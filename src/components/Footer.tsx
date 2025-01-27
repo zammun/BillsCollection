@@ -15,10 +15,10 @@ const Footer = () => {
                     <span className='font-semibold '>contact@billscollection.co</span>
                     <span className='font-semibold'>+1 (347) 327-6851</span>
                     <div className='flex gap-6'>
-                        <Image src='/facebook.png' alt='' width={16} height={16} />
                         <Image src='/instagram.png' alt='' width={16} height={16} />
                         <Image src='/x.png' alt='' width={16} height={16} />
                         <Image src='/tiktok.png' alt='' width={16} height={16} />
+                        <Image src='/facebook.png' alt='' width={16} height={16} />
                     </div>
                 </div>
                 {/* Center */}
