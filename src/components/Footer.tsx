@@ -18,6 +18,7 @@ const Footer = () => {
                         <Image src='/facebook.png' alt='' width={16} height={16} />
                         <Image src='/instagram.png' alt='' width={16} height={16} />
                         <Image src='/x.png' alt='' width={16} height={16} />
+                        <Image src='/tiktok.png' alt='' width={16} height={16} />
                     </div>
                 </div>
                 {/* Center */}
