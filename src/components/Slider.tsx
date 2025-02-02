@@ -34,7 +34,7 @@ const Slider = () => {
     const [current, setCurrent] = useState(0);
 
     return (
-        <div className='h-[calc(100vh-80px)] overflow-hidden'>
+        <div className='h-[calc(50vh-40px)] overflow-hidden'> {/* Adjusted height */}
             <div className='w-max h-full flex transition-all ease-in-out duration-1000'
             style={{transform:`translateX(-${current * 100}vw)`}} >
                 {slides.map((slide) => (
@@ -46,8 +46,8 @@ const Slider = () => {
                         <Image src={slide.img} alt='' layout='fill' objectFit='cover' className='' quality={100}/>
                         {/* Text Container */}
                         <div className='absolute p-4 md:p-8 lg:p-12 text-center'>
-                            <h2 className='text-xl md:text-xl lg:text-2xl xl:text-5xl text-white mb-10'>{slide.description}</h2>
-                            <h1 className='text-4xl md:text-4xl lg:text-6xl xl:text-8xl font-semibold text-white mb-10'>{slide.title}</h1>
+                            <h2 className='text-lg md:text-lg lg:text-xl xl:text-3xl text-white mb-10'>{slide.description}</h2> {/* Adjusted text size */}
+                            <h1 className='text-3xl md:text-3xl lg:text-4xl xl:text-6xl font-semibold text-white mb-10'>{slide.title}</h1> {/* Adjusted text size */}
                             <Link href={slide.url}>
                                 <button className='mt-4 rounded-md bg-white text-black py-2 px-4 md:py-3 md:px-6 hover:bg-slate-600 hover:text-gray-50 transition-colors duration-300'>Shop Now</button>
                             </Link>
