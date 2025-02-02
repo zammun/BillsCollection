@@ -28,7 +28,7 @@ const NavIcons = () => {
                 alt='' 
                 width={22} 
                 height={22} 
-                className="cursor-pointer" 
+                className="cursor-pointer text-gray-300 hover:text-gray-400" // Adjusted color
                 onClick={handleProfile}
             />
             {isProfileOpen && (
@@ -42,7 +42,7 @@ const NavIcons = () => {
                 alt='' 
                 width={22} 
                 height={22} 
-                className="cursor-pointer" 
+                className="cursor-pointer text-gray-300 hover:text-gray-400" // Adjusted color
             />
             <div className='relative cursor-pointer'
             onClick={()=>setIsCartOpen((prev) => !prev)}
@@ -52,6 +52,7 @@ const NavIcons = () => {
                 alt=''
                 width={22} 
                 height={22}
+                className="text-gray-300 hover:text-gray-400" // Adjusted color
             />
             <div className='absolute -top-4 -right-4 w-6 h-6 bg-[#F35C7A] rounded-full text-white text-sm flex items-center justify-center'>2</div>
             </div>

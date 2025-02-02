@@ -7,8 +7,8 @@ import Footer from "@/components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Bills Collection E-Commerce Application",
-  description: "A complete e-commerce application with Next.js and Wix",
+  title: "Bills Collection",
+  description: "A gallery of Bills Collection",
 };
 
 export default function RootLayout({
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-gray-300`}>
         <Navbar/>
         {children}
         <Footer/>
