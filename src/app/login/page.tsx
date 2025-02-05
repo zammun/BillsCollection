@@ -1,6 +1,6 @@
 const LoginPage = () => {
     return (
-        <div className='flex items-center justify-center h-screen bg-[#5F41E4]'>
+        <div className='flex items-center justify-center h-screen bg-slate-800'>
             <div className='max-w-md w-full mx-auto bg-white p-8 rounded-lg shadow-lg'>
                 <h2 className='text-center text-2xl font-semibold mb-6'>Login with</h2>
                 <div className='flex gap-4 mb-6'>
