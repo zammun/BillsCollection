@@ -18,7 +18,8 @@ const Filter = () => {
   };
 
   return (
-    <div className="mt-12 flex justify-between">
+    <div className="mt-12 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 flex flex-col md:flex-row justify-between gap-6">
+      {/* Filter Section */}
       <div className="flex gap-6 flex-wrap">
         <select name="type" onChange={handleFilterChange} className="py-2 px-4 rounded-2xl text-xs font-medium bg-[#EBEDED]">
           <option value="">Type</option>
@@ -44,8 +45,9 @@ const Filter = () => {
         </select>
       </div>
 
-      <div>
-        <select name="sort" onChange={handleFilterChange} className="py-2 px-4 rounded-2xl text-xs font-medium bg-white ring-1 ring-gray-400">
+      {/* Sort Section */}
+      <div className="">
+        <select name="sort" onChange={handleFilterChange} className="py-2 px-4 rounded-2xl text-xs font-medium bg-white ring-1 ring-gray-400 w-full md:w-auto">
           <option value="">Sort By</option>
           <option value="price-asc">Price (low to high)</option>
           <option value="price-desc">Price (high to low)</option>

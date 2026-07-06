@@ -30,33 +30,34 @@ const Footer = () => {
                     </div>
                 </div>
                 {/* Center */}
-                <div className='hidden lg:flex justify-between w-1/2'>
-                <div className='flex flex-col justify-between'>
-                    <h1 className='font-medium text-lg'>COMPANY</h1>
-                    <div className='flex flex-col gap-6'>
-                        <Link href=''>About Us</Link>
-                        <Link href=''>Careers</Link>
-                        <Link href=''>Affiliates</Link>
-                        <Link href=''>Contact Us</Link>
+                {/* Change 'justify-between' to 'justify-start' and add a 'gap-16' or 'gap-24' */}
+                    <div className='hidden lg:flex justify-start gap-24 w-1/2'> 
+                        <div className='flex flex-col gap-6'> {/* Removed justify-between */}
+                            <h1 className='font-medium text-lg'>COMPANY</h1>
+                            <div className='flex flex-col gap-6'>
+                                <Link href=''>About Us</Link>
+                                <Link href=''>Careers</Link>
+                                <Link href=''>Affiliates</Link>
+                                <Link href=''>Contact Us</Link>
+                             </div>
+                        </div>
+                    <div className='flex flex-col gap-6'> {/* Removed justify-between */}
+                        <h1 className='font-medium text-lg'>SHOP</h1>
+                            <div className='flex flex-col gap-6'>
+                                <Link href=''>New Arrivals</Link>
+                                <Link href=''>Accessories</Link>
+                                <Link href=''>All Products</Link>
+                            </div>
+                        </div>
+                    <div className='flex flex-col gap-6'> {/* Removed justify-between */}
+                        <h1 className='font-medium text-lg'>HELP</h1>
+                        <div className='flex flex-col gap-6'>
+                            <Link href=''>Customer Service</Link>
+                            <Link href=''>My Account</Link>
+                            <Link href=''>Find a Store</Link>
+                        </div>
                     </div>
-                </div>
-                <div className='flex flex-col justify-between'>
-                    <h1 className='font-medium text-lg'>SHOP</h1>
-                    <div className='flex flex-col gap-6'>
-                        <Link href=''>New Arrivals</Link>
-                        <Link href=''>Accessories</Link>
-                        <Link href=''>All Products</Link>
                     </div>
-                </div>
-                <div className='flex flex-col justify-between'>
-                    <h1 className='font-medium text-lg'>HELP</h1>
-                    <div className='flex flex-col gap-6'>
-                        <Link href=''>Customer Service</Link>
-                        <Link href=''>My Account</Link>
-                        <Link href=''>Find a Store</Link>
-                    </div>
-                </div>
-                </div>
                 {/* Right */}
                 <div className='w-full md:w-1/2 lg:w-1/4 flex flex-col gap-8'>
                 <h1 className='font-medium text-lg'>SUBSCRIBE</h1>

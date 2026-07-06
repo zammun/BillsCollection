@@ -34,3 +34,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+GOOGLE_CLIENT_ID=your_id_here
+GOOGLE_CLIENT_SECRET=your_secret_here
+AUTH_SECRET=your_random_generated_secret
