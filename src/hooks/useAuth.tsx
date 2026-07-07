@@ -8,12 +8,29 @@ export const useAuth = () => {
     if (error) console.error("Google Login Error:", error.message);
   };
 
-  const loginWithApple = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'apple',
+  // Upgraded to accept a username
+  const registerWithEmail = async (email: string, password: string, username: string) => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: username, // We save it as full_name so your Navbar instantly picks it up
+        }
+      }
     });
-    if (error) console.error("Apple Login Error:", error.message);
+    if (error) throw error;
+    return data;
   };
 
-  return { loginWithGoogle, loginWithApple };
+  const loginWithEmail = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) throw error;
+    return data;
+  };
+
+  return { loginWithGoogle, registerWithEmail, loginWithEmail };
 };

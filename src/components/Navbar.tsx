@@ -7,40 +7,36 @@ import { useAuth } from "../hooks/useAuth";
 import { useAuthContext } from "../context/AuthContext";
 
 const UserMenu = () => {
-  const { loginWithGoogle, loginWithApple } = useAuth();
-  const { user, login, logout } = useAuthContext();
+  const { loginWithGoogle, loginWithEmail } = useAuth();
+  const { user, logout } = useAuthContext();
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    login({ email: email, name: "User" });
+    setError("");
+    try {
+      await loginWithEmail(email, password);
+      // Supabase context will auto-update the UI on success
+    } catch (err: any) {
+      setError(err.message || "Failed to log in.");
+    }
   };
 
   // If user is logged in, show the polished profile menu
   if (user) {
-    const avatarUrl = user.user_metadata?.avatar_url || "/default-avatar.png";
     const fullName = user.user_metadata?.full_name || "User";
 
     return (
       <div className="absolute right-0 mt-3 w-64 bg-white shadow-2xl border border-gray-100 rounded-xl p-2 z-50 text-sm">
         
-        {/* User Info Header */}
-        <div className="flex items-center gap-3 p-3">
-          <img 
-            src={avatarUrl} 
-            alt="Profile" 
-            className="w-10 h-10 rounded-full border border-gray-200 object-cover"
-            onError={(e) => { e.currentTarget.src = 'https://ui-avatars.com/api/?name=' + fullName }}
-          />
-          <div className="flex flex-col overflow-hidden">
-            <span className="font-semibold text-gray-800 truncate">{fullName}</span>
-            <span className="text-xs text-gray-500 truncate">{user.email}</span>
-          </div>
+        {/* Text-only User Info Header */}
+        <div className="px-4 py-3 border-b border-gray-50">
+          <p className="font-semibold text-gray-800 truncate">{fullName}</p>
+          <p className="text-xs text-gray-500 truncate mt-0.5">{user.email}</p>
         </div>
-
-        <div className="border-t border-gray-100 my-1"></div>
 
         {/* Action Links */}
         <Link to="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-indigo-600 rounded-md transition-colors">
@@ -63,7 +59,7 @@ const UserMenu = () => {
     );
   }
 
-  // Otherwise, show the Login Form
+  // Otherwise, show the Login Form (Google Only)
   return (
     <div className="absolute right-0 mt-2 w-[90vw] md:w-72 bg-white shadow-xl rounded-md p-6 z-50 text-sm border border-gray-100">
       <div className="flex flex-col gap-2 mb-4">
@@ -74,21 +70,17 @@ const UserMenu = () => {
           <img src="/google.svg" alt="Google" className="w-5 h-5 mr-2" />
           Sign in with Google
         </button>
-        <button 
-          onClick={loginWithApple} 
-          className="flex items-center justify-center w-full py-2 border border-gray-300 rounded-md hover:bg-gray-50 min-h-[40px] text-gray-700 font-medium transition-colors"
-        >
-          <img src="/apple.svg" alt="Apple" className="w-5 h-5 mr-2" />
-          Sign in with Apple
-        </button>
       </div>
 
       <div className="border-t border-gray-200 my-4"></div>
+
+      {error && <div className="mb-3 p-2 text-xs text-red-600 bg-red-50 rounded-md text-center">{error}</div>}
 
       <form className="space-y-3" onSubmit={handleLogin}>
         <input 
           type="email" 
           placeholder="Email" 
+          required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-800" 
@@ -96,6 +88,7 @@ const UserMenu = () => {
         <input 
           type="password" 
           placeholder="Password" 
+          required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-800" 
@@ -175,7 +168,10 @@ const Navbar = () => {
             <SearchBar />
           </div>
           <div className="relative">
-            <NavIcons onProfileClick={() => setUserMenuOpen(!userMenuOpen)} />
+            <NavIcons 
+              onProfileClick={() => setUserMenuOpen(!userMenuOpen)} 
+              isProfileOpen={userMenuOpen} 
+            />
             {userMenuOpen && <UserMenu />}
           </div>
         </div>

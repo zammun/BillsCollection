@@ -9,3 +9,17 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+
+/* Global Cursor Fix for all clickable elements */
+button, 
+a, 
+input[type="button"], 
+input[type="submit"], 
+[role="button"] {
+  cursor: pointer !important;
+}
+
+/* Ensure interactive elements don't get 'stuck' or blocked by hidden overlays */
+html, body {
+  -webkit-tap-highlight-color: transparent;
+}

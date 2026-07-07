@@ -1,25 +1,14 @@
-import { useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const CartModal = ({ onClose }: { onClose: () => void }) => {
-    const modalRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            const target = event.target as Element;
-            if (target.closest('#cart-icon')) return;
-            if (modalRef.current && !modalRef.current.contains(target)) {
-                onClose();
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [onClose]);
+    // We removed the internal useEffect entirely.
+    // Why? Because NavIcons.tsx is already handling the toggling logic.
+    // If you keep the useEffect here, it might conflict with the logic in NavIcons.
 
     const cartItems = true;
 
     return (
-        <div ref={modalRef} className='w-max absolute p-4 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white top-12 right-0 flex flex-col gap-6 z-20'>
+        <div className='w-max absolute p-4 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white top-12 right-0 flex flex-col gap-6 z-20'>
             {!cartItems ? (
                 <div className='text-center'>No items in cart</div>
             ) : (
@@ -49,16 +38,12 @@ const CartModal = ({ onClose }: { onClose: () => void }) => {
                     <p className='text-gray-500 text-sm mt-2 mb-4'>Shipping and taxes calculated at checkout</p>
                     
                     <div className='flex justify-between text-sm gap-4'>
+                        {/* We keep the onClick={onClose} so the modal closes when you navigate */}
                         <Link to="/cart" onClick={onClose}>
-                            <button className='rounded-md py-3 px-4 ring-1 ring-gray-300'>
-                                View Cart
-                            </button>
+                            <button className='rounded-md py-3 px-4 ring-1 ring-gray-300'>View Cart</button>
                         </Link>
-                        
                         <Link to="/checkout" onClick={onClose}>
-                            <button className='rounded-md py-3 px-4 bg-black text-white'>
-                                Checkout
-                            </button>
+                            <button className='rounded-md py-3 px-4 bg-black text-white'>Checkout</button>
                         </Link>
                     </div>
                 </div>
