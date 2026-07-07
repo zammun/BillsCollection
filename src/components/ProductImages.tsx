@@ -1,35 +1,38 @@
-import { useState } from 'react'
+import { useState } from "react";
 
-const images = [
-    { id: 1, url: '/4.jpg' },
-    { id: 2, url: '/5.jpg' },
-    { id: 3, url: '/6.jpg' },
-];
+// This interface explicitly tells TypeScript that 'images' is a valid prop
+interface ProductImagesProps {
+    images: string[];
+}
 
-const ProductImages = () => {
+const ProductImages = ({ images }: ProductImagesProps) => {
     const [index, setIndex] = useState(0);
-    
+
+    if (!images || images.length === 0) {
+        return <div className="w-full h-80 bg-gray-100 rounded-md animate-pulse" />;
+    }
+
     return (
-        <div className=''>
-            <div className='h-[500px] relative'>
+        <div className="flex flex-col gap-4">
+            {/* Main Featured Image Display */}
+            <div className="h-[500px] relative bg-gray-50 rounded-xl overflow-hidden p-4 flex items-center justify-center">
                 <img 
-                    src={images[index].url} 
-                    alt='Product main view' 
-                    className='w-full h-full object-cover rounded-md' 
+                    src={images[index]} 
+                    alt="Product preview" 
+                    className="w-full h-full object-contain"
                 />
             </div>
-            <div className='flex justify-between gap-4 mt-8'>
-                {images.map((img, i) => (
+            
+            {/* Thumbnail Grid Selector for multi-pics */}
+            <div className="flex gap-4 overflow-x-auto py-2">
+                {images.map((url, idx) => (
                     <div 
-                        className='w-1/4 h-32 relative cursor-pointer' 
-                        key={img.id} 
-                        onClick={() => setIndex(i)}
+                        key={idx} 
+                        onClick={() => setIndex(idx)}
+                        className={`w-24 h-24 bg-gray-50 rounded-lg overflow-hidden border-2 cursor-pointer flex-shrink-0 p-1 transition-all
+                            ${index === idx ? 'border-slate-950 scale-95 shadow-sm' : 'border-transparent hover:border-gray-300'}`}
                     >
-                        <img 
-                            src={img.url} 
-                            alt={`Product thumbnail ${i + 1}`} 
-                            className='w-full h-full object-cover rounded-md' 
-                        />
+                        <img src={url} alt="" className="w-full h-full object-cover rounded-md" />
                     </div>
                 ))}
             </div>

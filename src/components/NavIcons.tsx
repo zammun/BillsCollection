@@ -1,57 +1,52 @@
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import CartModal from './CartModal';
+import { useCartStore } from '../store/useCartStore';
 
 interface NavIconsProps {
   onProfileClick: () => void;
   isProfileOpen: boolean;
+  onCartClick: () => void;
+  isCartOpen: boolean;
+  setIsCartOpen: (open: boolean) => void;
 }
 
-const NavIcons = ({ onProfileClick, isProfileOpen }: NavIconsProps) => {
-  const [isCartOpen, setIsCartOpen] = useState(false);
+const NavIcons = ({ 
+  onProfileClick, 
+  isProfileOpen, 
+  onCartClick, 
+  isCartOpen, 
+  setIsCartOpen 
+}: NavIconsProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // 1. Dedicated, conflict-free click-outside listener just for the Cart
+  const cartItems = useCartStore((state) => state.cartItems);
+  const totalItemsInCart = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsCartOpen(false); // Force close cart without relying on stale state
+        setIsCartOpen(false); 
       }
     };
     
-    // Using mousedown is more reliable than click for closing dropdowns
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []); // Empty dependency array ensures this listener never goes stale
-
-  const handleCart = () => {
-    const nextCartState = !isCartOpen;
-    setIsCartOpen(nextCartState);
-    
-    // If we are opening the cart, and profile is open, close the profile
-    if (nextCartState && isProfileOpen) {
-      onProfileClick();
-    }
-  };
-
-  const handleProfile = () => {
-    // If we are opening the profile, and cart is open, close the cart
-    if (!isProfileOpen && isCartOpen) {
-      setIsCartOpen(false);
-    }
-    onProfileClick();
-  };
+  }, [setIsCartOpen]);
 
   return (
     <div ref={containerRef} className='flex items-center gap-4 xl:gap-6 relative'>
-      <img src='/profile.png' alt='Profile' width={22} height={22} className="cursor-pointer" onClick={handleProfile} />
+      <img src='/profile.png' alt='Profile' width={22} height={22} className="cursor-pointer" onClick={onProfileClick} />
       
       <img src='/notification.png' alt='Notifications' width={22} height={22} className="cursor-pointer" />
       
-      <div className='relative cursor-pointer' onClick={handleCart}>
+      <div className='relative cursor-pointer' onClick={onCartClick}>
         <img src='/cart.png' alt='Cart' width={22} height={22} />
-        <div className='absolute -top-4 -right-4 w-6 h-6 bg-[#F35C7A] rounded-full text-white text-sm flex items-center justify-center'>
-          2
-        </div>
+        
+        {totalItemsInCart > 0 && (
+          <div className='absolute -top-4 -right-4 w-6 h-6 bg-[#F35C7A] rounded-full text-white text-sm flex items-center justify-center'>
+            {totalItemsInCart}
+          </div>
+        )}
       </div>
       
       {isCartOpen && <CartModal onClose={() => setIsCartOpen(false)} />}

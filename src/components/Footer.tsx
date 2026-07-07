@@ -35,9 +35,14 @@ const Footer = () => {
         }
     };
 
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     return (
-        <div className='py-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 bg-gray-100 text-sm mt-24'>
-            {/* Top */}
+        <div className='relative py-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 bg-gray-100 text-sm mt-24'>
+            
+            {/* Top Section */}
             <div className='flex flex-col md:flex-row justify-between gap-24'>
                 {/* Left */}
                 <div className='w-full md:w-1/2 lg:w-1/4 flex flex-col gap-8'>
@@ -68,26 +73,26 @@ const Footer = () => {
                     <div className='flex flex-col gap-6'>
                         <h1 className='font-medium text-lg'>COMPANY</h1>
                         <div className='flex flex-col gap-6'>
-                            <Link to='/' className="hover:text-indigo-600 transition-colors">About Us</Link>
-                            <Link to='/' className="hover:text-indigo-600 transition-colors">Careers</Link>
-                            <Link to='/' className="hover:text-indigo-600 transition-colors">Affiliates</Link>
-                            <Link to='/' className="hover:text-indigo-600 transition-colors">Contact Us</Link>
+                            <Link to='/about' className="hover:text-indigo-600 transition-colors">About Us</Link>
+                            <Link to='/careers' className="hover:text-indigo-600 transition-colors">Careers</Link>
+                            <Link to='/affiliates' className="hover:text-indigo-600 transition-colors">Affiliates</Link>
+                            <Link to='/contact' className="hover:text-indigo-600 transition-colors">Contact Us</Link>
                         </div>
                     </div>
                     <div className='flex flex-col gap-6'>
                         <h1 className='font-medium text-lg'>SHOP</h1>
                         <div className='flex flex-col gap-6'>
-                            <Link to='/' className="hover:text-indigo-600 transition-colors">New Arrivals</Link>
-                            <Link to='/' className="hover:text-indigo-600 transition-colors">Accessories</Link>
-                            <Link to='/' className="hover:text-indigo-600 transition-colors">All Products</Link>
+                            <Link to='/shop?sort=newest' className="hover:text-indigo-600 transition-colors">New Arrivals</Link>
+                            <Link to='/shop?type=Accessories' className="hover:text-indigo-600 transition-colors">Accessories</Link>
+                            <Link to='/shop' className="hover:text-indigo-600 transition-colors">All Products</Link>
                         </div>
                     </div>
                     <div className='flex flex-col gap-6'>
                         <h1 className='font-medium text-lg'>HELP</h1>
                         <div className='flex flex-col gap-6'>
-                            <Link to='/' className="hover:text-indigo-600 transition-colors">Customer Service</Link>
-                            <Link to='/' className="hover:text-indigo-600 transition-colors">My Account</Link>
-                            <Link to='/' className="hover:text-indigo-600 transition-colors">Find a Store</Link>
+                            <Link to='/support' className="hover:text-indigo-600 transition-colors">Customer Service</Link>
+                            <Link to='/profile' className="hover:text-indigo-600 transition-colors">My Account</Link>
+                            <Link to='/stores' className="hover:text-indigo-600 transition-colors">Find a Store</Link>
                         </div>
                     </div>
                 </div>
@@ -95,9 +100,7 @@ const Footer = () => {
                 {/* Right */}
                 <div className='w-full md:w-1/2 lg:w-1/4 flex flex-col gap-8'>
                     <h1 className='font-medium text-lg'>SUBSCRIBE</h1>
-                    <p>
-                        Be the first to get updates and offers from Bills Collection, and teasers about our latest designs.
-                    </p>
+                    <p>Be the first to get updates and offers from Bills Collection, and teasers about our latest designs.</p>
                     
                     {/* Newsletter Form */}
                     <div className="flex flex-col gap-2">
@@ -134,20 +137,62 @@ const Footer = () => {
                 </div>
             </div>
             
-            {/* Bottom */}
-            <div className='flex flex-col md:flex-row items-center justify-between gap-8 mt-16'>
-                <div className=''>© {new Date().getFullYear()} Bills Collection</div>
-                <div className='flex flex-col gap-8 md:flex-row'>
-                    <div className=''>
-                        <span className='text-gray-500 mr-4'>Language</span>
-                        <span className='font-medium'>United States | English</span>
+            {/* Sub-Footer: Legal & Compliance */}
+            <div className='mt-20 pt-8 border-t border-gray-300 flex flex-col gap-6 text-xs text-gray-500'>
+                
+                {/* Legal Links (Row 1) */}
+                <div className='flex flex-wrap justify-center gap-x-3 gap-y-3'>
+                    <Link to='/privacy-policy' className='hover:text-gray-900 transition-colors'>Privacy Notice</Link>
+                    <span className='hidden md:block'>|</span>
+                    <Link to='/cookie-preferences' className='hover:text-gray-900 transition-colors'>Cookie Preferences</Link>
+                    <span className='hidden md:block'>|</span>
+                    <Link to='/interest-based-ads' className='hover:text-gray-900 transition-colors'>Interest Based Ads</Link>
+                    <span className='hidden md:block'>|</span>
+                    <Link to='/california-privacy-rights' className='hover:text-gray-900 transition-colors'>CA Privacy Rights</Link>
+                    <span className='hidden md:block'>|</span>
+                    <Link to='/do-not-sell' className='hover:text-gray-900 transition-colors'>Do Not Sell or Share My Personal Information</Link>
+                    <span className='hidden md:block'>|</span>
+                    <Link to='/terms-of-service' className='hover:text-gray-900 transition-colors'>Terms of Service</Link>
+                </div>
+                
+                {/* Legal Links (Row 2) */}
+                <div className='flex flex-wrap justify-center gap-x-3 gap-y-3 mt-1'>
+                    <Link to='/supply-chain-transparency' className='hover:text-gray-900 transition-colors'>CA Transparency in Supply Chains</Link>
+                    <span className='hidden md:block'>|</span>
+                    <Link to='/pricing-policy' className='hover:text-gray-900 transition-colors'>Pricing Policy</Link>
+                    <span className='hidden md:block'>|</span>
+                    <Link to='/accessibility' className='hover:text-gray-900 transition-colors'>Accessibility</Link>
+                </div>
+
+                {/* Copyright & Localization */}
+                <div className='flex flex-col md:flex-row items-center justify-between gap-6 mt-4'>
+                    <div className='text-center md:text-left'>
+                        © {new Date().getFullYear()} Bills Collection. All rights reserved. Request our <a href="mailto:contact@billscollection.co" className='underline hover:text-gray-900'>corporate name & address by email.</a>
                     </div>
-                    <div className=''>
-                        <span className='text-gray-500 mr-4'>Currency</span>
-                        <span className='font-medium'>USD</span>
+                    
+                    <div className='flex flex-col sm:flex-row gap-4 sm:gap-8 items-center'>
+                        <div className='flex items-center gap-2'>
+                            <span>Language:</span>
+                            <span className='font-medium text-gray-900'>US | EN</span>
+                        </div>
+                        <div className='flex items-center gap-2'>
+                            <span>Currency:</span>
+                            <span className='font-medium text-gray-900'>USD</span>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            {/* Scroll to Top Button */}
+            <button 
+                onClick={scrollToTop}
+                className='fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-white text-black p-3 rounded-full shadow-lg ring-1 ring-gray-200 hover:bg-gray-50 transition-all hover:-translate-y-1 z-50 flex items-center justify-center'
+                aria-label="Scroll to top"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m18 15-6-6-6 6"/>
+                </svg>
+            </button>
         </div>
     );
 };

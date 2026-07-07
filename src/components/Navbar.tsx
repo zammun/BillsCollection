@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Menu from "./Menu";
 import SearchBar from "./SearchBar";
 import NavIcons from "./NavIcons";
 import { useAuth } from "../hooks/useAuth";
 import { useAuthContext } from "../context/AuthContext";
 
-const UserMenu = () => {
+const UserMenu = ({ closeMenu }: { closeMenu: () => void }) => {
   const { loginWithGoogle, loginWithEmail } = useAuth();
   const { user, logout } = useAuthContext();
   
@@ -19,27 +19,34 @@ const UserMenu = () => {
     setError("");
     try {
       await loginWithEmail(email, password);
-      // Supabase context will auto-update the UI on success
     } catch (err: any) {
       setError(err.message || "Failed to log in.");
     }
   };
 
-  // If user is logged in, show the polished profile menu
   if (user) {
     const fullName = user.user_metadata?.full_name || "User";
+    const authorizedEmails = ['moneyygdaman@gmail.com'];
+    const isAdmin = authorizedEmails.includes(user.email || '');
 
     return (
       <div className="absolute right-0 mt-3 w-64 bg-white shadow-2xl border border-gray-100 rounded-xl p-2 z-50 text-sm">
-        
-        {/* Text-only User Info Header */}
         <div className="px-4 py-3 border-b border-gray-50">
           <p className="font-semibold text-gray-800 truncate">{fullName}</p>
           <p className="text-xs text-gray-500 truncate mt-0.5">{user.email}</p>
         </div>
 
-        {/* Action Links */}
-        <Link to="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-indigo-600 rounded-md transition-colors">
+        {isAdmin && (
+          <Link 
+            to="/admin" 
+            onClick={closeMenu}
+            className="block px-4 py-2 mx-1 mt-1 text-center font-bold text-xs uppercase tracking-wide rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors"
+          >
+            Admin Dashboard
+          </Link>
+        )}
+
+        <Link to="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-indigo-600 rounded-md transition-colors mt-1">
           Account Settings
         </Link>
         <Link to="/orders" className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-indigo-600 rounded-md transition-colors">
@@ -48,7 +55,6 @@ const UserMenu = () => {
 
         <div className="border-t border-gray-100 my-1"></div>
 
-        {/* Logout Button */}
         <button 
           onClick={logout} 
           className="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 rounded-md font-medium transition-colors"
@@ -59,7 +65,6 @@ const UserMenu = () => {
     );
   }
 
-  // Otherwise, show the Login Form (Google Only)
   return (
     <div className="absolute right-0 mt-2 w-[90vw] md:w-72 bg-white shadow-xl rounded-md p-6 z-50 text-sm border border-gray-100">
       <div className="flex flex-col gap-2 mb-4">
@@ -109,20 +114,42 @@ const UserMenu = () => {
 };
 
 const Navbar = () => {
-  const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const navigate = useNavigate();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false); 
+
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setCategoriesOpen(false);
         setUserMenuOpen(false);
+        setCartOpen(false);
       }
     };
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
+
+  const handleProfileClick = () => {
+    if (userMenuOpen) {
+      setUserMenuOpen(false);
+      navigate("/profile");
+    } else {
+      setCartOpen(false);
+      setUserMenuOpen(true);
+    }
+  };
+
+  const handleCartClick = () => {
+    if (cartOpen) {
+      setCartOpen(false);
+      navigate("/cart");
+    } else {
+      setUserMenuOpen(false);
+      setCartOpen(true);
+    }
+  };
 
   return (
     <div className="h-20 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative bg-slate-600 z-50" ref={menuRef}>
@@ -141,24 +168,10 @@ const Navbar = () => {
             <img src="/logo.png" alt="Logo" width={60} height={60} />
             <div className="text-2xl tracking-wide text-white">Bills Collection</div>
           </Link>
+          {/* Swapped Category elements with a direct link to an About page route */}
           <div className="hidden xl:flex gap-4 text-white">
             <Link to="/">Home</Link>
-            <div className="relative">
-              <button
-                onClick={() => setCategoriesOpen(!categoriesOpen)}
-                className="focus:outline-none text-white"
-              >
-                Categories
-              </button>
-              {categoriesOpen && (
-                <div className="absolute mt-2 w-48 bg-slate-500 shadow-lg rounded-md z-50">
-                  <Link to="/categories/shirts" className="block px-4 py-2 text-white hover:bg-gray-400">Shirts</Link>
-                  <Link to="/categories/pants" className="block px-4 py-2 text-white hover:bg-gray-400">Pants</Link>
-                  <Link to="/categories/hoodies" className="block px-4 py-2 text-white hover:bg-gray-400">Hoodies</Link>
-                  <Link to="/categories/accessories" className="block px-4 py-2 text-white hover:bg-gray-400">Accessories</Link>
-                </div>
-              )}
-            </div>
+            <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
           </div>
         </div>
@@ -169,10 +182,13 @@ const Navbar = () => {
           </div>
           <div className="relative">
             <NavIcons 
-              onProfileClick={() => setUserMenuOpen(!userMenuOpen)} 
-              isProfileOpen={userMenuOpen} 
+              onProfileClick={handleProfileClick} 
+              isProfileOpen={userMenuOpen}
+              onCartClick={handleCartClick}
+              isCartOpen={cartOpen}
+              setIsCartOpen={setCartOpen}
             />
-            {userMenuOpen && <UserMenu />}
+            {userMenuOpen && <UserMenu closeMenu={() => setUserMenuOpen(false)} />}
           </div>
         </div>
       </div>

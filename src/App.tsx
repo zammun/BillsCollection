@@ -10,6 +10,7 @@ import ContactPage from './pages/Contact';
 import AboutPage from './pages/About';
 import Footer from './components/Footer';
 import Register from "./pages/Register";
+import AdminPage from './pages/AdminPage';
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/register" element={<Register />} />
-        
+        <Route path="/admin" element={<AdminPage />} />
         {/* Protected Route Example */}
         <Route 
           path="/cart" 
