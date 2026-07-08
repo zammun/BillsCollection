@@ -23,7 +23,7 @@ const ListPage = () => {
             <Filter />
             
             {/* Product List */}
-            <h1 className='mt-12 text-xl font-semibold '>Shirts For You</h1>
+            <h1 className='mt-12 text-xl font-semibold '>Apparel For You</h1>
             <ProductList />
         </div>
     )

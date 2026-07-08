@@ -101,31 +101,31 @@ const ProfilePage = () => {
   };
 
   const handleAccountDeletion = async (e: React.SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setDeleteError("");
+  e.preventDefault();
+  setDeleteError("");
 
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user?.email) throw new Error("No authenticated user session found.");
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user?.email) throw new Error("No authenticated user session found.");
 
-      // Verify identity using login credentials
-      const { error: authError } = await supabase.auth.signInWithPassword({
-        email: user.email,
-        password: deletePassword,
-      });
+    // FIXED: Changed 'value' to 'email' to match Supabase's expected credentials type object
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email: user.email,
+      password: deletePassword,
+    });
 
-      if (authError) throw new Error("Incorrect validation password.");
+    if (authError) throw new Error("Incorrect validation password.");
 
-      // Invoke remote database cleanup protocol
-      const { error: delError } = await supabase.rpc('delete_user_account');
-      if (delError) throw delError;
+    // Invoke remote database cleanup protocol
+    const { error: delError } = await supabase.rpc('delete_user_account');
+    if (delError) throw delError;
 
-      await supabase.auth.signOut();
-      navigate("/");
-    } catch (err: any) {
-      setDeleteError(err.message || "Failed to remove account parameters.");
-    }
-  };
+    await supabase.auth.signOut();
+    navigate("/");
+  } catch (err: any) {
+    setDeleteError(err.message || "Failed to remove account parameters.");
+  }
+};
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -141,24 +141,26 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 pt-32 pb-24 min-h-[80vh] bg-slate-50/60">
+    /* FIXED: Cleared hard dark slate background wrapper to allow canvas transparent layout scaling */
+    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 pt-32 pb-24 min-h-[80vh] bg-transparent">
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 items-start">
         
         {/* Left Side Sidebar Overview Panel */}
-        <div className="w-full md:w-80 bg-white rounded-2xl border border-gray-200/60 p-6 shadow-xs flex flex-col gap-6 sticky top-28">
+        {/* FIXED: Restyled borders to thin slate-200 bounds */}
+        <div className="w-full md:w-80 bg-white rounded-2xl border border-slate-200/60 p-6 shadow-xs flex flex-col gap-6 sticky top-28">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xl uppercase shadow-xs flex-shrink-0">
               {profile?.name.charAt(0)}
             </div>
-            <div className="overflow-hidden">
+            <div className="overflow-hidden text-left">
               <h2 className="font-bold text-gray-900 truncate capitalize">{profile?.name}</h2>
               <p className="text-xs text-gray-400 truncate mt-0.5">{profile?.email}</p>
             </div>
           </div>
           
-          <div className="h-[1px] bg-gray-100" />
+          <div className="h-[1px] bg-slate-200/40" />
           
-          <div className="flex flex-col gap-3 text-xs font-medium text-gray-500 px-1">
+          <div className="flex flex-col gap-3 text-xs font-medium text-gray-500 px-1 text-left">
             <div className="flex justify-between items-center">
               <span>Member Since</span>
               <span className="font-semibold text-gray-800">{profile?.joinDate}</span>
@@ -169,10 +171,10 @@ const ProfilePage = () => {
             </div>
           </div>
 
-          <div className="h-[1px] bg-gray-100" />
+          <div className="h-[1px] bg-slate-200/40" />
 
           <nav className="flex flex-col gap-1 text-sm font-semibold">
-            <span className="bg-slate-900 text-white px-4 py-2.5 rounded-xl shadow-xs cursor-default">
+            <span className="bg-slate-900 text-white px-4 py-2.5 rounded-xl shadow-xs cursor-default text-left">
               Account Settings
             </span>
           </nav>
@@ -186,9 +188,10 @@ const ProfilePage = () => {
         </div>
 
         {/* Right Side Complex Information Form Control */}
-        <div className="flex-1 w-full flex flex-col gap-6">
+        <div className="flex-1 w-full flex flex-col gap-6 text-left">
           
-          <form onSubmit={handleUpdateProfile} className="bg-white rounded-2xl border border-gray-200/60 p-8 shadow-xs flex flex-col gap-8">
+          {/* FIXED: Restyled borders to match premium thin-line layout rules */}
+          <form onSubmit={handleUpdateProfile} className="bg-white rounded-2xl border border-slate-200/60 p-8 shadow-xs flex flex-col gap-8">
             <div>
               <h1 className="text-2xl font-bold text-slate-900">Profile Configuration</h1>
               <p className="text-xs text-gray-400 mt-1">Manage your personal information, shipping address, and account settings.</p>
@@ -196,7 +199,7 @@ const ProfilePage = () => {
 
             {/* Section 1: Core Personal Metrics */}
             <div className="flex flex-col gap-5">
-              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-gray-50 pb-2">1. Personal Information</h3>
+              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-200/40 pb-2">1. Personal Information</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-bold uppercase tracking-wide text-gray-500">Full Name</label>
@@ -204,7 +207,7 @@ const ProfilePage = () => {
                     type="text" 
                     value={name} 
                     onChange={(e) => setName(e.target.value)}
-                    className="p-3 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-slate-900 transition-all capitalize text-gray-800 font-medium"
+                    className="p-3 border border-slate-200/80 rounded-xl text-sm outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all capitalize text-gray-800 font-medium bg-transparent"
                     placeholder="Your Name"
                     required
                   />
@@ -215,7 +218,7 @@ const ProfilePage = () => {
                     type="tel" 
                     value={phone} 
                     onChange={(e) => setPhone(e.target.value)}
-                    className="p-3 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-slate-900 transition-all text-gray-800 font-medium"
+                    className="p-3 border border-slate-200/80 rounded-xl text-sm outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all text-gray-800 font-medium bg-transparent"
                     placeholder="(555) 000-0000"
                   />
                 </div>
@@ -223,18 +226,19 @@ const ProfilePage = () => {
 
               <div className="flex flex-col gap-1.5">
                 <label className="text-[11px] font-bold uppercase tracking-wide text-gray-400">Registered Email Address</label>
+                {/* FIXED: Set explicit background tint to match global theme layer */}
                 <input 
                   type="email" 
                   disabled 
                   value={profile?.email || ""} 
-                  className="p-3 bg-gray-50 border border-gray-100 text-gray-400 rounded-xl text-sm cursor-not-allowed font-medium"
+                  className="p-3 bg-[#f4f3ef] border border-slate-200/40 text-gray-400 rounded-xl text-sm cursor-not-allowed font-medium"
                 />
               </div>
             </div>
 
             {/* Section 2: Core Logistics Metric Values */}
             <div className="flex flex-col gap-5">
-              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-gray-50 pb-2">2. Shipping & Logistics Coordinates</h3>
+              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-200/40 pb-2">2. Shipping & Logistics Coordinates</h3>
               
               <div className="flex flex-col gap-1.5">
                 <label className="text-[11px] font-bold uppercase tracking-wide text-gray-500">Street Address</label>
@@ -242,7 +246,7 @@ const ProfilePage = () => {
                   type="text" 
                   value={streetAddress} 
                   onChange={(e) => setStreetAddress(e.target.value)}
-                  className="p-3 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-slate-900 transition-all text-gray-800 font-medium"
+                  className="p-3 border border-slate-200/80 rounded-xl text-sm outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all text-gray-800 font-medium bg-transparent"
                   placeholder="123 Main Street, Apt 4B"
                 />
               </div>
@@ -254,7 +258,7 @@ const ProfilePage = () => {
                     type="text" 
                     value={city} 
                     onChange={(e) => setCity(e.target.value)}
-                    className="p-3 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-slate-900 transition-all text-gray-800 font-medium"
+                    className="p-3 border border-slate-200/80 rounded-xl text-sm outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all text-gray-800 font-medium bg-transparent"
                     placeholder="New York"
                   />
                 </div>
@@ -265,7 +269,7 @@ const ProfilePage = () => {
                     maxLength={2}
                     value={stateCode} 
                     onChange={(e) => setStateCode(e.target.value)}
-                    className="p-3 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-slate-900 transition-all uppercase text-gray-800 font-medium"
+                    className="p-3 border border-slate-200/80 rounded-xl text-sm outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all uppercase text-gray-800 font-medium bg-transparent"
                     placeholder="NY"
                   />
                 </div>
@@ -275,14 +279,14 @@ const ProfilePage = () => {
                     type="text" 
                     value={zipCode} 
                     onChange={(e) => setZipCode(e.target.value)}
-                    className="p-3 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-slate-900 transition-all text-gray-800 font-medium"
+                    className="p-3 border border-slate-200/80 rounded-xl text-sm outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all text-gray-800 font-medium bg-transparent"
                     placeholder="10001"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="border-t border-gray-100 pt-4 flex justify-between items-center">
+            <div className="border-t border-slate-200/40 pt-4 flex justify-between items-center">
               <button 
                 type="submit"
                 disabled={isSaving}
@@ -291,7 +295,6 @@ const ProfilePage = () => {
                 {isSaving ? "Saving Metrics..." : "Save Configuration"}
               </button>
 
-              {/* Clean Account Termination Accordion Anchor Entry Point */}
               {!isDeleting && (
                 <button 
                   type="button"
@@ -306,9 +309,9 @@ const ProfilePage = () => {
 
           {/* Collapsible Administrative Deletion Controller Layout */}
           {isDeleting && (
-            <div className="bg-white rounded-2xl border border-gray-200/60 p-8 shadow-xs flex flex-col gap-4 animate-fadeIn">
+            <div className="bg-white rounded-2xl border border-slate-200/60 p-8 shadow-xs flex flex-col gap-4 animate-fadeIn">
               <div>
-                <h2 className="text-base font-bold text-gray-900">Account Removal Verification</h2>
+                <h2 className="text-base font-bold text-gray-900">Account Account Removal Verification</h2>
                 <p className="text-xs text-gray-400 mt-0.5">To completely wipe your parameters and credentials, confirm your identity password below.</p>
               </div>
               
@@ -318,7 +321,7 @@ const ProfilePage = () => {
                     type="password"
                     value={deletePassword}
                     onChange={(e) => setDeletePassword(e.target.value)}
-                    className="p-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-red-500 outline-none text-gray-800"
+                    className="p-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-red-500 outline-none text-gray-800 bg-transparent"
                     placeholder="Type password"
                     required
                   />
@@ -329,7 +332,7 @@ const ProfilePage = () => {
                   <button type="submit" className="bg-red-600 text-white px-5 py-2.5 rounded-xl text-xs font-bold cursor-pointer hover:bg-red-700 active:scale-[0.98] transition-all shadow-xs">
                     Delete Account
                   </button>
-                  <button type="button" onClick={() => { setIsDeleting(false); setDeleteError(""); setDeletePassword(""); }} className="bg-gray-100 text-gray-600 px-5 py-2.5 rounded-xl text-xs font-bold cursor-pointer hover:bg-gray-200 transition-all">
+                  <button type="button" onClick={() => { setIsDeleting(false); setDeleteError(""); setDeletePassword(""); }} className="bg-slate-50 border border-slate-200 text-gray-600 px-5 py-2.5 rounded-xl text-xs font-bold cursor-pointer hover:bg-gray-100 transition-all">
                     Dismiss
                   </button>
                 </div>

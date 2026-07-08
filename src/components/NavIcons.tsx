@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import CartModal from './CartModal';
 import { useCartStore } from '../store/useCartStore';
 
@@ -17,6 +17,8 @@ const NavIcons = ({
   setIsCartOpen 
 }: NavIconsProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  /* FIXED: Track localized bubble pop triggers */
+  const [shouldAnimate, setShouldAnimate] = useState(false);
 
   const cartItems = useCartStore((state) => state.cartItems);
   const totalItemsInCart = cartItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -32,9 +34,30 @@ const NavIcons = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [setIsCartOpen]);
 
+  /* FIXED: Watch quantity values to inject the scale pop animation */
+  useEffect(() => {
+    if (totalItemsInCart === 0) return;
+    setShouldAnimate(true);
+    
+    const handler = setTimeout(() => setShouldAnimate(false), 300);
+    return () => clearTimeout(handler);
+  }, [totalItemsInCart]);
+
   return (
-    // Added shrink-0 here
     <div ref={containerRef} className='flex items-center gap-4 xl:gap-6 relative shrink-0'>
+      
+      {/* Self-contained modular keyframe styling injection */}
+      <style>{`
+        @keyframes cartPop {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.35); }
+          100% { transform: scale(1); }
+        }
+        .animate-bubble-pop {
+          animation: cartPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+      `}</style>
+
       <img 
         src='/profile.png' 
         alt='Profile' 
@@ -53,8 +76,7 @@ const NavIcons = ({
         className="cursor-pointer shrink-0" 
       />
       
-      {/* Added shrink-0 here so the wrapper never compresses */}
-      <div className='relative cursor-pointer shrink-0' onClick={onCartClick}>
+      <div className='relative cursor-pointer shrink-0 py-1' onClick={onCartClick}>
         <img 
           src='/cart.png' 
           alt='Cart' 
@@ -64,7 +86,10 @@ const NavIcons = ({
         />
         
         {totalItemsInCart > 0 && (
-          <div className='absolute -top-4 -right-4 w-6 h-6 bg-[#F35C7A] rounded-full text-white text-sm flex items-center justify-center'>
+          /* FIXED: Added conditional animate-bubble-pop injector helper */
+          <div className={`absolute -top-3.5 -right-3.5 w-5 h-5 bg-[#F35C7A] rounded-full text-white text-[11px] font-bold flex items-center justify-center select-none shadow-sm transition-all
+            ${shouldAnimate ? 'animate-bubble-pop' : ''}`}
+          >
             {totalItemsInCart}
           </div>
         )}

@@ -40,7 +40,8 @@ const Footer = () => {
     };
 
     return (
-        <div className='relative py-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 bg-gray-100 text-sm mt-24'>
+        /* FIXED: Swapped bg-gray-100 to bg-[#e6e4dc] to look a tinge darker than the luxury backdrop */
+        <div className='relative py-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 bg-[#e6e4dc] text-sm mt-24'>
             
             {/* Top Section */}
             <div className='flex flex-col md:flex-row justify-between gap-24'>
@@ -104,7 +105,7 @@ const Footer = () => {
                     
                     {/* Newsletter Form */}
                     <div className="flex flex-col gap-2">
-                        <form onSubmit={handleSubscribe} className='flex w-full'>
+                        <form onSubmit={handleSubscribe} className='flex w-full rounded-xl overflow-hidden border border-slate-300/40'>
                             <input 
                                 type='email' 
                                 required
@@ -112,12 +113,12 @@ const Footer = () => {
                                 onChange={(e) => setEmail(e.target.value)}
                                 disabled={status === 'loading'}
                                 placeholder='Email address' 
-                                className='p-4 w-3/4 outline-none border border-transparent focus:border-gray-300 disabled:opacity-50 transition-colors' 
+                                className='p-4 w-3/4 bg-white text-slate-800 outline-none disabled:opacity-50 transition-colors text-xs' 
                             />
                             <button 
                                 type="submit"
                                 disabled={status === 'loading'}
-                                className='w-1/4 bg-black text-white font-semibold hover:bg-gray-800 disabled:opacity-70 transition-colors cursor-pointer'
+                                className='w-1/4 bg-black text-white font-semibold text-xs hover:bg-gray-800 disabled:opacity-70 transition-colors cursor-pointer'
                             >
                                 {status === 'loading' ? '...' : 'JOIN'}
                             </button>
@@ -127,18 +128,18 @@ const Footer = () => {
                     </div>
 
                     <span className='font-semibold'>Secure Payments</span>
-                    <div className='flex justify-between'>
-                        <img src='/visa.png' alt='Visa' width={40} height={20} />
-                        <img src='/mastercard.png' alt='Mastercard' width={40} height={20} />
-                        <img src='/paypal.png' alt='Paypal' width={40} height={20} />
-                        <img src='/discover.png' alt='Discover' width={40} height={20} />
-                        <img src='/skrill.png' alt='Skrill' width={40} height={20} />
+                    <div className='flex justify-between max-w-[200px] gap-2'>
+                        <img src='/visa.png' alt='Visa' width={40} height={20} className="object-contain" />
+                        <img src='/mastercard.png' alt='Mastercard' width={40} height={20} className="object-contain" />
+                        <img src='/paypal.png' alt='Paypal' width={40} height={20} className="object-contain" />
+                        <img src='/discover.png' alt='Discover' width={40} height={20} className="object-contain" />
+                        <img src='/skrill.png' alt='Skrill' width={40} height={20} className="object-contain" />
                     </div>
                 </div>
             </div>
             
             {/* Sub-Footer: Legal & Compliance */}
-            <div className='mt-20 pt-8 border-t border-gray-300 flex flex-col gap-6 text-xs text-gray-500'>
+            <div className='mt-20 pt-8 border-t border-slate-300/60 flex flex-col gap-6 text-xs text-slate-500/80'>
                 
                 {/* Legal Links (Row 1) */}
                 <div className='flex flex-wrap justify-center gap-x-3 gap-y-3'>
@@ -186,7 +187,7 @@ const Footer = () => {
             {/* Scroll to Top Button */}
             <button 
                 onClick={scrollToTop}
-                className='fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-white text-black p-3 rounded-full shadow-lg ring-1 ring-gray-200 hover:bg-gray-50 transition-all hover:-translate-y-1 z-50 flex items-center justify-center'
+                className='fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-white text-black p-3 rounded-full shadow-lg ring-1 ring-gray-200/60 hover:bg-gray-50 transition-all hover:-translate-y-1 z-50 flex items-center justify-center'
                 aria-label="Scroll to top"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

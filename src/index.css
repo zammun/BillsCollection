@@ -23,3 +23,25 @@ input[type="submit"],
 html, body {
   -webkit-tap-highlight-color: transparent;
 }
+
+.suave-luxury-theme {
+  /* A solid, premium matte ivory backdrop. It gives a warm, high-end gallery feel 
+     while making your white cards and filters pop cleanly with zero visual clutter */
+  background-color: #f4f3ef; 
+  background-image: none; 
+}
+
+/* Elegant, muted scrollbar to match the clean aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f4f3ef;
+}
+::-webkit-scrollbar-thumb {
+  background: #e2e0d9;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d4af37;
+}

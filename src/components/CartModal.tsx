@@ -18,7 +18,6 @@ const CartModal = ({ onClose }: CartModalProps) => {
     const handleRemoveClick = (e: React.MouseEvent, itemKey: string) => {
         e.preventDefault();
         e.stopPropagation();
-        // Removed the check so it ALWAYS triggers the confirmation view
         setConfirmDeleteId(itemKey);
     };
 
@@ -36,7 +35,8 @@ const CartModal = ({ onClose }: CartModalProps) => {
     };
 
     return (
-        <div className="absolute top-12 right-0 w-80 sm:w-96 p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white border border-gray-100 flex flex-col gap-6 z-50">
+        /* FIXED: Added top-14, z-[100], pointer-events-auto, and responsive mobile width */
+        <div className="absolute top-14 right-0 w-[calc(100vw-32px)] sm:w-96 p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white border border-gray-100 flex flex-col gap-6 z-[100] pointer-events-auto">
             
             <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold text-gray-900 tracking-tight">Shopping Cart</h2>
@@ -94,7 +94,6 @@ const CartModal = ({ onClose }: CartModalProps) => {
                                             </div>
                                             
                                             <div className="flex items-center justify-between text-sm">
-                                                {/* Core Control Stepper Button Pack */}
                                                 <div className="flex items-center bg-gray-50 rounded-lg ring-1 ring-gray-200/60 h-7 text-xs font-bold" onClick={(e) => e.stopPropagation()}>
                                                     <button 
                                                         onClick={(e) => {
@@ -109,16 +108,14 @@ const CartModal = ({ onClose }: CartModalProps) => {
                                                     >-</button>
                                                     <span className="w-7 text-center text-gray-800">{item.quantity}</span>
                                                     <button 
-    disabled={item.quantity >= item.size_inventory}
-    onClick={(e) => {
-        e.preventDefault();
-        updateQuantity(item.id, item.color, item.size, item.quantity + 1);
-    }}
-    className={`w-7 h-full flex items-center justify-center rounded-r-lg transition-colors cursor-pointer 
-        ${item.quantity >= item.size_inventory ? 'bg-gray-100 text-gray-300 cursor-not-allowed' : 'hover:bg-gray-200/70'}`}
->
-    +
-</button>
+                                                        disabled={item.quantity >= item.size_inventory}
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            updateQuantity(item.id, item.color, item.size, item.quantity + 1);
+                                                        }}
+                                                        className={`w-7 h-full flex items-center justify-center rounded-r-lg transition-colors cursor-pointer 
+                                                            ${item.quantity >= item.size_inventory ? 'bg-gray-100 text-gray-300 cursor-not-allowed' : 'hover:bg-gray-200/70'}`}
+                                                    >+</button>
                                                 </div>
 
                                                 <button 

@@ -110,7 +110,7 @@ const Filter = () => {
       {/* Mobile Toggle Button */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden flex items-center justify-center gap-2 w-full py-3.5 bg-gray-50 ring-1 ring-gray-200 rounded-2xl font-semibold text-sm text-gray-700 transition-colors hover:bg-gray-100 active:scale-[0.98]"
+        className="md:hidden flex items-center justify-center gap-2 w-full py-3.5 bg-[#f4f3ef] border border-slate-200/80 rounded-2xl font-semibold text-sm text-slate-700 transition-colors hover:bg-slate-200/40 active:scale-[0.98]"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
@@ -118,8 +118,8 @@ const Filter = () => {
         {isOpen ? "Close Filters" : "Filter & Sort"}
       </button>
 
-      {/* Filter Options */}
-      <div className={`flex-col md:flex-row justify-between gap-6 ${isOpen ? 'flex bg-gray-50/50 p-6 rounded-2xl border border-gray-100 md:p-0 md:bg-transparent md:border-none animate-fadeIn' : 'hidden md:flex'}`}>
+      {/* Filter Options Panel Container */}
+      <div className={`flex-col md:flex-row justify-between gap-6 ${isOpen ? 'flex bg-white/60 backdrop-blur-md p-6 rounded-2xl border border-slate-200 md:p-0 md:bg-transparent md:border-none animate-fadeIn' : 'hidden md:flex'}`}>
         
         {/* Left Side: Filtering */}
         <div className="flex gap-4 flex-wrap">
@@ -129,7 +129,7 @@ const Filter = () => {
             name="type" 
             onChange={handleInputChange} 
             value={localFilters.type} 
-            className="py-3 px-4 rounded-2xl text-xs font-medium bg-[#EBEDED] cursor-pointer outline-none flex-grow sm:flex-grow-0 capitalize"
+            className="py-3 px-4 rounded-2xl text-xs font-semibold bg-[#f4f3ef] text-slate-800 border border-slate-200/80 cursor-pointer outline-none flex-grow sm:flex-grow-0 capitalize transition-all focus:border-slate-400"
           >
             <option value="">All Types</option>
             {availableTypes.map(type => {
@@ -142,6 +142,7 @@ const Filter = () => {
             })}
           </select>
 
+          {/* Min Price Box Input */}
           <input 
             type="text" 
             inputMode="numeric"
@@ -150,8 +151,10 @@ const Filter = () => {
             value={localFilters.min}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            className="text-xs rounded-2xl pl-4 py-3 w-[calc(50%-8px)] sm:w-24 bg-white ring-1 ring-gray-300 md:ring-gray-400 placeholder:text-gray-500 outline-none focus:ring-indigo-500" 
+            className="text-xs rounded-2xl pl-4 py-3 w-[calc(50%-8px)] sm:w-24 bg-[#f4f3ef] text-slate-800 border border-slate-200/80 placeholder:text-slate-400 outline-none transition-all focus:border-slate-400" 
           />
+
+          {/* Max Price Box Input */}
           <input 
             type="text" 
             inputMode="numeric"
@@ -160,7 +163,7 @@ const Filter = () => {
             value={localFilters.max}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            className="text-xs rounded-2xl pl-4 py-3 w-[calc(50%-8px)] sm:w-24 bg-white ring-1 ring-gray-300 md:ring-gray-400 placeholder:text-gray-500 outline-none focus:ring-indigo-500" 
+            className="text-xs rounded-2xl pl-4 py-3 w-[calc(50%-8px)] sm:w-24 bg-[#f4f3ef] text-slate-800 border border-slate-200/80 placeholder:text-slate-400 outline-none transition-all focus:border-slate-400" 
           />
 
           {/* Dynamic Color Dropdown */}
@@ -168,7 +171,7 @@ const Filter = () => {
             name="color" 
             onChange={handleInputChange} 
             value={localFilters.color} 
-            className="py-3 px-4 rounded-2xl text-xs font-medium bg-[#EBEDED] cursor-pointer outline-none flex-grow sm:flex-grow-0 capitalize"
+            className="py-3 px-4 rounded-2xl text-xs font-semibold bg-[#f4f3ef] text-slate-800 border border-slate-200/80 cursor-pointer outline-none flex-grow sm:flex-grow-0 capitalize transition-all focus:border-slate-400"
           >
             <option value="">All Colors</option>
             {availableColors.map(color => (
@@ -183,7 +186,7 @@ const Filter = () => {
             name="sort" 
             onChange={handleInputChange} 
             value={localFilters.sort} 
-            className="py-3 px-4 rounded-2xl text-xs font-medium bg-white ring-1 ring-gray-300 md:ring-gray-400 w-full md:w-auto cursor-pointer outline-none focus:ring-indigo-500"
+            className="py-3 px-4 rounded-2xl text-xs font-semibold bg-[#f4f3ef] text-slate-800 border border-slate-200/80 w-full md:w-auto cursor-pointer outline-none transition-all focus:border-slate-400"
           >
             <option value="">Default Sorting</option>
             <option value="price-asc">Price (low to high)</option>
@@ -192,7 +195,7 @@ const Filter = () => {
             <option value="date-asc">Oldest</option>
           </select>
 
-          {/* Mobile-Only Interactive Confirmation Apply Call to Action */}
+          {/* Mobile Apply Button */}
           <button
             onClick={handleApplyMobileFilters}
             className="md:hidden w-full py-3 bg-slate-900 text-white text-xs font-bold rounded-xl transition-all active:scale-[0.98] shadow-sm hover:bg-slate-800"

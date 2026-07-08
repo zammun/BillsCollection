@@ -169,6 +169,13 @@ const SinglePage = () => {
 
                 {/* Add to Cart Section */}
                 <div className="flex flex-col gap-4 mt-4">
+                    {/* Dynamic Low Stock Notification */}
+                    {currentStock > 0 && currentStock < 5 && (
+                        <div className="bg-amber-50 border border-amber-200 text-amber-700 text-xs font-bold uppercase tracking-wide px-4 py-2.5 rounded-xl w-max animate-pulse">
+                            ⚠️ Only {currentStock} left
+                        </div>
+                    )}
+
                     <h4 className="font-semibold text-gray-900">Quantity</h4>
                     <div className="flex gap-4">
                         <div className="flex items-center bg-gray-100 rounded-xl ring-1 ring-gray-200">
