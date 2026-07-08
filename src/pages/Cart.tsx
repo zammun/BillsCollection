@@ -4,7 +4,7 @@ import { useCartStore } from '../store/useCartStore';
 const CartPage = () => {
     const cartItems = useCartStore((state) => state.cartItems);
     const removeFromCart = useCartStore((state) => state.removeFromCart);
-    const updateQuantity = useCartStore((state) => state.updateQuantity); // Pull action hook
+    const updateQuantity = useCartStore((state) => state.updateQuantity);
 
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
@@ -42,6 +42,13 @@ const CartPage = () => {
                                             <h3 className="font-semibold text-lg text-gray-900">{item.name}</h3>
                                         </Link>
                                         <p className="text-sm text-gray-500 mt-1">Color: {item.color} | Size: {item.size}</p>
+                                        
+                                        {/* NEW: Inline Cart Low-Stock warning notice prompt block */}
+                                        {item.size_inventory > 0 && item.size_inventory < 5 && (
+                                            <p className="text-xs font-semibold text-amber-600 mt-1.5 flex items-center gap-1 animate-pulse">
+                                                ⚠️ Act fast! Only {item.size_inventory} left in stock.
+                                            </p>
+                                        )}
                                     </div>
 
                                     {/* Interactive Quantity Control Stepper Wrapper */}
@@ -54,11 +61,16 @@ const CartPage = () => {
                                         </button>
                                         <span className="w-8 text-center text-xs font-semibold text-gray-800">{item.quantity}</span>
                                         <button 
-                                            onClick={() => updateQuantity(item.id, item.color, item.size, item.quantity + 1)}
-                                            className="w-8 h-full flex items-center justify-center text-sm font-semibold hover:bg-gray-200 rounded-r-lg transition-colors cursor-pointer"
-                                        >
-                                            +
-                                        </button>
+    disabled={item.quantity >= item.size_inventory}
+    onClick={(e) => {
+        e.preventDefault();
+        updateQuantity(item.id, item.color, item.size, item.quantity + 1);
+    }}
+    className={`w-7 h-full flex items-center justify-center rounded-r-lg transition-colors cursor-pointer 
+        ${item.quantity >= item.size_inventory ? 'bg-gray-100 text-gray-300 cursor-not-allowed' : 'hover:bg-gray-200/70'}`}
+>
+    +
+</button>
                                     </div>
                                 </div>
 
@@ -83,9 +95,9 @@ const CartPage = () => {
                         <span>Subtotal</span>
                         <span className="font-semibold text-gray-900">${subtotal.toFixed(2)}</span>
                     </div>
-                    <div className="flex justify-between w-full md:w-[400px] text-gray-700">
+                    <div className="flex justify-between w-full md:w-[400px] text-gray-700 items-center">
                         <span>Shipping</span>
-                        <span className="font-semibold text-green-600">FREE</span>
+                        <span className="text-sm text-gray-400 font-medium">Calculated at checkout</span>
                     </div>
                     <hr className="w-full md:w-[400px] border-gray-200 my-2" />
                     <div className="flex justify-between w-full md:w-[400px] text-xl font-bold text-gray-900 mb-4">

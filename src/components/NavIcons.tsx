@@ -3,16 +3,15 @@ import CartModal from './CartModal';
 import { useCartStore } from '../store/useCartStore';
 
 interface NavIconsProps {
-  onProfileClick: () => void;
+  onProfileClick: (e: React.MouseEvent) => void;
   isProfileOpen: boolean;
-  onCartClick: () => void;
+  onCartClick: (e: React.MouseEvent) => void;
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
 }
 
 const NavIcons = ({ 
   onProfileClick, 
-  isProfileOpen, 
   onCartClick, 
   isCartOpen, 
   setIsCartOpen 
@@ -34,13 +33,35 @@ const NavIcons = ({
   }, [setIsCartOpen]);
 
   return (
-    <div ref={containerRef} className='flex items-center gap-4 xl:gap-6 relative'>
-      <img src='/profile.png' alt='Profile' width={22} height={22} className="cursor-pointer" onClick={onProfileClick} />
+    // Added shrink-0 here
+    <div ref={containerRef} className='flex items-center gap-4 xl:gap-6 relative shrink-0'>
+      <img 
+        src='/profile.png' 
+        alt='Profile' 
+        width={22} 
+        height={22} 
+        className="cursor-pointer shrink-0" 
+        id="profile-icon" 
+        onClick={onProfileClick} 
+      />
       
-      <img src='/notification.png' alt='Notifications' width={22} height={22} className="cursor-pointer" />
+      <img 
+        src='/notification.png' 
+        alt='Notifications' 
+        width={22} 
+        height={22} 
+        className="cursor-pointer shrink-0" 
+      />
       
-      <div className='relative cursor-pointer' onClick={onCartClick}>
-        <img src='/cart.png' alt='Cart' width={22} height={22} />
+      {/* Added shrink-0 here so the wrapper never compresses */}
+      <div className='relative cursor-pointer shrink-0' onClick={onCartClick}>
+        <img 
+          src='/cart.png' 
+          alt='Cart' 
+          width={22} 
+          height={22} 
+          className="shrink-0"
+        />
         
         {totalItemsInCart > 0 && (
           <div className='absolute -top-4 -right-4 w-6 h-6 bg-[#F35C7A] rounded-full text-white text-sm flex items-center justify-center'>

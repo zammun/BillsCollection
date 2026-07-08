@@ -1,29 +1,53 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useCartStore } from '../store/useCartStore';
 import { supabase } from '../supabase'; 
 
-const ProductCard = ({ product }: { product: any }) => {
-    const [selectedSize, setSelectedSize] = useState('L'); 
+export const ProductCard = ({ product }: { product: any }) => {
+    // Default to 'S' or first available size.
+    const [selectedSize, setSelectedSize] = useState('S'); 
     const [currentImgIdx, setCurrentImgIdx] = useState(0);
+    const [isAdded, setIsAdded] = useState(false); // Track add state
+    
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const addToCart = useCartStore((state) => state.addToCart);
 
-    // Safe normalization to always get an array of image strings
+    // Get stock for the currently selected size. Defaults to 0 if sizes column is empty/missing
+    const stockForSelectedSize = product.sizes ? (product.sizes[selectedSize] || 0) : 0;
+
     const images = Array.isArray(product.image_url) && product.image_url.length > 0 
         ? product.image_url 
         : [product.image_url || ''];
 
+    useEffect(() => {
+        return () => {
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        };
+    }, []);
+
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault();
+        
+        if (stockForSelectedSize <= 0) {
+            alert(`Sorry, ${product.name} size ${selectedSize} is out of stock.`);
+            return;
+        }
+
         addToCart({
-            id: product.id.toString(), // Cast numerical DB id to string for the cart store
+            id: product.id.toString(), 
             name: product.name,
             price: product.price,
             color: product.color,
             size: selectedSize,
             image: images[0], 
-            quantity: 1, // Satisfies the cart store requirements by providing an explicit quantity
+            quantity: 1, 
+            size_inventory: stockForSelectedSize, 
         });
+
+        // Trigger the button feedback animation
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        setIsAdded(true);
+        timeoutRef.current = setTimeout(() => setIsAdded(false), 1000);
     };
 
     const nextSlide = (e: React.MouseEvent) => {
@@ -40,10 +64,14 @@ const ProductCard = ({ product }: { product: any }) => {
 
     return (
         <div className='w-full flex flex-col gap-4 relative group/card'>
-            {/* Main Active Image Display Frame */}
             <div className='relative w-full h-80 bg-gray-50 rounded-md overflow-hidden p-4 flex items-center justify-center group/slider'>
-                
-                {/* Image Redirect Link */}
+                {/* Floating stock alert: only pulse if stock is low for the selected size */}
+                {stockForSelectedSize > 0 && stockForSelectedSize < 5 && (
+                    <div className="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md z-20 shadow-xs pointer-events-none animate-pulse">
+                        Only {stockForSelectedSize} {selectedSize} Left
+                    </div>
+                )}
+
                 <Link to={`/product/${product.id}`} className="w-full h-full block">
                     <img 
                         src={images[currentImgIdx]} 
@@ -52,7 +80,6 @@ const ProductCard = ({ product }: { product: any }) => {
                     />
                 </Link>
 
-                {/* Left/Right Control Overlay Arrows */}
                 {images.length > 1 && (
                     <>
                         <button 
@@ -71,7 +98,6 @@ const ProductCard = ({ product }: { product: any }) => {
                 )}
             </div>
 
-            {/* Thumbnail Preview Row */}
             {images.length > 1 && (
                 <div className="flex gap-2 overflow-x-auto py-1 scrollbar-none justify-start">
                     {images.map((url: string, idx: number) => (
@@ -87,7 +113,6 @@ const ProductCard = ({ product }: { product: any }) => {
                 </div>
             )}
             
-            {/* Metadata Text */}
             <Link to={`/product/${product.id}`} className="flex flex-col gap-1">
                 <div className='flex justify-between items-center'>
                     <span className='font-medium text-gray-900'>{product.name}</span>
@@ -95,26 +120,39 @@ const ProductCard = ({ product }: { product: any }) => {
                 </div>
             </Link>
 
-            {/* Size Options Row */}
+            {/* Size Selector with Slash Logic */}
             <div className="flex gap-2 my-1">
-                {['S', 'M', 'L', 'XL'].map((size) => (
-                    <button
-                        key={size}
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedSize(size); }}
-                        className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium transition-colors border z-10
-                            ${selectedSize === size ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-gray-700 border-gray-200 hover:border-slate-400'}`}
-                    >
-                        {size}
-                    </button>
-                ))}
+                {['S', 'M', 'L', 'XL'].map((size) => {
+                    const stock = product.sizes ? (product.sizes[size] || 0) : 0;
+                    const isOutOfStock = stock === 0;
+
+                    return (
+                        <button
+                            key={size}
+                            disabled={isOutOfStock}
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); if(!isOutOfStock) setSelectedSize(size); }}
+                            className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium transition-all border relative z-10
+                                ${selectedSize === size && !isOutOfStock ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-gray-700 border-gray-200'}
+                                ${isOutOfStock ? 'text-gray-300 line-through cursor-not-allowed border-gray-100' : 'hover:border-slate-400'}`}
+                        >
+                            {size}
+                        </button>
+                    );
+                })}
             </div>
 
-            {/* Submit Action Control */}
             <button 
-                className='rounded-xl ring-1 ring-slate-900 text-slate-900 w-full py-2.5 px-4 text-sm font-semibold hover:bg-slate-900 hover:text-white transition-all active:scale-[0.98] z-10'
                 onClick={handleAddToCart}
+                disabled={stockForSelectedSize === 0}
+                className={`w-full py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-300 active:scale-[0.98] z-10 disabled:opacity-50 disabled:cursor-not-allowed shadow-xs
+                    ${stockForSelectedSize === 0 
+                        ? 'ring-1 ring-gray-200 text-gray-400 bg-gray-50' 
+                        : isAdded 
+                            ? 'bg-emerald-800 text-white ring-1 ring-emerald-800 scale-[1.02]' 
+                            : 'ring-1 ring-slate-900 text-slate-900 bg-white hover:bg-slate-900 hover:text-white'
+                    }`}
             >
-                Add to Cart
+                {stockForSelectedSize === 0 ? "Out of Stock" : isAdded ? "Added to Cart ✓" : "Add to Cart"}
             </button>
         </div>
     );
@@ -139,9 +177,38 @@ const ProductList = () => {
     let filteredProducts = [...products];
     const typeParam = searchParams.get("type");
     const colorParam = searchParams.get("color");
+    const minParam = searchParams.get("min");
+    const maxParam = searchParams.get("max");
+    const sortParam = searchParams.get("sort");
+    const searchParam = searchParams.get("search");
 
     if (typeParam) filteredProducts = filteredProducts.filter(p => p.type === typeParam);
     if (colorParam) filteredProducts = filteredProducts.filter(p => p.color === colorParam);
+    
+    if (minParam && !isNaN(Number(minParam))) {
+        filteredProducts = filteredProducts.filter(p => p.price >= Number(minParam));
+    }
+    if (maxParam && !isNaN(Number(maxParam))) {
+        filteredProducts = filteredProducts.filter(p => p.price <= Number(maxParam));
+    }
+
+    if (searchParam) {
+        filteredProducts = filteredProducts.filter(p => 
+            p.name?.toLowerCase().includes(searchParam.toLowerCase())
+        );
+    }
+
+    if (sortParam) {
+        if (sortParam === "price-asc") {
+            filteredProducts.sort((a, b) => a.price - b.price);
+        } else if (sortParam === "price-desc") {
+            filteredProducts.sort((a, b) => b.price - a.price);
+        } else if (sortParam === "date-desc") {
+            filteredProducts.sort((a, b) => new Date(b.created_at || b.id).getTime() - new Date(a.created_at || a.id).getTime());
+        } else if (sortParam === "date-asc") {
+            filteredProducts.sort((a, b) => new Date(a.created_at || a.id).getTime() - new Date(b.created_at || b.id).getTime());
+        }
+    }
 
     if (loading) return <div className="text-center py-12">Loading store...</div>;
 
@@ -158,4 +225,4 @@ const ProductList = () => {
     );
 };
 
-export default ProductList; 
+export default ProductList;

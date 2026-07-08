@@ -5,16 +5,17 @@ export interface CartItem {
     name: string;
     price: number;
     color: string;
-    size: string;
+    size: string; 
     image: string;
     quantity: number;
+    size_inventory: number; // The specific count for this size
 }
 
 interface CartStore {
     cartItems: CartItem[];
     addToCart: (item: CartItem) => void;
     removeFromCart: (id: string, color: string, size: string) => void;
-    updateQuantity: (id: string, color: string, size: string, newQuantity: number) => void; // Added interface type
+    updateQuantity: (id: string, color: string, size: string, newQuantity: number) => void;
     clearCart: () => void;
 }
 
@@ -22,21 +23,33 @@ export const useCartStore = create<CartStore>((set) => ({
     cartItems: [],
     
     addToCart: (item) => set((state) => {
-        const existingItem = state.cartItems.find(
-            (i) => i.id === item.id && i.color === item.color && i.size === item.size
-        );
+    const existingItem = state.cartItems.find(
+        (i) => i.id === item.id && i.color === item.color && i.size === item.size
+    );
 
         if (existingItem) {
-            return {
-                cartItems: state.cartItems.map((i) => 
-                    i.id === item.id && i.color === item.color && i.size === item.size
-                        ? { ...i, quantity: i.quantity + item.quantity }
-                        : i
-                )
-            };
+        // FIXED: Check against size_inventory
+        if (existingItem.quantity + item.quantity > existingItem.size_inventory) {
+            alert(`Cannot add more. Only ${existingItem.size_inventory} of size ${item.size} available.`);
+            return state; 
         }
-        return { cartItems: [...state.cartItems, item] };
-    }),
+        return {
+            cartItems: state.cartItems.map((i) => 
+                i.id === item.id && i.color === item.color && i.size === item.size
+                    ? { ...i, quantity: i.quantity + item.quantity }
+                    : i
+            )
+        };
+    }
+
+        // Check: Adding initial item exceeds limit (unlikely but safe)
+        if (item.quantity > item.size_inventory) {
+        alert(`Only ${item.size_inventory} in stock.`);
+        return state;
+    }
+
+    return { cartItems: [...state.cartItems, item] };
+}),
 
     removeFromCart: (id, color, size) => set((state) => ({
         cartItems: state.cartItems.filter(
@@ -44,14 +57,19 @@ export const useCartStore = create<CartStore>((set) => ({
         )
     })),
 
-    // Added quantity updater action
     updateQuantity: (id, color, size, newQuantity) => set((state) => ({
-        cartItems: state.cartItems.map((i) =>
-            i.id === id && i.color === color && i.size === size
-                ? { ...i, quantity: Math.max(1, newQuantity) } // Lower boundary lock at 1
-                : i
-        )
-    })),
+    cartItems: state.cartItems.map((i) => {
+        if (i.id === id && i.color === color && i.size === size) {
+            // Validate against the specific size inventory
+            if (newQuantity > i.size_inventory) {
+                alert(`Only ${i.size_inventory} items available for size ${size}.`);
+                return i;
+            }
+            return { ...i, quantity: Math.max(1, newQuantity) };
+        }
+        return i;
+    })
+})),
 
     clearCart: () => set({ cartItems: [] }),
 }));
