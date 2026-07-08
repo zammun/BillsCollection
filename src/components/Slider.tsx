@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const slides = [
   {
     id: 1,
-    title: "Welcome to Bill's Collection.",
+    title: "Welcome to Bills Collection.",
     description: "Discover our latest collection of clothing. Quality, style, and unique designs.",
     img: "/1.jpg",
     url: '/list', 

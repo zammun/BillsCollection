@@ -18,6 +18,11 @@ import ScrollToTop from './components/ScrollToTop';
 import SuccessPage from './pages/Success';
 import CancelPage from './pages/Cancel';
 import OrdersPage from './pages/Orders';
+import AccessibilityPage from './pages/Accessibility';
+import TosPage from './pages/ToS';
+import DoNotSellPage from './pages/DoNotSell';
+import PricingPolicyPage from './pages/PricingPolicy';
+import PrivacyPolicyPage from './pages/PrivacyPolicy';
 
 function App() {
   return (
@@ -41,6 +46,11 @@ function App() {
           <Route path="/results" element={<ResultsPage />} />
           <Route path="/success" element={<SuccessPage />} />
           <Route path="/cancel" element={<CancelPage />} />
+          <Route path="/ToS" element={<TosPage />} />
+          <Route path="/Accessibility" element={<AccessibilityPage />} />
+          <Route path="/DoNotSell" element={<DoNotSellPage />} />
+          <Route path="/PricingPolicy" element={<PricingPolicyPage />} />
+          <Route path="/PrivacyPolicy" element={<PrivacyPolicyPage />} />
 
           {/* Secure Protected Routes */}
           <Route 

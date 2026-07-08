@@ -161,7 +161,7 @@ const CartModal = ({ onClose }: CartModalProps) => {
                             <span>Subtotal</span>
                             <span>${subtotal.toFixed(2)}</span>
                         </div>
-                        <p className="text-xs text-gray-500">Shipping, taxes, and discount codes calculated at checkout.</p>
+                        <p className="text-xs text-gray-500">Shipping and taxes calculated at checkout.</p>
                         
                         <div className="flex justify-between gap-3 mt-2">
                             <Link 

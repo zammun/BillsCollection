@@ -192,7 +192,7 @@ const CartPage = () => {
                                             <Link to={`/product/${item.id}`} className="hover:text-indigo-600 transition-colors">
                                                 <h3 className="font-semibold text-base sm:text-xl text-slate-900 leading-tight">{item.name}</h3>
                                             </Link>
-                                            <p className="text-xs sm:text-sm text-slate-500 mt-1.5 font-medium">Color: {item.color} | Size: {item.size}</p>
+                                            <p className="text-xs sm:text-sm text-gray-500 mt-1.5 font-medium">Color: {item.color} | Size: {item.size}</p>
                                             
                                             {item.size_inventory > 0 && item.size_inventory < 5 && (
                                                 <p className="text-[11px] sm:text-xs font-bold text-amber-600 mt-2 flex items-center gap-1 animate-pulse">
@@ -201,7 +201,7 @@ const CartPage = () => {
                                             )}
                                         </div>
 
-                                        {/* FIXED: Removed bg-gray-100 and gray ring for an elegant, border-blended transparent tracker */}
+                                        {/* RETAINED: Transparent background option blends beautifully into the main gold-tinted layout canvas */}
                                         <div className="flex items-center bg-transparent border border-slate-200/80 rounded-xl w-max h-9 mt-4">
                                             <button 
                                                 disabled={isCheckingOut}
@@ -243,8 +243,8 @@ const CartPage = () => {
                 </div>
 
                 {/* Right Side: Order Summary Card Block (Sticky on Desktop) */}
-                {/* FIXED: Swapped out bg-white for bg-transparent to expose the custom layout canvas color */}
-                <div className="w-full lg:w-[420px] bg-transparent border border-slate-200/80 rounded-2xl p-6 lg:sticky lg:top-24 flex flex-col gap-5 text-left">
+                {/* REVERTED: Swapped back to 'bg-white' to match structural cards style */}
+                <div className="w-full lg:w-[420px] bg-white border border-slate-200/80 rounded-2xl p-6 lg:sticky lg:top-24 flex flex-col gap-5 text-left shadow-xs">
                     <h2 className="text-lg font-bold text-slate-900 tracking-tight border-b border-slate-200/40 pb-3">Order Summary</h2>
                     
                     <div className="flex flex-col gap-3.5 text-sm text-slate-600">
@@ -253,17 +253,12 @@ const CartPage = () => {
                             <span className="font-semibold text-slate-900">${subtotal.toFixed(2)}</span>
                         </div>
                         
-                        {/* FIXED: Removed grey background pills to prevent layout blocking color cuts */}
                         <div className="flex justify-between w-full items-center">
-                            <span>Shipping</span>
-                            <span className="text-xs text-slate-400 font-semibold border border-slate-200/60 px-2 py-0.5 rounded-md">Calculated at checkout</span>
-                        </div>
-
-                        {/* FIXED: Removed grey background pills to prevent layout blocking color cuts */}
-                        <div className="flex justify-between w-full items-center">
-                            <span>Estimated Tax</span>
-                            <span className="text-xs text-slate-400 font-semibold border border-slate-200/60 px-2 py-0.5 rounded-md">Calculated at checkout</span>
-                        </div>
+    <span className="text-slate-600">Shipping & Taxes</span>
+    <span className="text-xs text-slate-400 font-medium bg-slate-50/50 border border-slate-200/60 px-2 py-0.5 rounded-md">
+        Calculated at checkout
+    </span>
+</div>
                     </div>
 
                     <hr className="border-slate-200/60 my-1" />

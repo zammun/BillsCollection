@@ -143,7 +143,7 @@ const Footer = () => {
                 
                 {/* Legal Links (Row 1) */}
                 <div className='flex flex-wrap justify-center gap-x-3 gap-y-3'>
-                    <Link to='/privacy-policy' className='hover:text-gray-900 transition-colors'>Privacy Notice</Link>
+                    <Link to='/privacypolicy' className='hover:text-gray-900 transition-colors'>Privacy Notice</Link>
                     <span className='hidden md:block'>|</span>
                     <Link to='/cookie-preferences' className='hover:text-gray-900 transition-colors'>Cookie Preferences</Link>
                     <span className='hidden md:block'>|</span>
@@ -151,16 +151,16 @@ const Footer = () => {
                     <span className='hidden md:block'>|</span>
                     <Link to='/california-privacy-rights' className='hover:text-gray-900 transition-colors'>CA Privacy Rights</Link>
                     <span className='hidden md:block'>|</span>
-                    <Link to='/do-not-sell' className='hover:text-gray-900 transition-colors'>Do Not Sell or Share My Personal Information</Link>
+                    <Link to='/donotsell' className='hover:text-gray-900 transition-colors'>Do Not Sell or Share My Personal Information</Link>
                     <span className='hidden md:block'>|</span>
-                    <Link to='/terms-of-service' className='hover:text-gray-900 transition-colors'>Terms of Service</Link>
+                    <Link to='/tos' className='hover:text-gray-900 transition-colors'>Terms of Service</Link>
                 </div>
                 
                 {/* Legal Links (Row 2) */}
                 <div className='flex flex-wrap justify-center gap-x-3 gap-y-3 mt-1'>
                     <Link to='/supply-chain-transparency' className='hover:text-gray-900 transition-colors'>CA Transparency in Supply Chains</Link>
                     <span className='hidden md:block'>|</span>
-                    <Link to='/pricing-policy' className='hover:text-gray-900 transition-colors'>Pricing Policy</Link>
+                    <Link to='/pricingpolicy' className='hover:text-gray-900 transition-colors'>Pricing Policy</Link>
                     <span className='hidden md:block'>|</span>
                     <Link to='/accessibility' className='hover:text-gray-900 transition-colors'>Accessibility</Link>
                 </div>

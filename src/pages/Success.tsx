@@ -68,7 +68,7 @@ export default function SuccessPage() {
         </div>
 
         <h1 className="text-2xl font-black text-gray-900 tracking-tight">Payment Successful!</h1>
-        <p className="text-sm text-gray-500 mt-2">Thank you for your order. We are setting things up for dispatch.</p>
+        <p className="text-sm text-gray-500 mt-2">Thank you for your order. We are now processing for delivery.</p>
 
         <div className="my-6 p-4 bg-gray-50 rounded-xl border border-gray-100 text-left flex flex-col gap-3.5 text-sm">
           <div className="flex justify-between items-center">

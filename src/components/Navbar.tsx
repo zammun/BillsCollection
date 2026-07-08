@@ -139,11 +139,14 @@ const Navbar = () => {
       
       {/* Brand Identity Bundle */}
       <div className="flex items-center gap-6 md:gap-12 shrink-0">
-        <Link to="/" className="flex items-center gap-2 md:gap-3 shrink-0" onClick={() => { setCartOpen(false); setUserMenuOpen(false); setMobileMenuOpen(false); }}>
-          <img src="/logo.png" alt="Logo" className="w-9 h-9 md:w-[50px] md:h-[50px] shrink-0" />
-          {/* FIXED: Shifted headline typography parameter straight to sharp dark slate */}
-          <div className="text-base md:text-xl font-bold tracking-wide text-slate-900">Bills Collection</div>
-        </Link>
+  <Link to="/" className="flex items-center gap-2 md:gap-3 shrink-0" onClick={() => { setCartOpen(false); setUserMenuOpen(false); setMobileMenuOpen(false); }}>
+    <img 
+        src="/logo.png" 
+        alt="Logo" 
+        className="w-12 h-12 md:w-[60px] md:h-[60px] shrink-0" 
+    />
+    <div className="text-base md:text-xl font-bold tracking-wide text-slate-900">Bills Collection</div>
+  </Link>
 
         {/* Global Navigation links */}
         {/* FIXED: Restyled navigation parameters into sleek dark links */}
