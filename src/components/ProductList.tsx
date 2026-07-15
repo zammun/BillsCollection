@@ -56,12 +56,14 @@ export const ProductCard = ({ product }: { product: any }) => {
     const prevSlide = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        setCurrentImgIdx((prev) => (prev === 0 ? images.length - 1 : prev + 1));
+        // FIXED: Changed prev + 1 to prev - 1 so it correctly navigates backwards
+        setCurrentImgIdx((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     };
 
     return (
         <div className='w-full flex flex-col gap-4 relative group/card'>
-            <div className='relative w-full h-80 bg-[#f4f3ef] rounded-md overflow-hidden p-4 flex items-center justify-center group/slider'>
+            {/* FIXED: Changed bg-[#f4f3ef] to bg-transparent to allow seamless blending */}
+            <div className='relative w-full h-80 bg-transparent rounded-md overflow-hidden p-4 flex items-center justify-center group/slider'>
                 {stockForSelectedSize > 0 && stockForSelectedSize < 5 && (
                     <div className="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md z-20 shadow-xs pointer-events-none animate-pulse">
                         Act fast, only {stockForSelectedSize} left
@@ -72,7 +74,8 @@ export const ProductCard = ({ product }: { product: any }) => {
                     <img 
                         src={images[currentImgIdx]} 
                         alt={product.name} 
-                        className='w-full h-full object-contain pointer-events-none'
+                        // FIXED: Added mix-blend-multiply
+                        className='w-full h-full object-contain pointer-events-none mix-blend-multiply'
                     />
                 </Link>
 
@@ -100,10 +103,12 @@ export const ProductCard = ({ product }: { product: any }) => {
                         <button
                             key={idx}
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrentImgIdx(idx); }}
-                            className={`w-12 h-12 bg-white rounded border aspect-square overflow-hidden p-0.5 flex-shrink-0 transition-all cursor-pointer
+                            // FIXED: Changed bg-white to bg-transparent
+                            className={`w-12 h-12 bg-transparent rounded border aspect-square overflow-hidden p-0.5 flex-shrink-0 transition-all cursor-pointer
                                 ${currentImgIdx === idx ? 'border-slate-900 ring-1 ring-slate-900 scale-95' : 'border-gray-200 hover:border-gray-400'}`}
                         >
-                            <img src={url} alt="" className="w-full h-full object-cover rounded-[2px]" />
+                            {/* FIXED: Added mix-blend-multiply */}
+                            <img src={url} alt="" className="w-full h-full object-cover rounded-[2px] mix-blend-multiply" />
                         </button>
                     ))}
                 </div>
@@ -156,7 +161,6 @@ export const ProductCard = ({ product }: { product: any }) => {
 const ProductList = () => {
     const [products, setProducts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    /* FIXED: Extracted search parameter updates mutation frame */
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
@@ -228,7 +232,6 @@ const ProductList = () => {
         );
     }
 
-    /* FIXED: Transformed raw empty fallback string into a fully styled responsive user portal escape hatch */
     if (filteredProducts.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center py-20 px-4 text-center mt-12 bg-gray-50/50 rounded-2xl border border-gray-100 max-w-2xl mx-auto animate-fadeIn">

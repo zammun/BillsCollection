@@ -23,6 +23,11 @@ import TosPage from './pages/ToS';
 import DoNotSellPage from './pages/DoNotSell';
 import PricingPolicyPage from './pages/PricingPolicy';
 import PrivacyPolicyPage from './pages/PrivacyPolicy';
+import StoresPage from './pages/Stores';
+import CookiesPage from './pages/Cookies';
+import CaliforniaPrivacyRightsPage from './pages/CaliPrivacyRights';
+import InterestBasedAdsPage from './pages/InterestBasedAds';
+import CaliforniaTransparencyPage from './pages/CaliSupplyChain';
 
 function App() {
   return (
@@ -51,7 +56,11 @@ function App() {
           <Route path="/DoNotSell" element={<DoNotSellPage />} />
           <Route path="/PricingPolicy" element={<PricingPolicyPage />} />
           <Route path="/PrivacyPolicy" element={<PrivacyPolicyPage />} />
-
+          <Route path="/stores" element={<StoresPage />} />
+          <Route path="/cookie-preferences" element={<CookiesPage />} />
+          <Route path="/california-privacy-rights" element={<CaliforniaPrivacyRightsPage />} />
+          <Route path="/interest-based-ads" element={<InterestBasedAdsPage />} />
+          <Route path="/supply-chain-transparency" element={<CaliforniaTransparencyPage />} />
           {/* Secure Protected Routes */}
           <Route 
             path="/cart" 
