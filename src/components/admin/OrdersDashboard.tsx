@@ -51,6 +51,9 @@ const OrdersDashboard = () => {
     const [editingTrackingId, setEditingTrackingId] = useState<string | null>(null);
     const [tempTracking, setTempTracking] = useState('');
     
+    // Deletion State
+    const [orderToDelete, setOrderToDelete] = useState<string | null>(null);
+    
     // Toast State
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
 
@@ -105,6 +108,21 @@ const OrdersDashboard = () => {
         }
     };
 
+    const confirmDeleteOrder = async (orderId: string) => {
+        const { error } = await supabase
+            .from('orders')
+            .delete()
+            .eq('id', orderId);
+
+        if (!error) {
+            setOrders(prev => prev.filter(o => o.id !== orderId));
+            triggerToast("Order successfully removed.", 'success');
+        } else {
+            triggerToast("Failed to remove order.", 'error');
+        }
+        setOrderToDelete(null);
+    };
+
     if (loading) return <div className="text-center py-12 text-sm text-slate-500 font-semibold">Loading orders data...</div>;
 
     return (
@@ -123,7 +141,33 @@ const OrdersDashboard = () => {
                     </div>
                 ) : (
                     orders.map((order) => (
-                        <div key={order.id} className="bg-white border border-slate-200 shadow-xs rounded-2xl overflow-hidden flex flex-col">
+                        <div key={order.id} className="bg-white border border-slate-200 shadow-xs rounded-2xl overflow-hidden flex flex-col relative">
+                            
+                            {/* Deletion Confirmation Overlay */}
+                            {orderToDelete === order.id && (
+                                <div className="absolute inset-0 bg-white/90 backdrop-blur-sm z-50 flex flex-col items-center justify-center p-6 text-center animate-fadeIn">
+                                    <div className="w-16 h-16 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center text-2xl mb-4 shadow-sm border border-rose-100">
+                                        ✕
+                                    </div>
+                                    <h3 className="text-lg font-bold text-slate-900 mb-2">Delete Order {order.id.slice(0, 8)}?</h3>
+                                    <p className="text-slate-500 text-sm max-w-sm mb-6">This action cannot be undone. This will permanently remove the order record and all associated items from the database.</p>
+                                    <div className="flex items-center gap-3">
+                                        <button 
+                                            onClick={() => setOrderToDelete(null)} 
+                                            className="px-5 py-2.5 text-slate-600 font-bold bg-white border border-slate-200 hover:bg-slate-50 rounded-xl transition-colors cursor-pointer shadow-xs"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button 
+                                            onClick={() => confirmDeleteOrder(order.id)} 
+                                            className="px-5 py-2.5 bg-rose-600 text-white font-bold rounded-xl shadow-xs hover:bg-rose-700 transition-colors cursor-pointer"
+                                        >
+                                            Yes, Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Meta Top Strip */}
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-5 bg-[#f4f3ef]/40 border-b border-slate-200/60 text-xs font-semibold text-slate-600">
                                 <div>
@@ -154,6 +198,16 @@ const OrdersDashboard = () => {
                                         className="px-3 py-1.5 bg-slate-900 text-white text-[10px] font-bold uppercase rounded-lg hover:bg-slate-800 transition-colors cursor-pointer shadow-xs"
                                     >
                                         Update
+                                    </button>
+                                    
+                                    <div className="w-px h-6 bg-slate-200/80 mx-1 hidden sm:block"></div>
+                                    
+                                    <button 
+                                        onClick={() => setOrderToDelete(order.id)}
+                                        className="w-7 h-7 flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                                        title="Remove Order"
+                                    >
+                                        ✕
                                     </button>
                                 </div>
                             </div>

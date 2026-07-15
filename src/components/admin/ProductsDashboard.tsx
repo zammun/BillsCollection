@@ -171,7 +171,28 @@ const ProductsDashboard = () => {
     const handleSaveAsTemplate = async () => {
         if (!formData.name.trim()) return triggerToast("Please enter at least a product name to save a template blueprint.", "error");
         
+        setLoading(true);
         try {
+            const uploadedUrls: string[] = [...existingImageUrls];
+
+            // Upload any NEW images before saving the template
+            for (const file of images) {
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Math.random()}.${fileExt}`;
+                
+                const { error: uploadError } = await supabase.storage
+                    .from('product-images')
+                    .upload(fileName, file);
+
+                if (uploadError) throw new Error(`Storage Error: ${uploadError.message}`);
+
+                const { data: urlData } = supabase.storage
+                    .from('product-images')
+                    .getPublicUrl(fileName);
+
+                uploadedUrls.push(urlData.publicUrl);
+            }
+
             const templatePayload = {
                 name: formData.name,
                 price: formData.price,
@@ -179,7 +200,7 @@ const ProductsDashboard = () => {
                 color: formData.color,
                 type: formData.type,
                 sizes: { ...formData.sizes },
-                image_urls: [...existingImageUrls]
+                image_urls: uploadedUrls // Use the combined uploaded URLs
             };
 
             const { error } = await supabase
@@ -188,11 +209,20 @@ const ProductsDashboard = () => {
 
             if (error) throw error;
 
+            // Move the newly uploaded images into the "existing" array in the UI 
+            // so we don't upload them twice if the user clicks "Publish Item" right after.
+            setOriginalImageUrls(uploadedUrls);
+            imagePreviews.forEach(url => URL.revokeObjectURL(url));
+            setImages([]);
+            setImagePreviews([]);
+
             triggerToast(`Template "${formData.name}" saved securely.`);
             fetchTemplates(); 
         } catch (err: any) {
             console.error("Error saving template to DB:", err);
             triggerToast(err.message || "Failed to save layout preset template.", "error");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -351,7 +381,7 @@ const ProductsDashboard = () => {
         <div className="w-full">
             {/* --- TOAST NOTIFICATIONS UI NODE --- */}
             {toast && (
-                <div className={`fixed top-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-xl border shadow-xl animate-fadeIn transition-all duration-300 max-w-sm font-medium text-xs tracking-wide uppercase
+                <div className={`fixed top-6 right-6 z-[999] flex items-center gap-3 px-5 py-3.5 rounded-xl border shadow-xl animate-fadeIn transition-all duration-300 max-w-sm font-medium text-xs tracking-wide uppercase
                     ${toast.type === 'success' ? 'bg-white border-emerald-200 text-emerald-800' : ''}
                     ${toast.type === 'error' ? 'bg-white border-rose-200 text-rose-800' : ''}
                     ${toast.type === 'info' ? 'bg-white border-indigo-100 text-indigo-900' : ''}
@@ -484,7 +514,7 @@ const ProductsDashboard = () => {
                                 {loading ? "Processing..." : (editingProductId !== null ? "Save Changes" : "Publish Item")}
                             </button>
                             
-                            <button type="button" onClick={handleSaveAsTemplate} className="w-full bg-white text-slate-700 font-semibold text-sm py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs">
+                            <button type="button" onClick={handleSaveAsTemplate} disabled={loading} className="w-full bg-white text-slate-700 font-semibold text-sm py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors disabled:opacity-50 cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs">
                                 💾 Save Preset Template
                             </button>
 
