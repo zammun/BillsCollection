@@ -28,6 +28,7 @@ import CookiesPage from './pages/Cookies';
 import CaliforniaPrivacyRightsPage from './pages/CaliPrivacyRights';
 import InterestBasedAdsPage from './pages/InterestBasedAds';
 import CaliforniaTransparencyPage from './pages/CaliSupplyChain';
+import Affiliates from './pages/Affiliates';
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
           <Route path="/california-privacy-rights" element={<CaliforniaPrivacyRightsPage />} />
           <Route path="/interest-based-ads" element={<InterestBasedAdsPage />} />
           <Route path="/supply-chain-transparency" element={<CaliforniaTransparencyPage />} />
+          <Route path="/affiliates" element={<Affiliates />} />
           {/* Secure Protected Routes */}
           <Route 
             path="/cart" 
