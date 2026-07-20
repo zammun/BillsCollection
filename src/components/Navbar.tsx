@@ -230,7 +230,7 @@ const Navbar = () => {
       {mobileMenuOpen && (
         <div className="absolute top-20 left-0 w-full bg-[#f4f3ef]/95 backdrop-blur-lg p-5 border-t border-slate-200/60 shadow-2xl flex flex-col gap-5 md:hidden z-40 animate-fadeIn">
           <div className="w-full">
-            <SearchBar />
+            <SearchBar onSearch={() => setMobileMenuOpen(false)} />
           </div>
           <div className="flex flex-col gap-2 font-bold text-lg pt-4 border-t border-slate-200/60">
             <NavLink 

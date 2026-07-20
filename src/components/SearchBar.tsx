@@ -1,22 +1,26 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 
-const SearchBar = () => {
+interface SearchBarProps {
+    onSearch?: () => void;
+}
+
+const SearchBar = ({ onSearch }: SearchBarProps) => {
     const navigate = useNavigate();
-    const location = useLocation(); // Listen to active route changes
+    const location = useLocation();
     const [searchParams] = useSearchParams();
     const [query, setQuery] = useState(searchParams.get("search") || "");
 
-    // Automatically clear the search bar text whenever the user navigates to a new page
     useEffect(() => {
         setQuery("");
-    }, [location.pathname]); // Fires every time the URL path shifts
+    }, [location.pathname]);
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
         if (query.trim()) {
             navigate(`/results?search=${encodeURIComponent(query.trim())}`);
+            if (onSearch) onSearch(); // Closes mobile menu on search execution
         }
     };
 
