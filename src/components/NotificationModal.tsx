@@ -1,6 +1,6 @@
 import { useNotificationStore } from '../store/useNotificationStore';
 
-export default function NotificationModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+export default function NotificationModal({ isOpen }: { isOpen: boolean; onClose: () => void }) {
   const { notifications, markAsRead, clearAll } = useNotificationStore();
 
   if (!isOpen) return null;
