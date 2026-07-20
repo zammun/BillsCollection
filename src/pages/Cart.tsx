@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useCartStore } from '../store/useCartStore';
 import { supabase } from '../supabase';
 
 const CartPage = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const cartItems = useCartStore((state) => state.cartItems);
     const removeFromCart = useCartStore((state) => state.removeFromCart);
     const updateQuantity = useCartStore((state) => state.updateQuantity);
-    const clearCart = useCartStore((state) => state.clearCart);
+    // const clearCart = useCartStore((state) => state.clearCart);
 
     const [isCheckingOut, setIsCheckingOut] = useState(false);
 
