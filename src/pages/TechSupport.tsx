@@ -28,7 +28,7 @@ export default function TechSupport() {
             <img 
               src="/dev.jpg" 
               alt="Lead Developer" 
-              className="w-full h-96 object-cover object-top transform hover:scale-105 transition-transform duration-500"
+              className="w-full h-auto object-contain transform hover:scale-105 transition-transform duration-500"
             />
           </div>
           <div className="w-full md:w-1/2 space-y-4 text-left">
