@@ -40,19 +40,25 @@ const CartPage = () => {
     };
 
     // --- STRIPE SECURE CHECKOUT REDIRECT ---
+    // --- STRIPE SECURE CHECKOUT ---
     const handleCheckout = async () => {
         setIsCheckingOut(true);
         try {
-            // 1. Authenticate active user session context
             const { data: { user } } = await supabase.auth.getUser();
+            
             const currentUserId = user ? user.id : 'guest';
-            if (authError || !user) {
-                alert("Please log in to complete your transaction checkout loop.");
-                setIsCheckingOut(false);
-                return;
-            }
+            const userEmail = user ? user.email : undefined;
+            const metadata = user ? user.user_metadata : null;
+            
+            // Extract shipping data if it exists in the profile
+            const userAddress = metadata?.streetAddress ? {
+                name: metadata.name || userEmail?.split("@")[0],
+                streetAddress: metadata.streetAddress,
+                city: metadata.city,
+                stateCode: metadata.stateCode,
+                zipCode: metadata.zipCode
+            } : null;
 
-            // 2. Format cart items into standard Stripe line_items payload layout
             const lineItems = cartItems.map((item) => ({
                 price_data: {
                     currency: 'usd',
@@ -65,17 +71,16 @@ const CartPage = () => {
                 quantity: item.quantity,
             }));
 
-            // 3. Request a secure payment session URL from your Netlify backend function
-             const response = await fetch('http://localhost:9999/.netlify/functions/checkout', { // <-- Updated to standalone functions port
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-        lineItems,
-        userId: user.id,
-    }),
-});
+            const response = await fetch('http://localhost:9999/.netlify/functions/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    lineItems,
+                    userId: currentUserId,
+                    userEmail, // Sent to backend
+                    userAddress // Sent to backend
+                }),
+            });
 
             const session = await response.json();
 
@@ -83,7 +88,6 @@ const CartPage = () => {
                 throw new Error(session.error || 'Failed to initialize secure checkout terminal.');
             }
 
-            // 4. Handoff context routing seamlessly to Stripe's secure billing portal canvas
             window.location.assign(session.url);
 
         } catch (error: any) {

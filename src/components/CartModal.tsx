@@ -38,14 +38,25 @@ const CartModal = ({ onClose }: CartModalProps) => {
 
     // --- STRIPE SECURE CHECKOUT FOR MODAL ---
     // --- STRIPE SECURE CHECKOUT FOR MODAL ---
+    // --- STRIPE SECURE CHECKOUT ---
     const handleCheckout = async () => {
         setIsCheckingOut(true);
         try {
-            // 1. Get user session, but do not throw an error if they are missing
             const { data: { user } } = await supabase.auth.getUser();
+            
             const currentUserId = user ? user.id : 'guest';
+            const userEmail = user ? user.email : undefined;
+            const metadata = user ? user.user_metadata : null;
+            
+            // Extract shipping data if it exists in the profile
+            const userAddress = metadata?.streetAddress ? {
+                name: metadata.name || userEmail?.split("@")[0],
+                streetAddress: metadata.streetAddress,
+                city: metadata.city,
+                stateCode: metadata.stateCode,
+                zipCode: metadata.zipCode
+            } : null;
 
-            // 2. Format cart items into standard Stripe line_items payload layout
             const lineItems = cartItems.map((item) => ({
                 price_data: {
                     currency: 'usd',
@@ -58,15 +69,14 @@ const CartModal = ({ onClose }: CartModalProps) => {
                 quantity: item.quantity,
             }));
 
-            // 3. Request secure payment session URL
             const response = await fetch('http://localhost:9999/.netlify/functions/checkout', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     lineItems,
                     userId: currentUserId,
+                    userEmail, // Sent to backend
+                    userAddress // Sent to backend
                 }),
             });
 
@@ -76,7 +86,6 @@ const CartModal = ({ onClose }: CartModalProps) => {
                 throw new Error(session.error || 'Failed to initialize secure checkout terminal.');
             }
 
-            // 4. Handoff to Stripe
             window.location.assign(session.url);
 
         } catch (error: any) {

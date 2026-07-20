@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Menu from "./Menu";
 import SearchBar from "./SearchBar";
 import NavIcons from "./NavIcons";
 import { useAuth } from "../hooks/useAuth";
@@ -13,7 +12,7 @@ const UserMenu = ({ closeMenu }: { closeMenu: () => void }) => {
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [, setError] = useState("");
 
   const menuRef = useRef<HTMLDivElement>(null);
 
