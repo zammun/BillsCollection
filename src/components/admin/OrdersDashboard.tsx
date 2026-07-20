@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../supabase';
+import { useNotificationStore } from '../../store/useNotificationStore';
 
 // --- UI TOAST COMPONENT (INTERNAL) ---
 const Toast = ({ message, type, onClose }: { message: string, type: 'success' | 'error' | 'info', onClose: () => void }) => {
@@ -56,6 +57,9 @@ const OrdersDashboard = () => {
     
     // Toast State
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
+    
+    // Notification Store Hook
+    const addNotification = useNotificationStore((state) => state.addNotification);
 
     const triggerToast = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
         setToast({ message, type });
@@ -88,6 +92,19 @@ const OrdersDashboard = () => {
 
         if (!error) {
             triggerToast(`Order ${order.id.slice(0, 6)} updated to ${order.fulfillment_status}`, 'success');
+
+            // Trigger notification based on status
+            if (order.fulfillment_status === 'Shipped') {
+                addNotification(
+                    "Order Shipped 📦",
+                    `Your order #${order.id.slice(0, 8)} is on its way to you.`
+                );
+            } else if (order.fulfillment_status === 'Delivered') {
+                addNotification(
+                    "Order Delivered 🏡",
+                    `Your order #${order.id.slice(0, 8)} has arrived. Enjoy your purchase!`
+                );
+            }
         } else {
             triggerToast("Failed to update status.", 'error');
         }

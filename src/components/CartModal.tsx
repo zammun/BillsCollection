@@ -96,7 +96,7 @@ const CartModal = ({ onClose }: CartModalProps) => {
     };
 
     return (
-        <div className="absolute top-14 right-0 w-[calc(100vw-32px)] sm:w-96 p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white border border-gray-100 flex flex-col gap-6 z-[100] pointer-events-auto">
+        <div className="absolute top-14 right-0 w-[calc(100vw-24px)] max-w-sm sm:w-96 p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white border border-gray-100 flex flex-col gap-6 z-[100] pointer-events-auto">
             
             <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold text-gray-900 tracking-tight">Shopping Cart</h2>

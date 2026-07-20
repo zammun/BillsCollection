@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import CartModal from './CartModal';
+import NotificationModal from './NotificationModal';
 import { useCartStore } from '../store/useCartStore';
 
 interface NavIconsProps {
@@ -8,16 +9,21 @@ interface NavIconsProps {
   onCartClick: (e: React.MouseEvent) => void;
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
+  isNotificationOpen: boolean;
+  onNotificationClick: (e: React.MouseEvent) => void;
+  setIsNotificationOpen: (open: boolean) => void;
 }
 
 const NavIcons = ({ 
   onProfileClick, 
   onCartClick, 
   isCartOpen, 
-  setIsCartOpen 
+  setIsCartOpen,
+  isNotificationOpen,
+  onNotificationClick,
+  setIsNotificationOpen
 }: NavIconsProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  /* FIXED: Track localized bubble pop triggers */
   const [shouldAnimate, setShouldAnimate] = useState(false);
 
   const cartItems = useCartStore((state) => state.cartItems);
@@ -27,26 +33,23 @@ const NavIcons = ({
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsCartOpen(false); 
+        setIsNotificationOpen(false);
       }
     };
     
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [setIsCartOpen]);
+  }, [setIsCartOpen, setIsNotificationOpen]);
 
-  /* FIXED: Watch quantity values to inject the scale pop animation */
   useEffect(() => {
     if (totalItemsInCart === 0) return;
     setShouldAnimate(true);
-    
     const handler = setTimeout(() => setShouldAnimate(false), 300);
     return () => clearTimeout(handler);
   }, [totalItemsInCart]);
 
   return (
     <div ref={containerRef} className='flex items-center gap-4 xl:gap-6 relative shrink-0'>
-      
-      {/* Self-contained modular keyframe styling injection */}
       <style>{`
         @keyframes cartPop {
           0% { transform: scale(1); }
@@ -68,13 +71,18 @@ const NavIcons = ({
         onClick={onProfileClick} 
       />
       
-      <img 
-        src='/notification.png' 
-        alt='Notifications' 
-        width={22} 
-        height={22} 
-        className="cursor-pointer shrink-0" 
-      />
+      <div 
+        className="cursor-pointer shrink-0 relative" 
+        onClick={onNotificationClick}
+      >
+        <img 
+          src='/notification.png' 
+          alt='Notifications' 
+          width={22} 
+          height={22} 
+          className="shrink-0" 
+        />
+      </div>
       
       <div className='relative cursor-pointer shrink-0 py-1' onClick={onCartClick}>
         <img 
@@ -86,7 +94,6 @@ const NavIcons = ({
         />
         
         {totalItemsInCart > 0 && (
-          /* FIXED: Added conditional animate-bubble-pop injector helper */
           <div className={`absolute -top-3.5 -right-3.5 w-5 h-5 bg-[#F35C7A] rounded-full text-white text-[11px] font-bold flex items-center justify-center select-none shadow-sm transition-all
             ${shouldAnimate ? 'animate-bubble-pop' : ''}`}
           >
@@ -96,6 +103,7 @@ const NavIcons = ({
       </div>
       
       {isCartOpen && <CartModal onClose={() => setIsCartOpen(false)} />}
+      <NotificationModal isOpen={isNotificationOpen} onClose={() => setIsNotificationOpen(false)} />
     </div>
   );
 };

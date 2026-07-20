@@ -18,7 +18,7 @@ export default function TechSupport() {
             BillsCollection <span className="text-[#d4af37]">Tech Support</span>
           </h1>
           <p className="text-lg text-zinc-600 max-w-2xl mx-auto leading-relaxed">
-            Experiencing a bug or technical issue? Report it directly to our engineering desk below.
+            Experiencing a bug or technical issue? Report it here.
           </p>
         </div>
 
@@ -49,7 +49,7 @@ export default function TechSupport() {
               <div className="text-5xl">✅</div>
               <h3 className="text-2xl font-semibold text-zinc-900">Bug Report Received</h3>
               <p className="text-zinc-600 max-w-md mx-auto">
-                Thank you for helping us improve BillsCollection. Our engineering team has logged your ticket.
+                Thank you for helping us improve Bills Collection. Our engineering team has logged your ticket.
               </p>
             </div>
           ) : (
@@ -80,7 +80,7 @@ export default function TechSupport() {
                 <textarea 
                   required 
                   rows={4}
-                  placeholder="Provide steps to reproduce, error logs, or page details..."
+                  placeholder="Provide information"
                   className="w-full p-4 rounded-xl border border-zinc-200 focus:outline-none focus:border-zinc-900 text-sm transition-colors bg-zinc-50/50 resize-none"
                 ></textarea>
               </div>

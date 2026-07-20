@@ -94,7 +94,7 @@ const Footer = () => {
                             <Link to='/contact' className="hover:text-indigo-600 transition-colors">Customer Service</Link>
                             <Link to='/profile' className="hover:text-indigo-600 transition-colors">My Account</Link>
                             <Link to='/stores' className="hover:text-indigo-600 transition-colors">Find a Store</Link>
-                            <Link to='/tech-support' className="hover:text-indigo-600 transition-colors">Tech Support</Link>
+                            <Link to='/tech-support' className="hover:text-indigo-600 transition-colors">Technical Support</Link>
                         </div>
                     </div>
                 </div>

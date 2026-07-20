@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import NavIcons from "./NavIcons";
 import { useAuth } from "../hooks/useAuth";
@@ -109,6 +109,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false); 
+  const [notificationOpen, setNotificationOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const cartItems = useCartStore((state) => state.cartItems);
@@ -121,6 +122,7 @@ const Navbar = () => {
         navigate("/profile");
     } else {
         setCartOpen(false);
+        setNotificationOpen(false);
         setMobileMenuOpen(false);
         setUserMenuOpen(true);
     }
@@ -135,9 +137,18 @@ const Navbar = () => {
         }
     } else {
         setUserMenuOpen(false);
+        setNotificationOpen(false);
         setMobileMenuOpen(false);
         setCartOpen(true);
     }
+  };
+
+  const handleNotificationClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setUserMenuOpen(false);
+    setCartOpen(false);
+    setMobileMenuOpen(false);
+    setNotificationOpen(!notificationOpen);
   };
 
   return (
@@ -145,34 +156,46 @@ const Navbar = () => {
       
       {/* Brand Identity Bundle */}
       <div className="flex items-center gap-6 md:gap-12 shrink-0">
-        <Link to="/" className="flex items-center gap-2 md:gap-4 shrink-0" onClick={() => { setCartOpen(false); setUserMenuOpen(false); setMobileMenuOpen(false); }}>
+        <Link to="/" className="flex items-center gap-2 md:gap-4 shrink-0" onClick={() => { setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); setMobileMenuOpen(false); }}>
           <img 
               src="/logo.png" 
               alt="Logo" 
               className="w-14 h-14 md:w-[70px] md:h-[70px] shrink-0" 
           />
-          {/* Bigger, tighter, bolder logo text */}
           <div className="text-xl md:text-3xl font-extrabold tracking-tight text-slate-900">Bills Collection</div>
         </Link>
 
-        {/* Global Navigation links */}
-        {/* Increased to text-lg for a more premium, legible feel */}
-        <nav className="hidden lg:flex items-center gap-8 text-lg font-semibold text-slate-600">
-          <Link to="/" className="hover:text-slate-900 transition-colors">Home</Link>
-          <Link to="/about" className="hover:text-slate-900 transition-colors">About</Link>
-          <Link to="/contact" className="hover:text-slate-900 transition-colors">Contact</Link>
+        {/* Global Navigation links with Active Highlighting */}
+        <nav className="hidden lg:flex items-center gap-8 text-lg font-semibold">
+          <NavLink 
+            to="/" 
+            end 
+            className={({ isActive }) => `transition-colors ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
+          >
+            Home
+          </NavLink>
+          <NavLink 
+            to="/about" 
+            className={({ isActive }) => `transition-colors ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
+          >
+            About
+          </NavLink>
+          <NavLink 
+            to="/contact" 
+            className={({ isActive }) => `transition-colors ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
+          >
+            Contact
+          </NavLink>
         </nav>
       </div>
 
       {/* Primary Actions Deck */}
       <div className="flex-grow flex items-center justify-end gap-4 md:gap-6">
         
-        {/* Desktop Search Wrapper */}
         <div className="hidden md:flex flex-1 max-w-[280px] justify-end">
           <SearchBar />
         </div>
         
-        {/* Interaction Triggers Anchor node */}
         <div className="relative shrink-0 flex items-center gap-5">
           <NavIcons 
             onProfileClick={handleProfileClick} 
@@ -180,11 +203,13 @@ const Navbar = () => {
             onCartClick={handleCartClick}
             isCartOpen={cartOpen}
             setIsCartOpen={setCartOpen}
+            isNotificationOpen={notificationOpen}
+            onNotificationClick={handleNotificationClick}
+            setIsNotificationOpen={setNotificationOpen}
           />
           
-          {/* Mobile Hamburg Toggle Button */}
           <button 
-            onClick={() => { setMobileMenuOpen(!mobileMenuOpen); setCartOpen(false); setUserMenuOpen(false); }}
+            onClick={() => { setMobileMenuOpen(!mobileMenuOpen); setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); }}
             className="text-slate-800 p-1 focus:outline-none md:hidden block shrink-0 cursor-pointer"
             aria-label="Toggle navigation menu"
           >
@@ -203,17 +228,36 @@ const Navbar = () => {
 
       {/* Mobile Menu Panel Overlay */}
       {mobileMenuOpen && (
-  <div className="absolute top-20 left-0 w-full bg-[#f4f3ef]/95 backdrop-blur-lg p-5 border-t border-slate-200/60 shadow-2xl flex flex-col gap-5 md:hidden z-40 animate-fadeIn">
-    <div className="w-full">
-      <SearchBar />
-    </div>
-    <div className="flex flex-col gap-2 text-slate-800 font-bold text-lg pt-4 border-t border-slate-200/60">
-      <Link to="/" onClick={() => setMobileMenuOpen(false)} className="hover:text-slate-500 py-3 px-2 rounded-lg hover:bg-slate-200/50 transition-colors">Home</Link>
-      <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="hover:text-slate-500 py-3 px-2 rounded-lg hover:bg-slate-200/50 transition-colors">About</Link>
-      <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="hover:text-slate-500 py-3 px-2 rounded-lg hover:bg-slate-200/50 transition-colors">Contact</Link>
-    </div>
-  </div>
-)}
+        <div className="absolute top-20 left-0 w-full bg-[#f4f3ef]/95 backdrop-blur-lg p-5 border-t border-slate-200/60 shadow-2xl flex flex-col gap-5 md:hidden z-40 animate-fadeIn">
+          <div className="w-full">
+            <SearchBar />
+          </div>
+          <div className="flex flex-col gap-2 font-bold text-lg pt-4 border-t border-slate-200/60">
+            <NavLink 
+              to="/" 
+              end 
+              onClick={() => setMobileMenuOpen(false)} 
+              className={({ isActive }) => `py-3 px-2 rounded-lg transition-colors ${isActive ? 'text-slate-900 bg-slate-200/60' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'}`}
+            >
+              Home
+            </NavLink>
+            <NavLink 
+              to="/about" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className={({ isActive }) => `py-3 px-2 rounded-lg transition-colors ${isActive ? 'text-slate-900 bg-slate-200/60' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'}`}
+            >
+              About
+            </NavLink>
+            <NavLink 
+              to="/contact" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className={({ isActive }) => `py-3 px-2 rounded-lg transition-colors ${isActive ? 'text-slate-900 bg-slate-200/60' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'}`}
+            >
+              Contact
+            </NavLink>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

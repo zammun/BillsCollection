@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
 import { useCartStore } from "../store/useCartStore";
+import { useNotificationStore } from "../store/useNotificationStore"; // 1. Import store
 import { supabase } from "../supabase";
 
 interface OrderSummary {
@@ -13,6 +14,7 @@ interface OrderSummary {
 export default function SuccessPage() {
   const { user } = useAuthContext();
   const clearCart = useCartStore((state) => state.clearCart);
+  const addNotification = useNotificationStore((state) => state.addNotification); // 2. Pull hook
   const [latestOrder, setLatestOrder] = useState<OrderSummary | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +37,14 @@ export default function SuccessPage() {
           .single();
 
         if (error) throw error;
-        if (data) setLatestOrder(data);
+        if (data) {
+          setLatestOrder(data);
+          // 3. Fire the notification when the order data successfully loads here
+          addNotification(
+            "Order Confirmed! 🎉", 
+            `Your payment was successful. Order #${data.id.slice(0, 8)} is being prepared.`
+          );
+        }
       } catch (err) {
         console.error("Error retrieving order confirmation:", err);
       } finally {
@@ -44,7 +53,7 @@ export default function SuccessPage() {
     }
 
     fetchLatestOrder();
-  }, [user]);
+  }, [user, addNotification]);
 
   // Generate an estimated delivery target date 5 days out formatted in MM-DD-YYYY
   const getEstimatedDeliveryDate = () => {
