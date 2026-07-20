@@ -203,18 +203,17 @@ const Navbar = () => {
 
       {/* Mobile Menu Panel Overlay */}
       {mobileMenuOpen && (
-        <div className="absolute top-20 left-0 w-full bg-[#f4f3ef]/95 backdrop-blur-lg p-5 border-t border-slate-200/60 shadow-2xl flex flex-col gap-5 md:hidden z-40 animate-fadeIn">
-          <div className="w-full" onClick={() => setMobileMenuOpen(false)}>
-            <SearchBar />
-          </div>
-          {/* Increased mobile text to text-lg and added more vertical padding for easier tapping */}
-          <div className="flex flex-col gap-2 text-slate-800 font-bold text-lg pt-4 border-t border-slate-200/60">
-            <Link to="/" onClick={() => setMobileMenuOpen(false)} className="hover:text-slate-500 py-3 px-2 rounded-lg hover:bg-slate-200/50 transition-colors">Home</Link>
-            <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="hover:text-slate-500 py-3 px-2 rounded-lg hover:bg-slate-200/50 transition-colors">About</Link>
-            <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="hover:text-slate-500 py-3 px-2 rounded-lg hover:bg-slate-200/50 transition-colors">Contact</Link>
-          </div>
-        </div>
-      )}
+  <div className="absolute top-20 left-0 w-full bg-[#f4f3ef]/95 backdrop-blur-lg p-5 border-t border-slate-200/60 shadow-2xl flex flex-col gap-5 md:hidden z-40 animate-fadeIn">
+    <div className="w-full">
+      <SearchBar />
+    </div>
+    <div className="flex flex-col gap-2 text-slate-800 font-bold text-lg pt-4 border-t border-slate-200/60">
+      <Link to="/" onClick={() => setMobileMenuOpen(false)} className="hover:text-slate-500 py-3 px-2 rounded-lg hover:bg-slate-200/50 transition-colors">Home</Link>
+      <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="hover:text-slate-500 py-3 px-2 rounded-lg hover:bg-slate-200/50 transition-colors">About</Link>
+      <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="hover:text-slate-500 py-3 px-2 rounded-lg hover:bg-slate-200/50 transition-colors">Contact</Link>
+    </div>
+  </div>
+)}
     </div>
   );
 };
