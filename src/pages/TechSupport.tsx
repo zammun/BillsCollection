@@ -28,7 +28,7 @@ export default function TechSupport() {
             <img 
               src="/dev.jpg" 
               alt="Lead Developer" 
-              className="w-full h-80 object-cover object-center transform hover:scale-105 transition-transform duration-500" 
+              className="w-full h-96 object-cover object-top transform hover:scale-105 transition-transform duration-500"
             />
           </div>
           <div className="w-full md:w-1/2 space-y-4 text-left">
@@ -37,7 +37,7 @@ export default function TechSupport() {
               We're on it.
             </h2>
             <p className="text-zinc-600 leading-relaxed text-sm">
-              Our system architecture is continuously monitored, but edge cases happen. Send details regarding unexpected behavior, broken checkout flows, or layout glitches directly to the desk of our lead developer.
+              Our system architecture is continuously monitored, but edge cases happen. Send details regarding unexpected behavior, broken checkouts, or glitches directly to the desk of our lead developer.
             </p>
           </div>
         </div>
@@ -61,7 +61,7 @@ export default function TechSupport() {
                   <input 
                     type="text" 
                     required 
-                    placeholder="Muneeb Zaman"
+                    placeholder="LeBron James"
                     className="w-full p-4 rounded-xl border border-zinc-200 focus:outline-none focus:border-zinc-900 text-sm transition-colors bg-zinc-50/50" 
                   />
                 </div>
