@@ -39,90 +39,56 @@ const CartPage = () => {
         setConfirmModal({ isOpen: false, itemToRemove: null });
     };
 
-    // --- DIRECT FRONTEND CHECKOUT & STOCK DECREMENT SIMULATION ---
+    // --- STRIPE SECURE CHECKOUT REDIRECT ---
     const handleCheckout = async () => {
         setIsCheckingOut(true);
         try {
             // 1. Authenticate active user session context
-            const { data: { user }, error: authError } = await supabase.auth.getUser();
+            const { data: { user } } = await supabase.auth.getUser();
+            const currentUserId = user ? user.id : 'guest';
             if (authError || !user) {
                 alert("Please log in to complete your transaction checkout loop.");
                 setIsCheckingOut(false);
                 return;
             }
 
-            // 2. Decrement size inventory parameters for each item in the cart array
-            for (const item of cartItems) {
-                const { data: product, error: fetchError } = await supabase
-                    .from('products')
-                    .select('sizes')
-                    .eq('id', Number(item.id))
-                    .single();
+            // 2. Format cart items into standard Stripe line_items payload layout
+            const lineItems = cartItems.map((item) => ({
+                price_data: {
+                    currency: 'usd',
+                    product_data: {
+                        name: `${item.name} (${item.color} / ${item.size})`,
+                        images: item.image ? [item.image] : [],
+                    },
+                    unit_amount: Math.round(item.price * 100),
+                },
+                quantity: item.quantity,
+            }));
 
-                if (fetchError || !product) {
-                    throw new Error(`Failed to read current stock metrics for product: ${item.name}`);
-                }
+            // 3. Request a secure payment session URL from your Netlify backend function
+             const response = await fetch('http://localhost:9999/.netlify/functions/checkout', { // <-- Updated to standalone functions port
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        lineItems,
+        userId: user.id,
+    }),
+});
 
-                const currentSizes = product.sizes || { S: 0, M: 0, L: 0, XL: 0 };
-                const selectedSizeKey = item.size as keyof typeof currentSizes;
-                
-                // Safe step metric deduction
-                const updatedSizeStock = Math.max(0, (currentSizes[selectedSizeKey] || 0) - item.quantity);
-                
-                const newSizesObject = {
-                    ...currentSizes,
-                    [selectedSizeKey]: updatedSizeStock
-                };
+            const session = await response.json();
 
-                // Mathematical calculation summary matching int4 parameters boundary rules
-                const newTotalInventoryCount = Object.values(newSizesObject).reduce((a, b) => Number(a) + Number(b), 0);
-
-                // Push inventory decrement changes directly live
-                const { error: updateError } = await supabase
-                    .from('products')
-                    .update({
-                        sizes: newSizesObject,
-                        inventory_count: newTotalInventoryCount
-                    })
-                    .eq('id', Number(item.id));
-
-                if (updateError) throw updateError;
+            if (!response.ok || !session.url) {
+                throw new Error(session.error || 'Failed to initialize secure checkout terminal.');
             }
 
-            // 3. Document order log entry straight into database ledger rows mapping matching your schema structures
-            const orderPayload = {
-                user_id: user.id,
-                items: cartItems, // Directly drops complete snapshot context array into jsonb cell grid block
-                total_amount: subtotal,
-                shipping_address: user.user_metadata?.streetAddress 
-                    ? {
-                        street: user.user_metadata.streetAddress,
-                        city: user.user_metadata.city,
-                        state: user.user_metadata.stateCode,
-                        zip: user.user_metadata.zipCode
-                      }
-                    : null,
-                payment_status: 'Paid', // Authorizing local validation status flags mock settings
-                fulfillment_status: 'Processing',
-                tracking_number: null
-            };
-
-            const { error: orderError } = await supabase
-                .from('orders')
-                .insert([orderPayload]);
-
-            if (orderError) throw orderError;
-
-            // 4. Wipe cart from Zustand state and database columns seamlessly via store middleware pipeline triggers
-            clearCart();
-
-            // 5. Shift layout framework portal context straight to user success landing module routing
-            navigate('/success');
+            // 4. Handoff context routing seamlessly to Stripe's secure billing portal canvas
+            window.location.assign(session.url);
 
         } catch (error: any) {
-            console.error("Simulation database mutation pipeline crashed loop error:", error);
-            alert(error.message || "An expected synchronization broken loop error occurred while executing mock checkout processes.");
-        } finally {
+            console.error("Stripe gateway routing engine exception:", error);
+            alert(error.message || "An error occurred while executing checkout processes.");
             setIsCheckingOut(false);
         }
     };
@@ -201,7 +167,6 @@ const CartPage = () => {
                                             )}
                                         </div>
 
-                                        {/* RETAINED: Transparent background option blends beautifully into the main gold-tinted layout canvas */}
                                         <div className="flex items-center bg-transparent border border-slate-200/80 rounded-xl w-max h-9 mt-4">
                                             <button 
                                                 disabled={isCheckingOut}
@@ -242,8 +207,7 @@ const CartPage = () => {
                     ))}
                 </div>
 
-                {/* Right Side: Order Summary Card Block (Sticky on Desktop) */}
-                {/* REVERTED: Swapped back to 'bg-white' to match structural cards style */}
+                {/* Right Side: Order Summary Card Block */}
                 <div className="w-full lg:w-[420px] bg-white border border-slate-200/80 rounded-2xl p-6 lg:sticky lg:top-24 flex flex-col gap-5 text-left shadow-xs">
                     <h2 className="text-lg font-bold text-slate-900 tracking-tight border-b border-slate-200/40 pb-3">Order Summary</h2>
                     
@@ -254,11 +218,11 @@ const CartPage = () => {
                         </div>
                         
                         <div className="flex justify-between w-full items-center">
-    <span className="text-slate-600">Shipping & Taxes</span>
-    <span className="text-xs text-slate-400 font-medium bg-slate-50/50 border border-slate-200/60 px-2 py-0.5 rounded-md">
-        Calculated at checkout
-    </span>
-</div>
+                            <span className="text-slate-600">Shipping & Taxes</span>
+                            <span className="text-xs text-slate-400 font-medium bg-slate-50/50 border border-slate-200/60 px-2 py-0.5 rounded-md">
+                                Calculated at checkout
+                            </span>
+                        </div>
                     </div>
 
                     <hr className="border-slate-200/60 my-1" />

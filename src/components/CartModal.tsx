@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCartStore } from '../store/useCartStore';
+import { supabase } from '../supabase'; // <-- Added Supabase import for auth check
 
 interface CartModalProps {
     onClose: () => void;
@@ -12,6 +13,7 @@ const CartModal = ({ onClose }: CartModalProps) => {
     const updateQuantity = useCartStore((state) => state.updateQuantity);
 
     const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+    const [isCheckingOut, setIsCheckingOut] = useState(false); // <-- Added loading state
 
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
@@ -34,8 +36,57 @@ const CartModal = ({ onClose }: CartModalProps) => {
         setConfirmDeleteId(null);
     };
 
+    // --- STRIPE SECURE CHECKOUT FOR MODAL ---
+    // --- STRIPE SECURE CHECKOUT FOR MODAL ---
+    const handleCheckout = async () => {
+        setIsCheckingOut(true);
+        try {
+            // 1. Get user session, but do not throw an error if they are missing
+            const { data: { user } } = await supabase.auth.getUser();
+            const currentUserId = user ? user.id : 'guest';
+
+            // 2. Format cart items into standard Stripe line_items payload layout
+            const lineItems = cartItems.map((item) => ({
+                price_data: {
+                    currency: 'usd',
+                    product_data: {
+                        name: `${item.name} (${item.color} / ${item.size})`,
+                        images: item.image ? [item.image] : [],
+                    },
+                    unit_amount: Math.round(item.price * 100),
+                },
+                quantity: item.quantity,
+            }));
+
+            // 3. Request secure payment session URL
+            const response = await fetch('http://localhost:9999/.netlify/functions/checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    lineItems,
+                    userId: currentUserId,
+                }),
+            });
+
+            const session = await response.json();
+
+            if (!response.ok || !session.url) {
+                throw new Error(session.error || 'Failed to initialize secure checkout terminal.');
+            }
+
+            // 4. Handoff to Stripe
+            window.location.assign(session.url);
+
+        } catch (error: any) {
+            console.error("Stripe gateway routing engine exception:", error);
+            alert(error.message || "An error occurred while executing checkout processes.");
+            setIsCheckingOut(false);
+        }
+    };
+
     return (
-        /* FIXED: Added top-14, z-[100], pointer-events-auto, and responsive mobile width */
         <div className="absolute top-14 right-0 w-[calc(100vw-32px)] sm:w-96 p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white border border-gray-100 flex flex-col gap-6 z-[100] pointer-events-auto">
             
             <div className="flex items-center justify-between">
@@ -66,7 +117,6 @@ const CartModal = ({ onClose }: CartModalProps) => {
                             return (
                                 <div className="relative overflow-hidden rounded-xl min-h-[96px]" key={itemKey}>
                                     
-                                    {/* Normal Row Presentation Layout */}
                                     <div className={`flex gap-4 transition-all duration-300 ${isConfirming ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}>
                                         <Link 
                                             to={`/product/${item.id}`}
@@ -128,7 +178,6 @@ const CartModal = ({ onClose }: CartModalProps) => {
                                         </div>
                                     </div>
 
-                                    {/* Action Banner Confirmation Slide Overlay */}
                                     <div className={`absolute inset-0 bg-red-50/90 rounded-xl border border-red-100 flex items-center justify-between px-4 transition-all duration-300 ${isConfirming ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 pointer-events-none'}`}>
                                         <div className="flex flex-col gap-0.5 max-w-[55%]">
                                             <span className="text-xs font-bold text-red-900">
@@ -171,11 +220,13 @@ const CartModal = ({ onClose }: CartModalProps) => {
                             >
                                 View Cart
                             </Link>
+                            {/* Updated Checkout Button */}
                             <button 
-                                onClick={onClose}
-                                className="flex-1 rounded-xl py-3 px-4 bg-slate-900 text-white font-semibold text-center hover:bg-slate-800 transition-all active:scale-[0.98] cursor-pointer"
+                                onClick={handleCheckout}
+                                disabled={isCheckingOut}
+                                className="flex-1 rounded-xl py-3 px-4 bg-slate-900 text-white font-semibold text-center hover:bg-slate-800 transition-all active:scale-[0.98] cursor-pointer disabled:bg-slate-700 disabled:cursor-not-allowed"
                             >
-                                Checkout
+                                {isCheckingOut ? "Processing..." : "Checkout"}
                             </button>
                         </div>
                     </div>
