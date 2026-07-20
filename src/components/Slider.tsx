@@ -30,11 +30,14 @@ const slides = [
 
 const Slider = () => {
   const [current, setCurrent] = useState(0);
-  /* FIXED: Added landing page entrance animation flag */
   const [isLoaded, setIsLoaded] = useState(false);
 
+  // Touch tracking state for swipe gestures
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const minSwipeDistance = 50;
+
   useEffect(() => {
-    // Trigger the overall component animation immediately on mount
     setIsLoaded(true);
 
     const interval = setInterval(() => {
@@ -46,9 +49,33 @@ const Slider = () => {
   const prevSlide = () => setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   const nextSlide = () => setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
 
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    if (isLeftSwipe) {
+      nextSlide();
+    } else if (isRightSwipe) {
+      prevSlide();
+    }
+  };
+
   return (
-    /* FIXED: The entire slider component now smoothly scales and lifts up when landing on the page */
-    <div className={`h-[calc(100vh-80px)] overflow-hidden relative transition-all duration-[1200ms] ease-out transform will-change-transform
+    <div 
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+      className={`h-[calc(100vh-80px)] overflow-hidden relative transition-all duration-[1200ms] ease-out transform will-change-transform
       ${isLoaded ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-12 scale-[0.98]"}`}
     >
       {/* Horizontal Filmstrip Wrapper */}
@@ -66,7 +93,6 @@ const Slider = () => {
               
               <div className='absolute p-4 text-center z-10 max-w-3xl flex flex-col items-center justify-center overflow-hidden'>
                 
-                {/* 1. Subtitle (Optimized layout performance: removed blur filter entirely) */}
                 <h2 className={`text-lg lg:text-xl text-white mb-6 drop-shadow-md transition-all duration-700 ease-out transform will-change-transform
                   ${isActive ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-12"}`}
                   style={{ transitionDelay: isActive ? '500ms' : '0ms' }}
@@ -74,7 +100,6 @@ const Slider = () => {
                   {slide.description}
                 </h2>
                 
-                {/* 2. Main Title (Optimized layout performance: removed expensive tracking/blur adjustments) */}
                 <h1 className={`text-4xl lg:text-6xl font-extrabold text-white mb-12 drop-shadow-lg transition-all duration-700 ease-out transform tracking-tight will-change-transform
                   ${isActive ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-16 scale-95"}`}
                   style={{ transitionDelay: isActive ? '650ms' : '0ms' }}
@@ -82,7 +107,6 @@ const Slider = () => {
                   {slide.title}
                 </h1>
                 
-                {/* 3. Action Shop Target Button */}
                 <Link 
                   to={slide.url}
                   className={`transition-all duration-500 ease-out transform will-change-transform
@@ -101,17 +125,17 @@ const Slider = () => {
         })}
       </div>
 
-      {/* Navigation Arrows */}
-      <div className="absolute top-1/2 left-4 md:left-8 cursor-pointer z-10 -translate-y-1/2" onClick={prevSlide}>
-          <div className="bg-white/50 p-3 md:p-4 rounded-full hover:bg-white text-slate-900 transition-colors duration-300 shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      {/* Navigation Arrows (Scaled down on mobile) */}
+      <div className="absolute top-1/2 left-3 md:left-8 cursor-pointer z-10 -translate-y-1/2" onClick={prevSlide}>
+          <div className="bg-white/50 p-2 md:p-4 rounded-full hover:bg-white text-slate-900 transition-colors duration-300 shadow-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="m15 18-6-6 6-6"/>
               </svg>
           </div>
       </div>
-      <div className="absolute top-1/2 right-4 md:right-8 cursor-pointer z-10 -translate-y-1/2" onClick={nextSlide}>
-          <div className="bg-white/50 p-3 md:p-4 rounded-full hover:bg-white text-slate-900 transition-colors duration-300 shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <div className="absolute top-1/2 right-3 md:right-8 cursor-pointer z-10 -translate-y-1/2" onClick={nextSlide}>
+          <div className="bg-white/50 p-2 md:p-4 rounded-full hover:bg-white text-slate-900 transition-colors duration-300 shadow-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="m9 18 6-6-6-6"/>
               </svg>
           </div>
