@@ -17,7 +17,7 @@ export default function NotificationModal({ isOpen, onClose }: { isOpen: boolean
       </div>
       <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 mt-2">
         {notifications.length === 0 ? (
-          <p className="text-xs text-slate-500 py-6 text-center">No notifications yet.</p>
+          <p className="text-sm text-gray-500 py-6 text-center">No notifications yet.</p>
         ) : (
           notifications.map((n) => (
             <div 
