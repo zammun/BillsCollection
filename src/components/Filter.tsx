@@ -23,7 +23,7 @@ const Filter = () => {
     sort: searchParams.get("sort") || "",
   });
 
-  // Keep local state synchronized if the URL parameters change externally
+  // Keep local state synchronized if URL parameters change externally
   useEffect(() => {
     setLocalFilters({
       type: searchParams.get("type") || "",
@@ -58,10 +58,8 @@ const Filter = () => {
   ) => {
     const { name, value } = e.target;
     
-    // Update local state staging container first
     setLocalFilters(prev => ({ ...prev, [name]: value }));
 
-    // If screen is desktop width, push changes to the URL immediately
     if (window.innerWidth >= 768) {
       const params = new URLSearchParams(searchParams.toString());
       if (value) {
@@ -91,7 +89,6 @@ const Filter = () => {
     e.preventDefault();
     const params = new URLSearchParams(searchParams.toString());
 
-    // Loop through staged state entries and apply them to the query parameter stack
     Object.entries(localFilters).forEach(([key, value]) => {
       if (value) {
         params.set(key, value);
@@ -101,7 +98,7 @@ const Filter = () => {
     });
 
     navigate(`${location.pathname}?${params.toString()}`);
-    setIsOpen(false); // Close mobile drawer window panel layer
+    setIsOpen(false);
   };
 
   return (
@@ -110,7 +107,7 @@ const Filter = () => {
       {/* Mobile Toggle Button */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden flex items-center justify-center gap-2 w-full py-3.5 bg-[#f4f3ef] border border-slate-200/80 rounded-2xl font-semibold text-sm text-slate-700 transition-colors hover:bg-slate-200/40 active:scale-[0.98]"
+        className="md:hidden flex items-center justify-center gap-2 w-full py-3.5 bg-[#faf8f5] hover:bg-[#e6e4dc] border border-[#e2e0d9] rounded-2xl font-semibold text-sm text-slate-800 transition-all shadow-2xs active:scale-[0.98]"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
@@ -119,7 +116,7 @@ const Filter = () => {
       </button>
 
       {/* Filter Options Panel Container */}
-      <div className={`flex-col md:flex-row justify-between gap-6 ${isOpen ? 'flex bg-white/60 backdrop-blur-md p-6 rounded-2xl border border-slate-200 md:p-0 md:bg-transparent md:border-none animate-fadeIn' : 'hidden md:flex'}`}>
+      <div className={`flex-col md:flex-row justify-between gap-6 ${isOpen ? 'flex bg-[#faf8f5]/90 backdrop-blur-md p-6 rounded-2xl border border-[#e2e0d9] md:p-0 md:bg-transparent md:border-none animate-fadeIn' : 'hidden md:flex'}`}>
         
         {/* Left Side: Filtering */}
         <div className="flex gap-4 flex-wrap">
@@ -129,7 +126,7 @@ const Filter = () => {
             name="type" 
             onChange={handleInputChange} 
             value={localFilters.type} 
-            className="py-3 px-4 rounded-2xl text-xs font-semibold bg-[#f4f3ef] text-slate-800 border border-slate-200/80 cursor-pointer outline-none flex-grow sm:flex-grow-0 capitalize transition-all focus:border-slate-400"
+            className="py-3 px-4 rounded-2xl text-xs font-semibold bg-[#faf8f5] hover:bg-[#e6e4dc] text-slate-800 border border-[#e2e0d9] cursor-pointer outline-none flex-grow sm:flex-grow-0 capitalize transition-all focus:border-slate-400 shadow-2xs"
           >
             <option value="">All Types</option>
             {availableTypes.map(type => {
@@ -151,7 +148,7 @@ const Filter = () => {
             value={localFilters.min}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            className="text-xs rounded-2xl pl-4 py-3 w-[calc(50%-8px)] sm:w-24 bg-[#f4f3ef] text-slate-800 border border-slate-200/80 placeholder:text-slate-400 outline-none transition-all focus:border-slate-400" 
+            className="text-xs rounded-2xl pl-4 py-3 w-[calc(50%-8px)] sm:w-24 bg-[#faf8f5] text-slate-800 border border-[#e2e0d9] placeholder:text-slate-400 outline-none transition-all focus:border-slate-400 shadow-2xs" 
           />
 
           {/* Max Price Box Input */}
@@ -163,7 +160,7 @@ const Filter = () => {
             value={localFilters.max}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            className="text-xs rounded-2xl pl-4 py-3 w-[calc(50%-8px)] sm:w-24 bg-[#f4f3ef] text-slate-800 border border-slate-200/80 placeholder:text-slate-400 outline-none transition-all focus:border-slate-400" 
+            className="text-xs rounded-2xl pl-4 py-3 w-[calc(50%-8px)] sm:w-24 bg-[#faf8f5] text-slate-800 border border-[#e2e0d9] placeholder:text-slate-400 outline-none transition-all focus:border-slate-400 shadow-2xs" 
           />
 
           {/* Dynamic Color Dropdown */}
@@ -171,7 +168,7 @@ const Filter = () => {
             name="color" 
             onChange={handleInputChange} 
             value={localFilters.color} 
-            className="py-3 px-4 rounded-2xl text-xs font-semibold bg-[#f4f3ef] text-slate-800 border border-slate-200/80 cursor-pointer outline-none flex-grow sm:flex-grow-0 capitalize transition-all focus:border-slate-400"
+            className="py-3 px-4 rounded-2xl text-xs font-semibold bg-[#faf8f5] hover:bg-[#e6e4dc] text-slate-800 border border-[#e2e0d9] cursor-pointer outline-none flex-grow sm:flex-grow-0 capitalize transition-all focus:border-slate-400 shadow-2xs"
           >
             <option value="">All Colors</option>
             {availableColors.map(color => (
@@ -186,7 +183,7 @@ const Filter = () => {
             name="sort" 
             onChange={handleInputChange} 
             value={localFilters.sort} 
-            className="py-3 px-4 rounded-2xl text-xs font-semibold bg-[#f4f3ef] text-slate-800 border border-slate-200/80 w-full md:w-auto cursor-pointer outline-none transition-all focus:border-slate-400"
+            className="py-3 px-4 rounded-2xl text-xs font-semibold bg-[#faf8f5] hover:bg-[#e6e4dc] text-slate-800 border border-[#e2e0d9] w-full md:w-auto cursor-pointer outline-none transition-all focus:border-slate-400 shadow-2xs"
           >
             <option value="">Default Sorting</option>
             <option value="price-asc">Price (low to high)</option>

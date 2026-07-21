@@ -56,13 +56,11 @@ export const ProductCard = ({ product }: { product: any }) => {
     const prevSlide = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        // FIXED: Changed prev + 1 to prev - 1 so it correctly navigates backwards
         setCurrentImgIdx((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     };
 
     return (
         <div className='w-full flex flex-col gap-4 relative group/card'>
-            {/* FIXED: Changed bg-[#f4f3ef] to bg-transparent to allow seamless blending */}
             <div className='relative w-full h-80 bg-transparent rounded-md overflow-hidden p-4 flex items-center justify-center group/slider'>
                 {stockForSelectedSize > 0 && stockForSelectedSize < 5 && (
                     <div className="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md z-20 shadow-xs pointer-events-none animate-pulse">
@@ -74,7 +72,6 @@ export const ProductCard = ({ product }: { product: any }) => {
                     <img 
                         src={images[currentImgIdx]} 
                         alt={product.name} 
-                        // FIXED: Added mix-blend-multiply
                         className='w-full h-full object-contain pointer-events-none mix-blend-multiply'
                     />
                 </Link>
@@ -83,13 +80,13 @@ export const ProductCard = ({ product }: { product: any }) => {
                     <>
                         <button 
                             onClick={prevSlide}
-                            className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-slate-900 shadow-md rounded-full w-9 h-9 md:w-8 md:h-8 flex items-center justify-center text-lg font-bold z-10 opacity-100 md:opacity-0 md:group-hover/slider:opacity-100 transition-opacity cursor-pointer"
+                            className="absolute left-2 top-1/2 -translate-y-1/2 bg-[#faf8f5]/90 hover:bg-[#e6e4dc] border border-[#e2e0d9] text-slate-900 shadow-md rounded-full w-9 h-9 md:w-8 md:h-8 flex items-center justify-center text-lg font-bold z-10 opacity-100 md:opacity-0 md:group-hover/slider:opacity-100 transition-all cursor-pointer"
                         >
                             ‹
                         </button>
                         <button 
                             onClick={nextSlide}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-slate-900 shadow-md rounded-full w-9 h-9 md:w-8 md:h-8 flex items-center justify-center text-lg font-bold z-10 opacity-100 md:opacity-0 md:group-hover/slider:opacity-100 transition-opacity cursor-pointer"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#faf8f5]/90 hover:bg-[#e6e4dc] border border-[#e2e0d9] text-slate-900 shadow-md rounded-full w-9 h-9 md:w-8 md:h-8 flex items-center justify-center text-lg font-bold z-10 opacity-100 md:opacity-0 md:group-hover/slider:opacity-100 transition-all cursor-pointer"
                         >
                             ›
                         </button>
@@ -103,11 +100,9 @@ export const ProductCard = ({ product }: { product: any }) => {
                         <button
                             key={idx}
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrentImgIdx(idx); }}
-                            // FIXED: Changed bg-white to bg-transparent
                             className={`w-12 h-12 bg-transparent rounded border aspect-square overflow-hidden p-0.5 flex-shrink-0 transition-all cursor-pointer
-                                ${currentImgIdx === idx ? 'border-slate-900 ring-1 ring-slate-900 scale-95' : 'border-gray-200 hover:border-gray-400'}`}
+                                ${currentImgIdx === idx ? 'border-slate-900 ring-1 ring-slate-900 scale-95' : 'border-[#e2e0d9] hover:border-slate-400'}`}
                         >
-                            {/* FIXED: Added mix-blend-multiply */}
                             <img src={url} alt="" className="w-full h-full object-cover rounded-[2px] mix-blend-multiply" />
                         </button>
                     ))}
@@ -121,6 +116,7 @@ export const ProductCard = ({ product }: { product: any }) => {
                 </div>
             </Link>
 
+            {/* Size Selector Buttons */}
             <div className="flex gap-2 my-1">
                 {['S', 'M', 'L', 'XL'].map((size) => {
                     const stock = product.sizes ? (product.sizes[size] || 0) : 0;
@@ -132,8 +128,8 @@ export const ProductCard = ({ product }: { product: any }) => {
                             disabled={isOutOfStock}
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); if(!isOutOfStock) setSelectedSize(size); }}
                             className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium transition-all border relative z-10 cursor-pointer
-                                ${selectedSize === size && !isOutOfStock ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-gray-700 border-gray-200'}
-                                ${isOutOfStock ? 'text-gray-300 line-through cursor-not-allowed border-gray-100' : 'hover:border-slate-400'}`}
+                                ${selectedSize === size && !isOutOfStock ? 'bg-slate-900 text-white border-slate-900' : 'bg-[#faf8f5] text-slate-800 border-[#e2e0d9] hover:bg-[#e6e4dc]'}
+                                ${isOutOfStock ? 'text-gray-300 line-through cursor-not-allowed border-[#e2e0d9]/50 bg-[#faf8f5]/50' : 'hover:border-slate-400'}`}
                         >
                             {size}
                         </button>
@@ -141,15 +137,16 @@ export const ProductCard = ({ product }: { product: any }) => {
                 })}
             </div>
 
+            {/* Add to Cart Button */}
             <button 
                 onClick={handleAddToCart}
                 disabled={stockForSelectedSize === 0}
-                className={`w-full py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-300 active:scale-[0.98] z-10 disabled:opacity-50 disabled:cursor-not-allowed shadow-xs cursor-pointer
+                className={`w-full py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-300 active:scale-[0.98] z-10 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs cursor-pointer
                     ${stockForSelectedSize === 0 
-                        ? 'ring-1 ring-gray-200 text-gray-400 bg-gray-50' 
+                        ? 'border border-[#e2e0d9] text-gray-400 bg-[#e6e4dc]/50' 
                         : isAdded 
                             ? 'bg-emerald-800 text-white ring-1 ring-emerald-800 scale-[1.02]' 
-                            : 'ring-1 ring-slate-900 text-slate-900 bg-white hover:bg-slate-900 hover:text-white'
+                            : 'border border-[#e2e0d9] text-slate-900 bg-[#faf8f5] hover:bg-slate-900 hover:text-white hover:border-slate-900'
                     }`}
             >
                 {stockForSelectedSize === 0 ? "Out of Stock" : isAdded ? "Added to Cart ✓" : "Add to Cart"}
@@ -215,17 +212,17 @@ const ProductList = () => {
             <div className='mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16'>
                 {Array.from({ length: 8 }).map((_, idx) => (
                     <div key={idx} className="w-full flex flex-col gap-4">
-                        <div className="w-full h-80 bg-gray-200/60 rounded-md animate-pulse" />
+                        <div className="w-full h-80 bg-[#e6e4dc]/60 rounded-md animate-pulse" />
                         <div className="flex justify-between items-center mt-1">
-                            <div className="h-4 bg-gray-200/60 rounded w-1/2 animate-pulse" />
-                            <div className="h-4 bg-gray-200/60 rounded w-12 animate-pulse" />
+                            <div className="h-4 bg-[#e6e4dc]/60 rounded w-1/2 animate-pulse" />
+                            <div className="h-4 bg-[#e6e4dc]/60 rounded w-12 animate-pulse" />
                         </div>
                         <div className="flex gap-2 my-1">
                             {Array.from({ length: 4 }).map((_, i) => (
-                                <div key={i} className="w-8 h-8 rounded-full bg-gray-200/60 animate-pulse" />
+                                <div key={i} className="w-8 h-8 rounded-full bg-[#e6e4dc]/60 animate-pulse" />
                             ))}
                         </div>
-                        <div className="w-full h-10 bg-gray-200/60 rounded-xl animate-pulse" />
+                        <div className="w-full h-10 bg-[#e6e4dc]/60 rounded-xl animate-pulse" />
                     </div>
                 ))}
             </div>
@@ -234,7 +231,7 @@ const ProductList = () => {
 
     if (filteredProducts.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center py-20 px-4 text-center mt-12 bg-gray-50/50 rounded-2xl border border-gray-100 max-w-2xl mx-auto animate-fadeIn">
+            <div className="flex flex-col items-center justify-center py-20 px-4 text-center mt-12 bg-[#faf8f5]/60 rounded-2xl border border-[#e2e0d9] max-w-2xl mx-auto animate-fadeIn">
                 <div className="text-5xl mb-4 text-gray-400 select-none">🛒</div>
                 <h3 className="text-xl font-bold text-gray-900 tracking-tight">Your search drew a blank</h3>
                 <p className="text-sm text-gray-500 max-w-sm mt-2 leading-relaxed">
@@ -242,7 +239,7 @@ const ProductList = () => {
                 </p>
                 <button 
                     onClick={() => setSearchParams({})} 
-                    className="mt-6 px-5 py-2.5 bg-slate-900 text-white text-xs font-bold tracking-wide uppercase rounded-xl hover:bg-slate-800 transition-all active:scale-[0.97] shadow-md shadow-slate-900/10 cursor-pointer"
+                    className="mt-6 px-5 py-2.5 bg-slate-900 text-white text-xs font-bold tracking-wide uppercase rounded-xl hover:bg-slate-800 transition-all active:scale-[0.97] shadow-md cursor-pointer"
                 >
                     Reset All Filters
                 </button>
