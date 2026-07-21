@@ -11,6 +11,11 @@ export const ProductCard = ({ product }: { product: any }) => {
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const addToCart = useCartStore((state) => state.addToCart);
 
+    // Touch gesture tracking refs
+    const touchStartX = useRef<number | null>(null);
+    const touchStartY = useRef<number | null>(null);
+    const isSwiping = useRef(false);
+
     const stockForSelectedSize = product.sizes ? (product.sizes[selectedSize] || 0) : 0;
 
     const images = Array.isArray(product.image_url) && product.image_url.length > 0 
@@ -22,6 +27,47 @@ export const ProductCard = ({ product }: { product: any }) => {
             if (timeoutRef.current) clearTimeout(timeoutRef.current);
         };
     }, []);
+
+    // Touch gesture handlers for mobile image swiping
+    const handleTouchStart = (e: React.TouchEvent) => {
+        touchStartX.current = e.touches[0].clientX;
+        touchStartY.current = e.touches[0].clientY;
+        isSwiping.current = false;
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        if (touchStartX.current === null || touchStartY.current === null) return;
+
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+
+        const diffX = touchStartX.current - touchEndX;
+        const diffY = touchStartY.current - touchEndY;
+
+        // Trigger slide change if gesture is primarily horizontal and > 30px
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
+            isSwiping.current = true;
+            if (diffX > 0) {
+                // Swiped Left -> Next Image
+                setCurrentImgIdx((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+            } else {
+                // Swiped Right -> Previous Image
+                setCurrentImgIdx((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+            }
+        }
+
+        touchStartX.current = null;
+        touchStartY.current = null;
+    };
+
+    // Prevent accidental page navigation when completing a horizontal swipe
+    const handleLinkClick = (e: React.MouseEvent) => {
+        if (isSwiping.current) {
+            e.preventDefault();
+            e.stopPropagation();
+            isSwiping.current = false;
+        }
+    };
 
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -61,18 +107,39 @@ export const ProductCard = ({ product }: { product: any }) => {
 
     return (
         <div className='w-full flex flex-col gap-4 relative group/card'>
-            <div className='relative w-full h-80 bg-transparent rounded-md overflow-hidden p-4 flex items-center justify-center group/slider'>
+            {/* Image Box with Touch Event Listeners */}
+            <div 
+                className='relative w-full h-80 bg-transparent rounded-md overflow-hidden p-4 flex items-center justify-center group/slider touch-pan-y'
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+            >
                 {stockForSelectedSize > 0 && stockForSelectedSize < 5 && (
                     <div className="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md z-20 shadow-xs pointer-events-none animate-pulse">
                         Act fast, only {stockForSelectedSize} left
                     </div>
                 )}
 
-                <Link to={`/product/${product.id}`} className="w-full h-full block">
+                {/* Mobile Dot Indicators for Multi-Image Items */}
+                {images.length > 1 && (
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-20 md:hidden pointer-events-none">
+                        {images.map((_, idx) => (
+                            <div 
+                                key={idx} 
+                                className={`h-1.5 rounded-full transition-all duration-300 ${currentImgIdx === idx ? 'w-4 bg-slate-900' : 'w-1.5 bg-slate-400/50'}`} 
+                            />
+                        ))}
+                    </div>
+                )}
+
+                <Link 
+                    to={`/product/${product.id}`} 
+                    className="w-full h-full block"
+                    onClick={handleLinkClick}
+                >
                     <img 
                         src={images[currentImgIdx]} 
                         alt={product.name} 
-                        className='w-full h-full object-contain pointer-events-none mix-blend-multiply'
+                        className='w-full h-full object-contain pointer-events-none mix-blend-multiply select-none'
                     />
                 </Link>
 
