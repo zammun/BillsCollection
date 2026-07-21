@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 /* Custom utility for hiding scrollbars */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
@@ -25,8 +31,6 @@ html, body {
 }
 
 .suave-luxury-theme {
-  /* A solid, premium matte ivory backdrop. It gives a warm, high-end gallery feel 
-     while making your white cards and filters pop cleanly with zero visual clutter */
   background-color: #f4f3ef; 
   background-image: none; 
 }
