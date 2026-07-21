@@ -1,29 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@800;900&family=Jost:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-heading: "Syne", sans-serif;
+  --font-sans: "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: "Inter", sans-serif;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: #f4f3ef;
   color: #0f172a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Luxury Editorial Display Header Class */
 .font-heading {
   font-family: var(--font-heading);
-  letter-spacing: -0.03em; /* Tight letter spacing prevents horizontal stretching */
 }
 
-/* Glassmorphism & UI Accents */
-.glass-panel {
-  background: rgba(244, 243, 239, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+.font-display {
+  font-family: var(--font-heading);
+}
+
+/* Custom utility for hiding scrollbars */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 /* Global Cursor Fix */
@@ -39,17 +43,21 @@ html, body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Custom Minimal Scrollbar */
+.suave-luxury-theme {
+  background-color: #f4f3ef; 
+  background-image: none; 
+}
+
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
   background: #f4f3ef;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 9999px;
+  background: #e2e0d9;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #0f172a;
+  background: #d4af37;
 }

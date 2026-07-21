@@ -9,7 +9,7 @@ export default function TechSupport() {
             Bills Collection <span className="text-[#d4af37]">Tech Support</span>
           </h1>
           <p className="text-lg text-zinc-600 max-w-2xl mx-auto leading-relaxed">
-            Experiencing a bug or technical issue? Reach out directly.
+            Reach out to me for any technical issues.
           </p>
         </div>
 
@@ -28,7 +28,7 @@ export default function TechSupport() {
               We're on it.
             </h2>
             <p className="text-zinc-600 leading-relaxed text-sm">
-              Our system architecture is continuously monitored, but edge cases happen. Send details regarding unexpected behavior, broken checkouts, or glitches directly to the desk of our lead developer.
+              Our system architecture is continuously monitored, but problems can happen. Hit me up if anything is wrong.
             </p>
           </div>
         </div>

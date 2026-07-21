@@ -40,6 +40,7 @@ const Footer = () => {
     };
 
     return (
+        /* FIXED: Swapped bg-gray-100 to bg-[#e6e4dc] to look a tinge darker than the luxury backdrop */
         <div className='relative py-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 bg-[#e6e4dc] text-sm mt-24'>
             
             {/* Top Section */}
@@ -137,16 +138,6 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
-
-            {/* Mobile-Only Technical Support Dedicated Row */}
-            <div className='mt-16 block lg:hidden text-center'>
-                <Link 
-                    to='/tech-support' 
-                    className='inline-block w-full max-w-xs bg-slate-900 text-white font-bold text-xs uppercase tracking-wider py-4 rounded-xl shadow-md hover:bg-slate-800 transition-colors'
-                >
-                    Technical Support
-                </Link>
-            </div>
             
             {/* Sub-Footer: Legal & Compliance */}
             <div className='mt-20 pt-8 border-t border-slate-300/60 flex flex-col gap-6 text-xs text-slate-500/80'>
@@ -197,7 +188,7 @@ const Footer = () => {
             {/* Scroll to Top Button */}
             <button 
                 onClick={scrollToTop}
-                className='fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-white text-black p-3 rounded-full shadow-lg ring-1 ring-gray-200/60 hover:bg-gray-50 transition-all hover:-translate-y-1 z-50 flex items-center justify-center cursor-pointer'
+                className='fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-white text-black p-3 rounded-full shadow-lg ring-1 ring-gray-200/60 hover:bg-gray-50 transition-all hover:-translate-y-1 z-50 flex items-center justify-center'
                 aria-label="Scroll to top"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

@@ -30,6 +30,7 @@ import InterestBasedAdsPage from './pages/InterestBasedAds';
 import CaliforniaTransparencyPage from './pages/CaliSupplyChain';
 import Affiliates from './pages/Affiliates';
 import TechSupport from './pages/TechSupport';
+import PlantTest from './components/PlantTest';
 
 function App() {
   return (
@@ -65,6 +66,7 @@ function App() {
           <Route path="/supply-chain-transparency" element={<CaliforniaTransparencyPage />} />
           <Route path="/affiliates" element={<Affiliates />} />
           <Route path="/tech-support" element={<TechSupport />} />
+          <Route path="/plant-test" element={<PlantTest />} />
           {/* Secure Protected Routes */}
           <Route path="/cart" element={<CartPage />} />
           <Route 

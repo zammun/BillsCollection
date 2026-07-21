@@ -9,6 +9,7 @@ import { useCartStore } from "../store/useCartStore";
 const UserMenu = ({ closeMenu }: { closeMenu: () => void }) => {
   const { loginWithGoogle, loginWithEmail } = useAuth();
   const { user, logout } = useAuthContext();
+  const navigate = useNavigate();
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -101,6 +102,20 @@ const UserMenu = ({ closeMenu }: { closeMenu: () => void }) => {
         <input type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3.5 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:border-slate-400 focus:bg-white text-slate-800 text-sm transition-colors" />
         <button type="submit" className="w-full py-3.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 font-bold transition-colors cursor-pointer text-sm uppercase tracking-wider shadow-md mt-2">Login</button>
       </form>
+
+      {/* Sign Up Link */}
+      <div className="mt-4 text-center text-xs text-slate-600 pt-2 border-t border-slate-100">
+        Don't have an account?{" "}
+        <button 
+          onClick={() => {
+            closeMenu();
+            navigate("/register");
+          }} 
+          className="font-bold text-slate-900 hover:underline cursor-pointer ml-1"
+        >
+          Sign up
+        </button>
+      </div>
     </div>
   );
 };
@@ -115,11 +130,11 @@ const Navbar = () => {
   const cartItems = useCartStore((state) => state.cartItems);
   const totalItemsInCart = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
+  // FIXED: Simply toggles menu open/close without navigating to /profile
   const handleProfileClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (userMenuOpen) {
         setUserMenuOpen(false);
-        navigate("/profile");
     } else {
         setCartOpen(false);
         setNotificationOpen(false);
@@ -162,7 +177,7 @@ const Navbar = () => {
               alt="Logo" 
               className="w-14 h-14 md:w-[70px] md:h-[70px] shrink-0" 
           />
-          <div className="text-xl md:text-3xl font-extrabold tracking-tight text-slate-900 font-heading">Bills Collection</div>
+          <div className="text-xl md:text-3xl font-black tracking-tight text-slate-900 font-heading">Bills Collection</div>
         </Link>
 
         {/* Global Navigation links */}

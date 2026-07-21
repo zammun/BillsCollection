@@ -5,7 +5,7 @@ const slides = [
   {
     id: 1,
     title: "Welcome to Bills Collection.",
-    subtitle: "EST. 2026",
+    subtitle: "EST. 2023",
     description: "Quality, style, and unique architectural designs.",
     img: "/1.jpg",
     url: '/list', 
@@ -16,7 +16,7 @@ const slides = [
     subtitle: "LIMITED DROP",
     description: "Shop exclusive pieces from our seasonal outerwear archive.", 
     img: "/2.jpg",
-    url: '/list?type=outerwear', 
+    url: '/list?type=Hoodie', 
   },
   {
     id: 3,
@@ -88,7 +88,7 @@ const Slider = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20 pointer-events-none" />
 
               {/* Content Overlay */}
-              <div className='absolute w-full px-6 text-center z-10 max-w-4xl flex flex-col items-center bottom-24 md:bottom-auto md:top-1/2 md:-translate-y-1/2'>
+              <div className='absolute w-full px-6 text-center z-10 max-w-5xl flex flex-col items-center bottom-24 md:bottom-auto md:top-1/2 md:-translate-y-1/2'>
                 
                 {/* Subtitle / Tag */}
                 <span className={`text-xs md:text-sm font-semibold tracking-[0.25em] text-amber-300 uppercase mb-3 transition-all duration-700 ease-out
@@ -98,13 +98,13 @@ const Slider = () => {
                   {slide.subtitle}
                 </span>
 
-                {/* Editorial Heading */}
-                <h1 className={`text-4xl md:text-6xl lg:text-7xl font-heading font-extrabold text-white mb-4 drop-shadow-2xl transition-all duration-700 ease-out
-                  ${isActive ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-12 scale-95"}`}
-                  style={{ transitionDelay: isActive ? '450ms' : '0ms' }}
-                >
-                  {slide.title}
-                </h1>
+                {/* Editorial Heading - Balanced Sizing & Letter Spacing */}
+               <h1 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-black text-white mb-5 drop-shadow-2xl tracking-tight leading-[0.95] transition-all duration-700 ease-out transform will-change-transform
+  ${isActive ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-16 scale-95"}`}
+  style={{ transitionDelay: isActive ? '500ms' : '0ms' }}
+>
+  {slide.title}
+</h1>
 
                 {/* Subheading */}
                 <p className={`text-sm md:text-lg text-slate-200 mb-8 max-w-md font-medium drop-shadow-md transition-all duration-700 ease-out
