@@ -76,7 +76,7 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
           .join('');
 
         await resend.emails.send({
-          from: 'Bills Collection <orders@billscollect.io>', // Replace with your domain once verified (e.g. orders@billscollect.io)
+          from: 'Bills Collection <orders@billscollection.co>',
           to: customerEmail,
           subject: 'Order Confirmation - Bills Collection',
           html: `
