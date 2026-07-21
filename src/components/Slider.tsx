@@ -5,26 +5,26 @@ const slides = [
   {
     id: 1,
     title: "Welcome to Bills Collection.",
-    description: "Quality, style, and unique designs.",
+    subtitle: "EST. 2026",
+    description: "Quality, style, and unique architectural designs.",
     img: "/1.jpg",
     url: '/list', 
-    bg: "bg-gradient-to-r from-yellow-50 to-pink-50"
   },
   {
     id: 2,
     title: "Winter Sale Collection",
-    description: "Shop now and get the best deals on our winter selection.", 
+    subtitle: "LIMITED DROP",
+    description: "Shop exclusive pieces from our seasonal outerwear archive.", 
     img: "/2.jpg",
     url: '/list?type=outerwear', 
-    bg: "bg-gradient-to-r from-blue-50 to-green-50",
   },
   {
     id: 3,
     title: "New Arrivals",
-    description: "Take a look at our latest collection.",
+    subtitle: "JUST LANDED",
+    description: "Discover modern essentials curated for everyday wear.",
     img: "/4.jpg",
     url: '/list?sort=date-desc', 
-    bg: 'bg-gradient-to-r from-yellow-50 to-blue-50',
   },
 ];
 
@@ -32,7 +32,6 @@ const Slider = () => {
   const [current, setCurrent] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Touch tracking state for swipe gestures
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const minSwipeDistance = 50;
@@ -42,7 +41,7 @@ const Slider = () => {
 
     const interval = setInterval(() => {
       setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 20000);
+    }, 12000);
     return () => clearInterval(interval);
   }, []);
 
@@ -61,13 +60,8 @@ const Slider = () => {
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
     const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
-    if (isLeftSwipe) {
-      nextSlide();
-    } else if (isRightSwipe) {
-      prevSlide();
-    }
+    if (distance > minSwipeDistance) nextSlide();
+    else if (distance < -minSwipeDistance) prevSlide();
   };
 
   return (
@@ -75,82 +69,98 @@ const Slider = () => {
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
-      className={`h-[calc(100dvh-80px)] overflow-hidden relative transition-all duration-[1200ms] ease-out transform will-change-transform
-      ${isLoaded ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-12 scale-[0.98]"}`}
+      className={`h-[calc(100dvh-80px)] overflow-hidden relative transition-all duration-1000 ease-out
+      ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
     >
-      {/* Horizontal Filmstrip Wrapper */}
-      <div className='w-max h-full flex transition-all ease-in-out duration-1000 will-change-transform'
-        style={{ transform: `translateX(-${current * 100}vw)` }} >
+      {/* Horizontal Slider Wrapper */}
+      <div 
+        className='w-max h-full flex transition-transform ease-in-out duration-1000'
+        style={{ transform: `translateX(-${current * 100}vw)` }}
+      >
         {slides.map((slide, index) => {
           const isActive = current === index;
 
           return (
-            <div
-              className={`${slide.bg} w-screen h-full relative flex justify-center items-center`}
-              key={slide.id}
-            >
-              <img src={slide.img} alt='' className='w-full h-full object-cover' />
+            <div className="w-screen h-full relative flex justify-center items-center" key={slide.id}>
+              <img src={slide.img} alt={slide.title} className='w-full h-full object-cover' />
               
-              {/* Positioned text blocks down on mobile, centered on desktop */}
-              <div className='absolute w-full px-6 text-center z-10 max-w-3xl flex flex-col items-center bottom-28 md:bottom-auto md:top-1/2 md:-translate-y-1/2'>
+              {/* Vignette Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20 pointer-events-none" />
+
+              {/* Content Overlay */}
+              <div className='absolute w-full px-6 text-center z-10 max-w-4xl flex flex-col items-center bottom-24 md:bottom-auto md:top-1/2 md:-translate-y-1/2'>
                 
-                {/* Title using Outfit display font */}
-                <h1 className={`text-4xl lg:text-6xl font-display font-extrabold text-white mb-4 drop-shadow-xl transition-all duration-700 ease-out transform tracking-tight will-change-transform
-                  ${isActive ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-16 scale-95"}`}
-                  style={{ transitionDelay: isActive ? '500ms' : '0ms' }}
+                {/* Subtitle / Tag */}
+                <span className={`text-xs md:text-sm font-semibold tracking-[0.25em] text-amber-300 uppercase mb-3 transition-all duration-700 ease-out
+                  ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+                  style={{ transitionDelay: isActive ? '300ms' : '0ms' }}
+                >
+                  {slide.subtitle}
+                </span>
+
+                {/* Editorial Heading */}
+                <h1 className={`text-4xl md:text-6xl lg:text-7xl font-heading font-extrabold text-white mb-4 drop-shadow-2xl transition-all duration-700 ease-out
+                  ${isActive ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-12 scale-95"}`}
+                  style={{ transitionDelay: isActive ? '450ms' : '0ms' }}
                 >
                   {slide.title}
                 </h1>
 
-                {/* Description */}
-                <h2 className={`text-sm md:text-lg lg:text-xl text-white/90 mb-8 max-w-lg drop-shadow-md transition-all duration-700 ease-out transform will-change-transform
-                  ${isActive ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-12"}`}
-                  style={{ transitionDelay: isActive ? '650ms' : '0ms' }}
+                {/* Subheading */}
+                <p className={`text-sm md:text-lg text-slate-200 mb-8 max-w-md font-medium drop-shadow-md transition-all duration-700 ease-out
+                  ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+                  style={{ transitionDelay: isActive ? '600ms' : '0ms' }}
                 >
                   {slide.description}
-                </h2>
+                </p>
                 
+                {/* CTA Button */}
                 <Link 
                   to={slide.url}
-                  className={`transition-all duration-500 ease-out transform will-change-transform
-                    ${isActive ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-12 scale-90"}`}
-                  style={{ transitionDelay: isActive ? '850ms' : '0ms' }}
+                  className={`transition-all duration-500 ease-out
+                    ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+                  style={{ transitionDelay: isActive ? '750ms' : '0ms' }}
                 >
-                  <button className='rounded-md bg-white text-black py-3.5 px-10 hover:bg-slate-600 hover:text-white font-bold text-xs tracking-widest uppercase transition-all cursor-pointer shadow-lg active:scale-95 duration-300'>
-                    Shop Now
+                  <button className='rounded-full bg-white text-slate-950 px-9 py-4 font-bold text-xs tracking-[0.2em] uppercase hover:bg-slate-900 hover:text-white transition-all duration-300 shadow-2xl hover:scale-105 active:scale-95 cursor-pointer border border-white/20'>
+                    Explore Collection
                   </button>
                 </Link>
               </div>
-
-              <div className="absolute inset-0 bg-black/30 pointer-events-none" />
             </div>
           );
         })}
       </div>
 
-      {/* Navigation Arrows */}
-      <div className="hidden md:block absolute top-1/2 left-8 cursor-pointer z-10 -translate-y-1/2" onClick={prevSlide}>
-          <div className="bg-white/50 p-4 rounded-full hover:bg-white text-slate-900 transition-colors duration-300 shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="m15 18-6-6 6-6"/>
-              </svg>
-          </div>
-      </div>
-      <div className="hidden md:block absolute top-1/2 right-8 cursor-pointer z-10 -translate-y-1/2" onClick={nextSlide}>
-          <div className="bg-white/50 p-4 rounded-full hover:bg-white text-slate-900 transition-colors duration-300 shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="m9 18 6-6-6-6"/>
-              </svg>
-          </div>
-      </div>
+      {/* Modern Minimal Navigation Arrows */}
+      <button 
+        onClick={prevSlide}
+        className="hidden md:flex absolute top-1/2 left-8 -translate-y-1/2 z-20 w-12 h-12 rounded-full glass-panel border border-white/20 items-center justify-center text-slate-900 hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer"
+        aria-label="Previous slide"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m15 18-6-6 6-6"/>
+        </svg>
+      </button>
 
-      {/* Dots */}
-      <div className='absolute m-auto left-1/2 bottom-8 flex gap-4 transform -translate-x-1/2 z-10'>
+      <button 
+        onClick={nextSlide}
+        className="hidden md:flex absolute top-1/2 right-8 -translate-y-1/2 z-20 w-12 h-12 rounded-full glass-panel border border-white/20 items-center justify-center text-slate-900 hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer"
+        aria-label="Next slide"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m9 18 6-6-6-6"/>
+        </svg>
+      </button>
+
+      {/* Slide Indicators */}
+      <div className='absolute left-1/2 bottom-8 -translate-x-1/2 z-20 flex gap-3'>
         {slides.map((slide, index) => (
-          <div className={`w-3 h-3 rounded-full ring-1 ring-white cursor-pointer transition-all duration-300 ${current === index ? "scale-125 bg-white" : "bg-white/40"}`}
+          <button 
             key={slide.id}
-            onClick={() => setCurrent(index)}>
-          </div>
+            onClick={() => setCurrent(index)}
+            className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${current === index ? "w-8 bg-white" : "w-2 bg-white/40 hover:bg-white/70"}`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
         ))}
       </div>
     </div>

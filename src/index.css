@@ -2,25 +2,31 @@
 
 @theme {
   --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-display: "Outfit", sans-serif;
+  --font-heading: "Syne", sans-serif;
 }
 
 body {
   font-family: var(--font-sans);
+  background-color: #f4f3ef;
+  color: #0f172a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Hide scrollbars utility */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-hide {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+/* Luxury Editorial Display Header Class */
+.font-heading {
+  font-family: var(--font-heading);
+  letter-spacing: -0.03em; /* Tight letter spacing prevents horizontal stretching */
 }
 
-/* Global cursor fix */
+/* Glassmorphism & UI Accents */
+.glass-panel {
+  background: rgba(244, 243, 239, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Global Cursor Fix */
 button, 
 a, 
 input[type="button"], 
@@ -33,22 +39,17 @@ html, body {
   -webkit-tap-highlight-color: transparent;
 }
 
-.suave-luxury-theme {
-  background-color: #f4f3ef; 
-  background-image: none; 
-}
-
-/* Custom Scrollbars */
+/* Custom Minimal Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
   background: #f4f3ef;
 }
 ::-webkit-scrollbar-thumb {
-  background: #e2e0d9;
-  border-radius: 4px;
+  background: #cbd5e1;
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #d4af37;
+  background: #0f172a;
 }
