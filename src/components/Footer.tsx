@@ -70,28 +70,27 @@ const Footer = () => {
                 </div>
                 
                 {/* Center */}
-                {/* Center */}
-                <div className='flex flex-col sm:flex-row justify-start gap-12 lg:gap-24 w-full lg:w-1/2'> 
-                    <div className='flex flex-col gap-4 lg:gap-6'>
+                <div className='hidden lg:flex justify-start gap-24 w-1/2'> 
+                    <div className='flex flex-col gap-6'>
                         <h1 className='font-medium text-lg'>COMPANY</h1>
-                        <div className='flex flex-col gap-4 lg:gap-6'>
+                        <div className='flex flex-col gap-6'>
                             <Link to='/about' className="hover:text-indigo-600 transition-colors">About Us</Link>
                             <Link to='/careers' className="hover:text-indigo-600 transition-colors">Careers</Link>
                             <Link to='/affiliates' className="hover:text-indigo-600 transition-colors">Affiliates</Link>
                             <Link to='/contact' className="hover:text-indigo-600 transition-colors">Contact Us</Link>
                         </div>
                     </div>
-                    <div className='flex flex-col gap-4 lg:gap-6'>
+                    <div className='flex flex-col gap-6'>
                         <h1 className='font-medium text-lg'>SHOP</h1>
-                        <div className='flex flex-col gap-4 lg:gap-6'>
+                        <div className='flex flex-col gap-6'>
                             <Link to='/shop?sort=newest' className="hover:text-indigo-600 transition-colors">New Arrivals</Link>
                             <Link to='/shop?type=Accessories' className="hover:text-indigo-600 transition-colors">Accessories</Link>
                             <Link to='/shop' className="hover:text-indigo-600 transition-colors">All Products</Link>
                         </div>
                     </div>
-                    <div className='flex flex-col gap-4 lg:gap-6'>
+                    <div className='flex flex-col gap-6'>
                         <h1 className='font-medium text-lg'>HELP</h1>
-                        <div className='flex flex-col gap-4 lg:gap-6'>
+                        <div className='flex flex-col gap-6'>
                             <Link to='/contact' className="hover:text-indigo-600 transition-colors">Customer Service</Link>
                             <Link to='/profile' className="hover:text-indigo-600 transition-colors">My Account</Link>
                             <Link to='/stores' className="hover:text-indigo-600 transition-colors">Find a Store</Link>
