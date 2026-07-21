@@ -122,7 +122,7 @@ export const ProductCard = ({ product }: { product: any }) => {
                 {/* Mobile Dot Indicators for Multi-Image Items */}
                 {images.length > 1 && (
                     <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-20 md:hidden pointer-events-none">
-                        {images.map((_, idx) => (
+                        {images.map((_: string, idx: number) => (
                             <div 
                                 key={idx} 
                                 className={`h-1.5 rounded-full transition-all duration-300 ${currentImgIdx === idx ? 'w-4 bg-slate-900' : 'w-1.5 bg-slate-400/50'}`} 
@@ -185,7 +185,7 @@ export const ProductCard = ({ product }: { product: any }) => {
 
             {/* Size Selector Buttons */}
             <div className="flex gap-2 my-1">
-                {['S', 'M', 'L', 'XL'].map((size) => {
+                {['S', 'M', 'L', 'XL'].map((size: string) => {
                     const stock = product.sizes ? (product.sizes[size] || 0) : 0;
                     const isOutOfStock = stock === 0;
 
@@ -277,7 +277,7 @@ const ProductList = () => {
     if (loading) {
         return (
             <div className='mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16'>
-                {Array.from({ length: 8 }).map((_, idx) => (
+                {Array.from({ length: 8 }).map((_: unknown, idx: number) => (
                     <div key={idx} className="w-full flex flex-col gap-4">
                         <div className="w-full h-80 bg-[#e6e4dc]/60 rounded-md animate-pulse" />
                         <div className="flex justify-between items-center mt-1">
@@ -285,7 +285,7 @@ const ProductList = () => {
                             <div className="h-4 bg-[#e6e4dc]/60 rounded w-12 animate-pulse" />
                         </div>
                         <div className="flex gap-2 my-1">
-                            {Array.from({ length: 4 }).map((_, i) => (
+                            {Array.from({ length: 4 }).map((_: unknown, i: number) => (
                                 <div key={i} className="w-8 h-8 rounded-full bg-[#e6e4dc]/60 animate-pulse" />
                             ))}
                         </div>
@@ -316,7 +316,7 @@ const ProductList = () => {
 
     return (
         <div className='mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16'>
-            {filteredProducts.map((product) => (
+            {filteredProducts.map((product: any) => (
                 <ProductCard key={product.id} product={product} />
             ))}
         </div>
