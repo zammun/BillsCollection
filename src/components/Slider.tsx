@@ -94,15 +94,15 @@ const Slider = () => {
               {/* Positioned text blocks down on mobile, centered on desktop */}
               <div className='absolute w-full px-6 text-center z-10 max-w-3xl flex flex-col items-center bottom-28 md:bottom-auto md:top-1/2 md:-translate-y-1/2'>
                 
-                {/* 1. Title swapped to the top */}
-                <h1 className={`text-4xl lg:text-6xl font-extrabold text-white mb-4 drop-shadow-lg transition-all duration-700 ease-out transform tracking-tight will-change-transform
+                {/* 1. Title with Heavy Heading Font & Ultra-Bold Tracking */}
+                <h1 className={`text-4xl lg:text-6xl font-heading font-extrabold text-white mb-4 drop-shadow-xl transition-all duration-700 ease-out transform tracking-tighter will-change-transform
                   ${isActive ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-16 scale-95"}`}
                   style={{ transitionDelay: isActive ? '500ms' : '0ms' }}
                 >
                   {slide.title}
                 </h1>
 
-                {/* 2. Description moved below */}
+                {/* 2. Description */}
                 <h2 className={`text-sm md:text-lg lg:text-xl text-white/90 mb-8 max-w-lg drop-shadow-md transition-all duration-700 ease-out transform will-change-transform
                   ${isActive ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-12"}`}
                   style={{ transitionDelay: isActive ? '650ms' : '0ms' }}
@@ -128,7 +128,7 @@ const Slider = () => {
         })}
       </div>
 
-      {/* Navigation Arrows (Hidden completely on mobile, visible on medium+ screens) */}
+      {/* Navigation Arrows */}
       <div className="hidden md:block absolute top-1/2 left-8 cursor-pointer z-10 -translate-y-1/2" onClick={prevSlide}>
           <div className="bg-white/50 p-4 rounded-full hover:bg-white text-slate-900 transition-colors duration-300 shadow-sm">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

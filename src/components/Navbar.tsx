@@ -162,10 +162,10 @@ const Navbar = () => {
               alt="Logo" 
               className="w-14 h-14 md:w-[70px] md:h-[70px] shrink-0" 
           />
-          <div className="text-xl md:text-3xl font-extrabold tracking-tight text-slate-900">Bills Collection</div>
+          <div className="text-xl md:text-3xl font-extrabold tracking-tight text-slate-900 font-heading">Bills Collection</div>
         </Link>
 
-        {/* Global Navigation links with Active Highlighting */}
+        {/* Global Navigation links */}
         <nav className="hidden lg:flex items-center gap-8 text-lg font-semibold">
           <NavLink 
             to="/" 
@@ -208,16 +208,17 @@ const Navbar = () => {
             setIsNotificationOpen={setNotificationOpen}
           />
           
+          {/* Centered Burger Button */}
           <button 
             onClick={() => { setMobileMenuOpen(!mobileMenuOpen); setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); }}
-            className="focus:outline-none md:hidden flex items-center justify-center shrink-0 cursor-pointer text-slate-800"
+            className="focus:outline-none md:hidden flex items-center justify-center shrink-0 cursor-pointer text-slate-800 h-6 w-6"
             aria-label="Toggle navigation menu"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               {mobileMenuOpen ? (
                 <path d="M18 6 6 18M6 6l12 12" />
               ) : (
-                <path d="M4 12h16M4 6h16M4 18h16" />
+                <path d="M4 6h16M4 12h16M4 18h16" />
               )}
             </svg>
           </button>
@@ -232,29 +233,28 @@ const Navbar = () => {
           <div className="w-full">
             <SearchBar onSearch={() => setMobileMenuOpen(false)} />
           </div>
-          <div className="flex flex-col gap-1 font-bold text-lg pt-4 border-t border-slate-200/60 text-slate-800">
-            <NavLink 
+          <div className="flex flex-col gap-1 font-bold text-lg pt-4 border-t border-slate-200/60">
+            <Link 
               to="/" 
-              end 
               onClick={() => setMobileMenuOpen(false)} 
-              className={({ isActive }) => `py-3 px-3 rounded-xl transition-colors ${isActive ? 'text-slate-900 bg-slate-200/80 font-extrabold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'}`}
+              className="py-3 px-3 text-slate-800 hover:text-slate-900 transition-colors"
             >
               Home
-            </NavLink>
-            <NavLink 
+            </Link>
+            <Link 
               to="/about" 
               onClick={() => setMobileMenuOpen(false)} 
-              className={({ isActive }) => `py-3 px-3 rounded-xl transition-colors ${isActive ? 'text-slate-900 bg-slate-200/80 font-extrabold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'}`}
+              className="py-3 px-3 text-slate-800 hover:text-slate-900 transition-colors"
             >
               About
-            </NavLink>
-            <NavLink 
+            </Link>
+            <Link 
               to="/contact" 
               onClick={() => setMobileMenuOpen(false)} 
-              className={({ isActive }) => `py-3 px-3 rounded-xl transition-colors ${isActive ? 'text-slate-900 bg-slate-200/80 font-extrabold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'}`}
+              className="py-3 px-3 text-slate-800 hover:text-slate-900 transition-colors"
             >
               Contact
-            </NavLink>
+            </Link>
           </div>
         </div>
       )}

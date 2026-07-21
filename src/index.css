@@ -6,6 +6,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Heavy streetwear/fashion display titles */
+h1, h2, h3, .font-heading, .brand-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
 /* Custom utility for hiding scrollbars */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
