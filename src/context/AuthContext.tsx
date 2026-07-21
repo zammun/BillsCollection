@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { supabase } from '../supabase'; 
+import { useCartStore } from '../store/useCartStore'; // 1. Import cart store
 
 interface AuthContextType {
   user: any | null;
@@ -17,6 +18,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
+  
+  // 2. Access clearCart action
+  const clearCart = useCartStore((state) => state.clearCart);
 
   useEffect(() => {
     // 1. Check if there is an active session on load
@@ -26,21 +30,31 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     });
 
     // 2. Listen for Google/Apple redirects or logouts
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
       setLoading(false);
+
+      // Clear cart if user signs out via external session change
+      if (event === 'SIGNED_OUT') {
+        clearCart();
+      }
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [clearCart]);
 
-  // Temporary manual state update for your email/password form
   const login = (userData: any) => setUser(userData);
   
   const logout = async () => {
     try {
       await supabase.auth.signOut();
       setUser(null);
+      
+      // 3. Wipe cart state on explicit logout
+      clearCart();
+      
+      // Clear localStorage key directly if Zustand uses persist middleware
+      localStorage.removeItem("cart-storage"); 
     } catch (error) {
       console.error("Error logging out: ", error);
     }
