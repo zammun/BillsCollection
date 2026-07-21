@@ -95,7 +95,7 @@ const Slider = () => {
               <div className='absolute w-full px-6 text-center z-10 max-w-3xl flex flex-col items-center bottom-28 md:bottom-auto md:top-1/2 md:-translate-y-1/2'>
                 
                 {/* Title using Outfit display font */}
-                <h1 className={`text-4xl lg:text-6xl font-display font-black text-white mb-4 drop-shadow-xl transition-all duration-700 ease-out transform tracking-tight will-change-transform
+                <h1 className={`text-4xl lg:text-6xl font-display font-extrabold text-white mb-4 drop-shadow-xl transition-all duration-700 ease-out transform tracking-tight will-change-transform
                   ${isActive ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-16 scale-95"}`}
                   style={{ transitionDelay: isActive ? '500ms' : '0ms' }}
                 >
