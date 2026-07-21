@@ -40,7 +40,7 @@ const HomePage = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
               <div className="absolute bottom-6 left-6 text-white z-10">
                 <p className="text-xs uppercase tracking-widest font-bold text-slate-300 mb-1">New Drop</p>
-                <h2 className="text-xl font-black md:text-3xl tracking-tight">Casual Fridays</h2>
+                <h2 className="text-xl font-black md:text-3xl tracking-tight">Stay Tuned For More Action...</h2>
               </div>
             </ScrollReveal>
           </div>
@@ -70,7 +70,7 @@ const HomePage = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10 pointer-events-none" />
               <div className="absolute bottom-4 left-4 text-white z-10">
-                <span className="font-bold tracking-tight text-sm md:text-base">Dapper</span>
+                <span className="font-bold tracking-tight text-sm md:text-base">Easy Money Sniper</span>
               </div>
             </ScrollReveal>
           </div>
@@ -86,7 +86,7 @@ const HomePage = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent pointer-events-none" />
               <div className="absolute inset-y-0 left-6 flex flex-col justify-center text-white z-10">
                 <p className="text-[10px] uppercase tracking-widest font-bold text-slate-300 mb-0.5">Seasonal</p>
-                <h2 className="text-lg md:text-xl font-bold tracking-tight">Four Seasons Lookbook</h2>
+                <h2 className="text-lg md:text-xl font-bold tracking-tight">We Got the Goods</h2>
               </div>
             </ScrollReveal>
           </div>

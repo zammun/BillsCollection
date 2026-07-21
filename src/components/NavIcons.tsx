@@ -12,7 +12,6 @@ interface NavIconsProps {
   isNotificationOpen: boolean;
   onNotificationClick: (e: React.MouseEvent) => void;
   setIsNotificationOpen: (open: boolean) => void;
-  isScrolled?: boolean; // 👈 Fixes the TypeScript error
 }
 
 const NavIcons = ({ 
@@ -23,7 +22,6 @@ const NavIcons = ({
   isNotificationOpen,
   onNotificationClick,
   setIsNotificationOpen,
-  isScrolled // 👈 Destructure it here
 }: NavIconsProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [shouldAnimate, setShouldAnimate] = useState(false);
@@ -50,9 +48,6 @@ const NavIcons = ({
     return () => clearTimeout(handler);
   }, [totalItemsInCart]);
 
-  // CSS class to invert black PNGs to white when at the top of the page
-  const iconFilter = !isScrolled ? "invert brightness-200" : ""; 
-
   return (
     <div ref={containerRef} className='flex items-center gap-4 xl:gap-6 relative shrink-0'>
       <style>{`
@@ -71,7 +66,7 @@ const NavIcons = ({
         alt='Profile' 
         width={22} 
         height={22} 
-        className={`cursor-pointer shrink-0 transition-all duration-300 ${iconFilter}`} 
+        className="cursor-pointer shrink-0 transition-all duration-300" 
         id="profile-icon" 
         onClick={onProfileClick} 
       />
@@ -85,7 +80,7 @@ const NavIcons = ({
           alt='Notifications' 
           width={22} 
           height={22} 
-          className={`shrink-0 transition-all duration-300 ${iconFilter}`} 
+          className="shrink-0 transition-all duration-300" 
         />
       </div>
       
@@ -95,7 +90,7 @@ const NavIcons = ({
           alt='Cart' 
           width={22} 
           height={22} 
-          className={`shrink-0 transition-all duration-300 ${iconFilter}`}
+          className="shrink-0 transition-all duration-300"
         />
         
         {totalItemsInCart > 0 && (

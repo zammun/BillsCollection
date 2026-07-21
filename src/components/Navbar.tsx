@@ -111,21 +111,9 @@ const Navbar = () => {
   const [cartOpen, setCartOpen] = useState(false); 
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
-  // Track scroll state for transparent header
-  const [isScrolled, setIsScrolled] = useState(false);
 
   const cartItems = useCartStore((state) => state.cartItems);
   const totalItemsInCart = cartItems.reduce((acc, item) => acc + item.quantity, 0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 15);
-    };
-    
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const handleProfileClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -164,9 +152,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className={`fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 z-50 flex items-center justify-between gap-4 transition-all duration-300
-      ${isScrolled ? "bg-[#f4f3ef]/90 backdrop-blur-md border-b border-slate-200/60 shadow-xs" : "bg-transparent border-transparent"}
-    `}>
+    <div className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 z-50 flex items-center justify-between gap-4 transition-all duration-300 bg-[#f4f3ef]/90 backdrop-blur-md border-b border-slate-200/60 shadow-xs">
       
       {/* Brand Identity Bundle */}
       <div className="flex items-center gap-6 md:gap-12 shrink-0">
@@ -176,7 +162,7 @@ const Navbar = () => {
               alt="Logo" 
               className="w-14 h-14 md:w-[70px] md:h-[70px] shrink-0" 
           />
-          <div className={`text-xl md:text-3xl font-extrabold tracking-tight transition-colors duration-300 ${isScrolled ? 'text-slate-900' : 'text-white'}`}>Bills Collection</div>
+          <div className="text-xl md:text-3xl font-extrabold tracking-tight text-slate-900">Bills Collection</div>
         </Link>
 
         {/* Global Navigation links with Active Highlighting */}
@@ -184,19 +170,19 @@ const Navbar = () => {
           <NavLink 
             to="/" 
             end 
-            className={({ isActive }) => `transition-colors duration-300 ${isActive ? (isScrolled ? 'text-slate-900' : 'text-white') + ' font-bold underline underline-offset-8 decoration-2' : (isScrolled ? 'text-slate-600 hover:text-slate-900' : 'text-white/80 hover:text-white')}`}
+            className={({ isActive }) => `transition-colors duration-300 ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
           >
             Home
           </NavLink>
           <NavLink 
             to="/about" 
-            className={({ isActive }) => `transition-colors duration-300 ${isActive ? (isScrolled ? 'text-slate-900' : 'text-white') + ' font-bold underline underline-offset-8 decoration-2' : (isScrolled ? 'text-slate-600 hover:text-slate-900' : 'text-white/80 hover:text-white')}`}
+            className={({ isActive }) => `transition-colors duration-300 ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
           >
             About
           </NavLink>
           <NavLink 
             to="/contact" 
-            className={({ isActive }) => `transition-colors duration-300 ${isActive ? (isScrolled ? 'text-slate-900' : 'text-white') + ' font-bold underline underline-offset-8 decoration-2' : (isScrolled ? 'text-slate-600 hover:text-slate-900' : 'text-white/80 hover:text-white')}`}
+            className={({ isActive }) => `transition-colors duration-300 ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
           >
             Contact
           </NavLink>
@@ -210,8 +196,7 @@ const Navbar = () => {
           <SearchBar />
         </div>
         
-        {/* Added dynamic color inheritance wrapper for icons */}
-        <div className={`relative shrink-0 flex items-center gap-5 transition-colors duration-300 ${isScrolled ? 'text-slate-800' : 'text-white'}`}>
+        <div className="relative shrink-0 flex items-center gap-5 text-slate-800">
           <NavIcons 
             onProfileClick={handleProfileClick} 
             isProfileOpen={userMenuOpen}
@@ -221,8 +206,6 @@ const Navbar = () => {
             isNotificationOpen={notificationOpen}
             onNotificationClick={handleNotificationClick}
             setIsNotificationOpen={setNotificationOpen}
-            // Optional: Pass isScrolled if NavIcons needs to know the state directly
-            isScrolled={isScrolled} 
           />
           
           <button 
