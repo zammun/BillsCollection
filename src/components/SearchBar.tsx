@@ -32,7 +32,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search..."
-                className="w-48 xl:w-56 p-2 pl-4 pr-10 bg-slate-700 text-white placeholder-slate-300 rounded-full border border-transparent focus:bg-white focus:text-slate-900 focus:placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/30 transition-all duration-400 ease-out focus:w-full"
+                className="w-48 xl:w-56 p-2 pl-4 pr-10 bg-slate-700 text-white placeholder-slate-300 rounded-full border border-transparent focus:bg-white focus:text-slate-900 focus:placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-[#F35C7A]/30 focus:border-[#F35C7A]/50 selection:bg-[#F35C7A] selection:text-white transition-all duration-400 ease-out focus:w-full"
             />
             <button type="submit" className="absolute right-3 cursor-pointer active:scale-95 flex items-center justify-center">
                 <img src="/search.png" alt="Search" width={16} height={16} className="opacity-70 hover:opacity-100 transition-opacity" />
