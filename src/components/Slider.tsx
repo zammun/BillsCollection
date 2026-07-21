@@ -75,7 +75,7 @@ const Slider = () => {
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
-      className={`h-[calc(100vh-80px)] overflow-hidden relative transition-all duration-[1200ms] ease-out transform will-change-transform
+      className={`h-[calc(100dvh-80px)] overflow-hidden relative transition-all duration-[1200ms] ease-out transform will-change-transform
       ${isLoaded ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-12 scale-[0.98]"}`}
     >
       {/* Horizontal Filmstrip Wrapper */}
