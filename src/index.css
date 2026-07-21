@@ -6,11 +6,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Heavy streetwear/fashion display titles */
-h1, h2, h3, .font-heading, .brand-title {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+/* Custom class for punchy Outfit display titles */
+.font-display {
+  font-family: 'Outfit', sans-serif;
 }
 
 /* Custom utility for hiding scrollbars */
@@ -32,7 +30,6 @@ input[type="submit"],
   cursor: pointer !important;
 }
 
-/* Ensure interactive elements don't get 'stuck' or blocked by hidden overlays */
 html, body {
   -webkit-tap-highlight-color: transparent;
 }
@@ -42,7 +39,7 @@ html, body {
   background-image: none; 
 }
 
-/* Elegant, muted scrollbar to match the clean aesthetic */
+/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
 }
