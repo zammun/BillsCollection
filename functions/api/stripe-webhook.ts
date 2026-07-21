@@ -14,10 +14,11 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
   const signature = request.headers.get('stripe-signature') || '';
   const webhookSecret = env.STRIPE_WEBHOOK_SECRET || '';
 
-  let event;
+  let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(payload, signature, webhookSecret);
+    // 1. Must use constructEventAsync for Cloudflare / Edge environments
+    event = await stripe.webhooks.constructEventAsync(payload, signature, webhookSecret);
   } catch (err: any) {
     console.error(`Webhook signature verification failed: ${err.message}`);
     return new Response(JSON.stringify({ error: err.message }), { status: 400 });
@@ -25,7 +26,9 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
-    const userId = session.metadata?.userId;
+    
+    // Safely extract userId if present
+    const userId = session.metadata?.userId || null;
 
     try {
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
@@ -43,6 +46,7 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
         };
       });
 
+      // 2. Insert into Supabase
       const { error: orderError } = await supabase
         .from('orders')
         .insert([{
@@ -54,7 +58,10 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
           items: formattedItems
         }]);
 
-      if (orderError) throw orderError;
+      if (orderError) {
+        console.error('Supabase Order Insert Error:', orderError);
+        throw orderError;
+      }
       
     } catch (error: any) {
       console.error('Database mutation failed during webhook processing:', error);
