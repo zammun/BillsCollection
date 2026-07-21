@@ -5,7 +5,7 @@ const slides = [
   {
     id: 1,
     title: "Welcome to Bills Collection.",
-    description: "Discover our latest collection of clothing. Quality, style, and unique designs.",
+    description: "Quality, style, and unique designs.",
     img: "/1.jpg",
     url: '/list', 
     bg: "bg-gradient-to-r from-yellow-50 to-pink-50"
@@ -13,7 +13,7 @@ const slides = [
   {
     id: 2,
     title: "Winter Sale Collection",
-    description: "Sale! Up to 50% off! Shop now and get the best deals on winter clothing.", 
+    description: "Shop now and get the best deals on our winter selection.", 
     img: "/2.jpg",
     url: '/list?type=outerwear', 
     bg: "bg-gradient-to-r from-blue-50 to-green-50",
@@ -21,7 +21,7 @@ const slides = [
   {
     id: 3,
     title: "New Arrivals",
-    description: "Shop our latest collection.",
+    description: "Take a look at our latest collection.",
     img: "/4.jpg",
     url: '/list?sort=date-desc', 
     bg: 'bg-gradient-to-r from-yellow-50 to-blue-50',
