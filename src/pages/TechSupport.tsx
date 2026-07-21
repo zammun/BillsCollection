@@ -6,7 +6,7 @@ export default function TechSupport() {
         {/* Header Section */}
         <div className="text-center space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold text-zinc-900 tracking-tight">
-            BillsCollection <span className="text-[#d4af37]">Tech Support</span>
+            Bills Collection <span className="text-[#d4af37]">Tech Support</span>
           </h1>
           <p className="text-lg text-zinc-600 max-w-2xl mx-auto leading-relaxed">
             Experiencing a bug or technical issue? Reach out directly.
