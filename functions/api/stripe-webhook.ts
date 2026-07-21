@@ -1,5 +1,6 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { Resend } from 'resend';
 
 export const onRequestPost = async (context: { request: Request; env: Record<string, string> }) => {
   const { request, env } = context;
@@ -9,6 +10,7 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
     env.VITE_SUPABASE_URL || env.SUPABASE_URL || '',
     env.SUPABASE_SERVICE_ROLE_KEY || ''
   );
+  const resend = new Resend(env.RESEND_API_KEY || '');
 
   const payload = await request.text();
   const signature = request.headers.get('stripe-signature') || '';
@@ -17,7 +19,6 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
   let event: Stripe.Event;
 
   try {
-    // 1. Must use constructEventAsync for Cloudflare / Edge environments
     event = await stripe.webhooks.constructEventAsync(payload, signature, webhookSecret);
   } catch (err: any) {
     console.error(`Webhook signature verification failed: ${err.message}`);
@@ -27,7 +28,6 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
     
-    // Safely extract and validate userId as a UUID or null for guests
     const rawUserId = session.metadata?.userId;
     const isValidUuid = rawUserId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(rawUserId);
     const userId = isValidUuid ? rawUserId : null;
@@ -49,14 +49,15 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
       });
 
       const customerEmail = session.customer_details?.email;
+      const totalAmount = (session.amount_total || 0) / 100;
 
-      // 2. Insert into Supabase
+      // 1. Insert into Supabase
       const { error: orderError } = await supabase
         .from('orders')
         .insert([{
           user_id: userId,
           customer_email: customerEmail,
-          total_amount: (session.amount_total || 0) / 100,
+          total_amount: totalAmount,
           payment_status: 'Paid',
           fulfillment_status: 'Processing',
           stripe_session_id: session.id,
@@ -67,9 +68,29 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
         console.error('Supabase Order Insert Error:', orderError);
         throw orderError;
       }
+
+      // 2. Send Email via Resend
+      if (customerEmail) {
+        const itemListHtml = formattedItems
+          .map((item: any) => `<li>${item.name} (x${item.quantity}) - $${item.price.toFixed(2)}</li>`)
+          .join('');
+
+        await resend.emails.send({
+          from: 'Bills Collection <orders@billscollect.io>', // Replace with your domain once verified (e.g. orders@billscollect.io)
+          to: customerEmail,
+          subject: 'Order Confirmation - Bills Collection',
+          html: `
+            <h1>Thank you for your order!</h1>
+            <p>We've received your payment of <strong>$${totalAmount.toFixed(2)}</strong>.</p>
+            <h3>Order Details:</h3>
+            <ul>${itemListHtml}</ul>
+            <p>If you have any questions, reply to this email!</p>
+          `,
+        });
+      }
       
     } catch (error: any) {
-      console.error('Database mutation failed during webhook processing:', error);
+      console.error('Database mutation or email dispatch failed:', error);
       return new Response(JSON.stringify({ error: error.message }), { status: 500 });
     }
   }

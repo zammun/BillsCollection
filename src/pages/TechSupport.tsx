@@ -40,7 +40,7 @@ export default function TechSupport() {
             Click below to open your email client and send a message directly to our engineering desk.
           </p>
           <a 
-            href="mailto:muneebzaman6@gmail.com?subject=BillsCollection%20Support%20Inquiry"
+            href="mailto:muneebzaman6@gmail.com?subject=Bills%20Collection%20Support%20Inquiry"
             className="w-full block bg-zinc-900 hover:bg-zinc-800 text-white py-4 rounded-xl font-medium transition-all duration-300 shadow-lg hover:shadow-zinc-900/20 active:scale-98 cursor-pointer text-sm text-center"
           >
             Contact Developer

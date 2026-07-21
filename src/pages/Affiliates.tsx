@@ -6,7 +6,7 @@ export default function Affiliates() {
         {/* Header Section */}
         <div className="space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold text-zinc-900 tracking-tight">
-            BillsCollection <span className="text-[#d4af37]">Affiliates</span>
+            Bills Collection <span className="text-[#d4af37]">Affiliates</span>
           </h1>
           <p className="text-lg text-zinc-600 max-w-2xl mx-auto leading-relaxed">
             We are building a network of trusted partners to bring you the best tools and resources for managing your collections.
