@@ -196,7 +196,7 @@ const Navbar = () => {
           <SearchBar />
         </div>
         
-        <div className="relative shrink-0 flex items-center gap-5 text-slate-800">
+        <div className="relative shrink-0 flex items-center gap-4 text-slate-800">
           <NavIcons 
             onProfileClick={handleProfileClick} 
             isProfileOpen={userMenuOpen}
@@ -210,10 +210,10 @@ const Navbar = () => {
           
           <button 
             onClick={() => { setMobileMenuOpen(!mobileMenuOpen); setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); }}
-            className="p-1 focus:outline-none md:hidden block shrink-0 cursor-pointer"
+            className="focus:outline-none md:hidden flex items-center justify-center shrink-0 cursor-pointer text-slate-800"
             aria-label="Toggle navigation menu"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               {mobileMenuOpen ? (
                 <path d="M18 6 6 18M6 6l12 12" />
               ) : (
@@ -228,30 +228,30 @@ const Navbar = () => {
 
       {/* Mobile Menu Panel Overlay */}
       {mobileMenuOpen && (
-        <div className="absolute top-20 left-0 w-full bg-[#f4f3ef]/95 backdrop-blur-lg p-5 border-t border-slate-200/60 shadow-2xl flex flex-col gap-5 md:hidden z-40 animate-fadeIn">
+        <div className="absolute top-20 left-0 w-full bg-[#f4f3ef] p-5 border-t border-slate-200/60 shadow-2xl flex flex-col gap-5 md:hidden z-40 animate-fadeIn">
           <div className="w-full">
             <SearchBar onSearch={() => setMobileMenuOpen(false)} />
           </div>
-          <div className="flex flex-col gap-2 font-bold text-lg pt-4 border-t border-slate-200/60">
+          <div className="flex flex-col gap-1 font-bold text-lg pt-4 border-t border-slate-200/60 text-slate-800">
             <NavLink 
               to="/" 
               end 
               onClick={() => setMobileMenuOpen(false)} 
-              className={({ isActive }) => `py-3 px-2 rounded-lg transition-colors ${isActive ? 'text-slate-900 bg-slate-200/60' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'}`}
+              className={({ isActive }) => `py-3 px-3 rounded-xl transition-colors ${isActive ? 'text-slate-900 bg-slate-200/80 font-extrabold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'}`}
             >
               Home
             </NavLink>
             <NavLink 
               to="/about" 
               onClick={() => setMobileMenuOpen(false)} 
-              className={({ isActive }) => `py-3 px-2 rounded-lg transition-colors ${isActive ? 'text-slate-900 bg-slate-200/60' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'}`}
+              className={({ isActive }) => `py-3 px-3 rounded-xl transition-colors ${isActive ? 'text-slate-900 bg-slate-200/80 font-extrabold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'}`}
             >
               About
             </NavLink>
             <NavLink 
               to="/contact" 
               onClick={() => setMobileMenuOpen(false)} 
-              className={({ isActive }) => `py-3 px-2 rounded-lg transition-colors ${isActive ? 'text-slate-900 bg-slate-200/60' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'}`}
+              className={({ isActive }) => `py-3 px-3 rounded-xl transition-colors ${isActive ? 'text-slate-900 bg-slate-200/80 font-extrabold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'}`}
             >
               Contact
             </NavLink>
