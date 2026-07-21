@@ -61,16 +61,18 @@ const NavIcons = ({
         }
       `}</style>
 
+      {/* Profile Icon */}
       <img 
         src='/profile.png' 
         alt='Profile' 
         width={22} 
         height={22} 
-        className="cursor-pointer shrink-0 transition-all duration-300" 
+        className="cursor-pointer shrink-0 transition-opacity duration-200 hover:opacity-75" 
         id="profile-icon" 
         onClick={onProfileClick} 
       />
       
+      {/* Notification Icon */}
       <div 
         className="cursor-pointer shrink-0 relative" 
         onClick={onNotificationClick}
@@ -80,21 +82,22 @@ const NavIcons = ({
           alt='Notifications' 
           width={22} 
           height={22} 
-          className="shrink-0 transition-all duration-300" 
+          className="shrink-0 transition-opacity duration-200 hover:opacity-75" 
         />
       </div>
       
+      {/* Cart Icon */}
       <div className='relative cursor-pointer shrink-0 py-1' onClick={onCartClick}>
         <img 
           src='/cart.png' 
           alt='Cart' 
           width={22} 
           height={22} 
-          className="shrink-0 transition-all duration-300"
+          className="shrink-0 transition-opacity duration-200 hover:opacity-75"
         />
         
         {totalItemsInCart > 0 && (
-          <div className={`absolute -top-3.5 -right-3.5 w-5 h-5 bg-[#F35C7A] rounded-full text-white text-[11px] font-bold flex items-center justify-center select-none shadow-sm transition-all
+          <div className={`absolute -top-2.5 -right-2.5 w-5 h-5 bg-slate-900 text-[#faf8f5] rounded-full text-[10px] font-bold flex items-center justify-center select-none shadow-xs border border-[#faf8f5] transition-all
             ${shouldAnimate ? 'animate-bubble-pop' : ''}`}
           >
             {totalItemsInCart}
