@@ -176,7 +176,7 @@ const Navbar = () => {
               alt="Logo" 
               className="w-14 h-14 md:w-[70px] md:h-[70px] shrink-0" 
           />
-          <div className="text-xl md:text-3xl font-extrabold tracking-tight text-slate-900">Bills Collection</div>
+          <div className={`text-xl md:text-3xl font-extrabold tracking-tight transition-colors duration-300 ${isScrolled ? 'text-slate-900' : 'text-white'}`}>Bills Collection</div>
         </Link>
 
         {/* Global Navigation links with Active Highlighting */}
@@ -184,19 +184,19 @@ const Navbar = () => {
           <NavLink 
             to="/" 
             end 
-            className={({ isActive }) => `transition-colors ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
+            className={({ isActive }) => `transition-colors duration-300 ${isActive ? (isScrolled ? 'text-slate-900' : 'text-white') + ' font-bold underline underline-offset-8 decoration-2' : (isScrolled ? 'text-slate-600 hover:text-slate-900' : 'text-white/80 hover:text-white')}`}
           >
             Home
           </NavLink>
           <NavLink 
             to="/about" 
-            className={({ isActive }) => `transition-colors ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
+            className={({ isActive }) => `transition-colors duration-300 ${isActive ? (isScrolled ? 'text-slate-900' : 'text-white') + ' font-bold underline underline-offset-8 decoration-2' : (isScrolled ? 'text-slate-600 hover:text-slate-900' : 'text-white/80 hover:text-white')}`}
           >
             About
           </NavLink>
           <NavLink 
             to="/contact" 
-            className={({ isActive }) => `transition-colors ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
+            className={({ isActive }) => `transition-colors duration-300 ${isActive ? (isScrolled ? 'text-slate-900' : 'text-white') + ' font-bold underline underline-offset-8 decoration-2' : (isScrolled ? 'text-slate-600 hover:text-slate-900' : 'text-white/80 hover:text-white')}`}
           >
             Contact
           </NavLink>
@@ -210,7 +210,8 @@ const Navbar = () => {
           <SearchBar />
         </div>
         
-        <div className="relative shrink-0 flex items-center gap-5">
+        {/* Added dynamic color inheritance wrapper for icons */}
+        <div className={`relative shrink-0 flex items-center gap-5 transition-colors duration-300 ${isScrolled ? 'text-slate-800' : 'text-white'}`}>
           <NavIcons 
             onProfileClick={handleProfileClick} 
             isProfileOpen={userMenuOpen}
@@ -220,11 +221,13 @@ const Navbar = () => {
             isNotificationOpen={notificationOpen}
             onNotificationClick={handleNotificationClick}
             setIsNotificationOpen={setNotificationOpen}
+            // Optional: Pass isScrolled if NavIcons needs to know the state directly
+            isScrolled={isScrolled} 
           />
           
           <button 
             onClick={() => { setMobileMenuOpen(!mobileMenuOpen); setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); }}
-            className="text-slate-800 p-1 focus:outline-none md:hidden block shrink-0 cursor-pointer"
+            className="p-1 focus:outline-none md:hidden block shrink-0 cursor-pointer"
             aria-label="Toggle navigation menu"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
