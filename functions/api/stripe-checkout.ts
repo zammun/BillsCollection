@@ -27,8 +27,8 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
 
       // 2. DASHBOARD SHIPPING RATES (IDs from your screenshot)
       shipping_options: [
-        { shipping_rate: 'shr_1TvgzSQpuEMN1BgCiL0hQrC' }, // Free Shipping
-        { shipping_rate: 'shr_1Tvh0DQpuEMN1BgSn5I8L2a' }, // Express Shipping ($12.00)
+        { shipping_rate: 'shr_1Tvh0DQqpuEMN1BgSn5I8L2a' }, // Free Shipping
+        { shipping_rate: 'shr_1TvgzSQqpuEMN1BgCiL0hQrC' }, // Express Shipping ($12.00)
       ],
 
       // 3. ADDRESS COLLECTION FOR TAX & SHIPPING
