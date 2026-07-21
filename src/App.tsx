@@ -37,20 +37,20 @@ import TrackOrderPage from './pages/TrackOrder';
 function App() {
   return (
     <Router>
-      <PullToRefresh>
-        <div className="suave-luxury-theme min-h-screen text-slate-900 relative">
-          
-          {/* Fixed Background Artwork */}
-          {/* <PlantTest /> */}
+      <div className="suave-luxury-theme min-h-screen text-slate-900 relative">
+        
+        {/* Fixed Navbar sits OUTSIDE PullToRefresh so it stays locked at the top */}
+        <Navbar />
+        <ScrollToTop />
 
-          {/* Foreground App Content */}
-          <div className="relative z-10 flex flex-col min-h-screen justify-between">
-            <div>
-              <Navbar />
-              <ScrollToTop />
-            </div>
+        {/* PullToRefresh handles only the page contents below the navbar */}
+        <PullToRefresh>
+          <div className="pt-20 md:pt-24 relative z-10 flex flex-col min-h-screen justify-between">
             
-            <main className="pt-16 md:pt-20 flex-grow">
+            {/* Fixed Background Artwork */}
+            {/* <PlantTest /> */}
+
+            <main className="flex-grow">
               <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<HomePage />} />
@@ -110,9 +110,9 @@ function App() {
 
             <Footer />
           </div>
+        </PullToRefresh>
 
-        </div>
-      </PullToRefresh>
+      </div>
     </Router>
   );
 }

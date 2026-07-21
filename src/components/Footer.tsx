@@ -92,6 +92,7 @@ const Footer = () => {
                         <div className='flex flex-col gap-6'>
                             <Link to='/contact' className="hover:text-indigo-600 transition-colors">Customer Service</Link>
                             <Link to='/profile' className="hover:text-indigo-600 transition-colors">My Account</Link>
+                            <Link to="/track-order" className="hover:text-indigo-600 transition-colors">Track Order</Link>
                             <Link to='/stores' className="hover:text-indigo-600 transition-colors">Find a Store</Link>
                             <Link to='/tech-support' className="hover:text-indigo-600 transition-colors">Technical Support</Link>
                         </div>
@@ -144,11 +145,6 @@ const Footer = () => {
                     to="/tech-support"
                     className="w-full max-w-xs py-3.5 px-6 bg-slate-900 text-white text-xs font-bold tracking-wide uppercase rounded-xl shadow-xs hover:bg-slate-800 transition-all text-center flex items-center justify-center gap-2 border border-slate-800"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                        <line x1="12" y1="17" x2="12.01" y2="17"/>
-                    </svg>
                     Technical Support
                 </Link>
             </div>

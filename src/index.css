@@ -17,6 +17,10 @@ body {
   font-family: var(--font-heading);
 }
 
+html, body {
+  overscroll-behavior-y: none;
+}
+
 .font-display {
   font-family: var(--font-heading);
 }
