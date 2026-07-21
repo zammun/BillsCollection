@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 const slides = [
@@ -32,9 +32,9 @@ const Slider = () => {
   const [current, setCurrent] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const minSwipeDistance = 50;
+  // Use refs instead of state to avoid 60fps re-renders during finger drag
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -49,33 +49,43 @@ const Slider = () => {
   const nextSlide = () => setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
 
   const onTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
   };
 
-  const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
 
-  const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
-    if (distance > minSwipeDistance) nextSlide();
-    else if (distance < -minSwipeDistance) prevSlide();
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+
+    const diffX = touchStartX.current - touchEndX;
+    const diffY = touchStartY.current - touchEndY;
+
+    // Only trigger slide change if swipe was horizontal (diffX > diffY) and > 40px
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
+      if (diffX > 0) {
+        nextSlide();
+      } else {
+        prevSlide();
+      }
+    }
+
+    touchStartX.current = null;
+    touchStartY.current = null;
   };
 
   return (
     <div 
       onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
-      /* FIXED: Changed transition-all to transition-opacity to stop dynamic address-bar height animations */
-      className={`h-[calc(100dvh-80px)] overflow-hidden relative transition-opacity duration-700 ease-out
+      /* touch-pan-y allows smooth vertical scrolling while preserving horizontal gestures */
+      className={`h-[calc(100dvh-80px)] overflow-hidden relative transition-opacity duration-700 ease-out touch-pan-y
       ${isLoaded ? "opacity-100" : "opacity-0"}`}
     >
       {/* Horizontal Slider Wrapper */}
       <div 
-        className='w-max h-full flex transition-transform ease-in-out duration-1000'
+        className='w-max h-full flex transition-transform ease-in-out duration-1000 will-change-transform'
         style={{ transform: `translateX(-${current * 100}vw)` }}
       >
         {slides.map((slide, index) => {
@@ -100,7 +110,7 @@ const Slider = () => {
                 </span>
 
                 {/* Editorial Heading */}
-                <h1 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-black text-white mb-5 drop-shadow-2xl tracking-tight leading-[0.95] transition-all duration-700 ease-out transform will-change-transform
+                <h1 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-black text-white mb-5 drop-shadow-2xl tracking-tight leading-[0.95] transition-all duration-700 ease-out transform
                   ${isActive ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-16 scale-95"}`}
                   style={{ transitionDelay: isActive ? '500ms' : '0ms' }}
                 >
@@ -122,9 +132,9 @@ const Slider = () => {
                     ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
                   style={{ transitionDelay: isActive ? '750ms' : '0ms' }}
                 >
-                  <button className='rounded-full bg-white text-slate-950 px-9 py-4 font-bold text-xs tracking-[0.2em] uppercase hover:bg-slate-900 hover:text-white transition-all duration-300 shadow-2xl hover:scale-105 active:scale-95 cursor-pointer border border-white/20'>
-                    Explore Collection
-                  </button>
+                  <button className="bg-[#faf8f5] hover:bg-[#e6e4dc] border border-[#e2e0d9] text-slate-900 rounded-full px-8 py-3 font-bold transition-all">
+  Explore Collection
+</button>
                 </Link>
               </div>
             </div>

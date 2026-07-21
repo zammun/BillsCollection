@@ -65,3 +65,29 @@ html, body {
 ::-webkit-scrollbar-thumb:hover {
   background: #d4af37;
 }
+
+/* Off-White Luxury Button Theme */
+.btn-offwhite {
+  background-color: #faf8f5;
+  border: 1px solid #e2e0d9;
+  color: #0f172a;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-offwhite:hover {
+  background-color: #e6e4dc;
+  border-color: #d4d0c5;
+}
+
+/* Optional: Dark inverted button with soft off-white text */
+.btn-dark {
+  background-color: #0f172a;
+  color: #f4f3ef;
+  border: 1px solid #0f172a;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-dark:hover {
+  background-color: #1e293b;
+  color: #ffffff;
+}

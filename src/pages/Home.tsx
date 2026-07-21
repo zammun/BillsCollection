@@ -5,7 +5,7 @@ import ScrollReveal from "../components/ScrollReveal";
 
 const HomePage = () => {
   return (
-    <div className='pb-24'>
+    <div className='pb-24 touch-pan-y'>
       <Slider />
       
       <div className='mt-8'><Filter /></div>
@@ -13,7 +13,6 @@ const HomePage = () => {
       {/* 1. Product Grid Section */}
       <ScrollReveal>
         <div className='mt-16 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64'>
-          {/* ELEVATED: Crisp slate typography and tracking adjustments */}
           <h1 className='text-2xl md:text-3xl font-bold tracking-tight text-slate-900'>Shop All</h1>
           <ProductList />
         </div>
@@ -22,7 +21,6 @@ const HomePage = () => {
       {/* 2. Lifestyle Collage Section */}
       <div className="mt-32 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
         <ScrollReveal>
-          {/* ELEVATED: Crisp slate typography and tracking adjustments */}
           <h1 className="text-2xl md:text-3xl font-bold mb-10 tracking-tight text-slate-900">Lifestyle</h1>
         </ScrollReveal>
         
@@ -34,8 +32,7 @@ const HomePage = () => {
               <img 
                 src="/15.jpg" 
                 alt="Casual Fridays" 
-                /* FIXED: Safeguarded scale compilation with safe arbitrary syntax */
-                className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.02] opacity-85 group-hover:opacity-75" 
+                className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.02] opacity-85 group-hover:opacity-75 will-change-transform" 
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
               <div className="absolute bottom-6 left-6 text-white z-10">
@@ -51,7 +48,7 @@ const HomePage = () => {
               <img 
                 src="/14.jpg" 
                 alt="Outerwear" 
-                className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.05] opacity-85 group-hover:opacity-75" 
+                className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.05] opacity-85 group-hover:opacity-75 will-change-transform" 
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10 pointer-events-none" />
               <div className="absolute bottom-4 left-4 text-white z-10">
@@ -66,7 +63,7 @@ const HomePage = () => {
               <img 
                 src="/11.jpg" 
                 alt="Dapper" 
-                className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.05] opacity-85 group-hover:opacity-75" 
+                className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.05] opacity-85 group-hover:opacity-75 will-change-transform" 
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10 pointer-events-none" />
               <div className="absolute bottom-4 left-4 text-white z-10">
@@ -81,7 +78,7 @@ const HomePage = () => {
               <img 
                 src="/6.jpg" 
                 alt="Lookbook" 
-                className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.02] opacity-85 group-hover:opacity-75" 
+                className="w-full h-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.02] opacity-85 group-hover:opacity-75 will-change-transform" 
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent pointer-events-none" />
               <div className="absolute inset-y-0 left-6 flex flex-col justify-center text-white z-10">

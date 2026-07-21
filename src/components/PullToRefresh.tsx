@@ -1,4 +1,4 @@
-import { useState, useRef, type ReactNode, type TouchEvent } from "react";
+import { useRef, type ReactNode, type TouchEvent } from "react";
 
 interface PullToRefreshProps {
   children: ReactNode;
@@ -8,10 +8,12 @@ interface PullToRefreshProps {
 const PULL_THRESHOLD = 80;
 
 const PullToRefresh = ({ children, onRefresh }: PullToRefreshProps) => {
-  const [pullDistance, setPullDistance] = useState(0);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const touchStartY = useRef(0);
+  const currentPull = useRef(0);
   const hasVibrated = useRef(false);
+  
+  const contentRef = useRef<HTMLDivElement>(null);
+  const spinnerRef = useRef<HTMLDivElement>(null);
 
   const isAtTop = () => {
     return (window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0) <= 0;
@@ -31,23 +33,37 @@ const PullToRefresh = ({ children, onRefresh }: PullToRefreshProps) => {
     const distance = currentY - touchStartY.current;
 
     if (distance > 0) {
-      const dampenedDistance = Math.min(distance * 0.45, 120);
-      setPullDistance(dampenedDistance);
+      const dampened = Math.min(distance * 0.4, 110);
+      currentPull.current = dampened;
 
-      if (dampenedDistance >= PULL_THRESHOLD && !hasVibrated.current) {
-        if ("vibrate" in navigator) {
-          navigator.vibrate(15);
-        }
+      // Direct GPU transform update without React re-renders
+      if (contentRef.current) {
+        contentRef.current.style.transform = `translateY(${dampened}px)`;
+        contentRef.current.style.transition = "none";
+      }
+
+      if (spinnerRef.current) {
+        spinnerRef.current.style.opacity = `${Math.min(dampened / PULL_THRESHOLD, 1)}`;
+      }
+
+      if (dampened >= PULL_THRESHOLD && !hasVibrated.current) {
+        if ("vibrate" in navigator) navigator.vibrate(15);
         hasVibrated.current = true;
       }
     }
   };
 
   const handleTouchEnd = () => {
-    if (pullDistance >= PULL_THRESHOLD) {
-      setIsRefreshing(true);
-      setPullDistance(50);
-      
+    if (currentPull.current >= PULL_THRESHOLD) {
+      if (contentRef.current) {
+        contentRef.current.style.transition = "transform 0.25s ease-out";
+        contentRef.current.style.transform = "translateY(50px)";
+      }
+
+      if (spinnerRef.current) {
+        spinnerRef.current.classList.add("animate-spin");
+      }
+
       setTimeout(() => {
         if (onRefresh) {
           onRefresh();
@@ -56,9 +72,14 @@ const PullToRefresh = ({ children, onRefresh }: PullToRefreshProps) => {
         }
       }, 300);
     } else {
-      setPullDistance(0);
+      if (contentRef.current) {
+        contentRef.current.style.transition = "transform 0.25s ease-out";
+        contentRef.current.style.transform = "translateY(0px)";
+      }
     }
+
     touchStartY.current = 0;
+    currentPull.current = 0;
   };
 
   return (
@@ -66,29 +87,15 @@ const PullToRefresh = ({ children, onRefresh }: PullToRefreshProps) => {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      className="relative min-h-screen overscroll-y-none"
+      className="relative min-h-screen"
     >
-      {/* Elastic Pull Wrapper */}
-      <div
-        className="relative"
-        style={{
-          transform: `translateY(${pullDistance}px)`,
-          transition: touchStartY.current === 0 ? "transform 0.3s cubic-bezier(0.1, 0.8, 0.3, 1)" : "none",
-        }}
-      >
-        {/* FIXED: Loading Indicator is now attached inside the pulled wrapper at -top-12 
-            so it reveals itself directly inside the gap pulled down underneath the navbar */}
+      <div ref={contentRef} className="relative will-change-transform">
+        {/* Loading Indicator */}
         <div
-          className="absolute -top-12 left-0 right-0 flex items-center justify-center pointer-events-none"
-          style={{
-            opacity: Math.min(pullDistance / PULL_THRESHOLD, 1),
-          }}
+          ref={spinnerRef}
+          className="absolute -top-12 left-0 right-0 flex items-center justify-center pointer-events-none opacity-0"
         >
-          <div
-            className={`w-7 h-7 border-2 border-slate-900 border-t-transparent rounded-full shadow-md bg-white p-1 ${
-              isRefreshing ? "animate-spin" : ""
-            }`}
-          />
+          <div className="w-7 h-7 border-2 border-slate-900 border-t-transparent rounded-full shadow-md bg-white p-1" />
         </div>
 
         {children}
