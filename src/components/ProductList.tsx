@@ -206,18 +206,18 @@ export const ProductCard = ({ product }: { product: any }) => {
 
             {/* Add to Cart Button */}
             <button 
-                onClick={handleAddToCart}
-                disabled={stockForSelectedSize === 0}
-                className={`w-full py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-300 active:scale-[0.98] z-10 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs cursor-pointer
-                    ${stockForSelectedSize === 0 
-                        ? 'border border-[#e2e0d9] text-gray-400 bg-[#e6e4dc]/50' 
-                        : isAdded 
-                            ? 'bg-emerald-800 text-white ring-1 ring-emerald-800 scale-[1.02]' 
-                            : 'border border-[#e2e0d9] text-slate-900 bg-[#faf8f5] hover:bg-slate-900 hover:text-white hover:border-slate-900'
-                    }`}
-            >
-                {stockForSelectedSize === 0 ? "Out of Stock" : isAdded ? "Added to Cart ✓" : "Add to Cart"}
-            </button>
+  onClick={handleAddToCart}
+  disabled={stockForSelectedSize === 0}
+  className={`w-full py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-300 active:scale-[0.98] z-10 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs cursor-pointer
+    ${stockForSelectedSize === 0 
+      ? 'border border-[#e2e0d9] text-gray-400 bg-[#e6e4dc]/50' 
+      : isAdded 
+        ? 'bg-[#F35C7A] text-white ring-1 ring-[#F35C7A] scale-[1.02]' 
+        : 'border border-[#e2e0d9] text-slate-900 bg-[#faf8f5] hover:bg-slate-900 hover:text-white hover:border-slate-900'
+    }`}
+>
+  {stockForSelectedSize === 0 ? "Out of Stock" : isAdded ? "Added to Cart ✓" : "Add to Cart"}
+</button>
         </div>
     );
 };
