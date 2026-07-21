@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 
 export const onRequestPost = async (context: { request: Request; env: Record<string, string> }) => {
   const { request, env } = context;
-
+  
   const stripe = new Stripe(env.STRIPE_SECRET_KEY || '');
   const supabase = createClient(
     env.VITE_SUPABASE_URL || env.SUPABASE_URL || '',
@@ -27,8 +27,10 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
     
-    // Safely extract userId if present
-    const userId = session.metadata?.userId || null;
+    // Safely extract and validate userId as a UUID or null for guests
+    const rawUserId = session.metadata?.userId;
+    const isValidUuid = rawUserId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(rawUserId);
+    const userId = isValidUuid ? rawUserId : null;
 
     try {
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
@@ -46,11 +48,14 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
         };
       });
 
+      const customerEmail = session.customer_details?.email;
+
       // 2. Insert into Supabase
       const { error: orderError } = await supabase
         .from('orders')
         .insert([{
           user_id: userId,
+          customer_email: customerEmail,
           total_amount: (session.amount_total || 0) / 100,
           payment_status: 'Paid',
           fulfillment_status: 'Processing',

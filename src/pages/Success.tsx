@@ -24,22 +24,30 @@ export default function SuccessPage() {
   }, [clearCart]);
 
   // 2. Fetch the newly written order row from Supabase to provide clear receipt records
+  // 2. Fetch the newly written order row from Supabase
   useEffect(() => {
     async function fetchLatestOrder() {
-      if (!user) return;
+      // Grab the session_id from the URL (e.g., /success?session_id=cs_test_123...)
+      const searchParams = new URLSearchParams(window.location.search);
+      const sessionId = searchParams.get('session_id');
+
+      // If there's no session ID, stop loading and exit
+      if (!sessionId) {
+        setLoading(false);
+        return;
+      }
+
       try {
         const { data, error } = await supabase
           .from("orders")
           .select("id, total_amount, created_at")
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false })
-          .limit(1)
+          .eq("stripe_session_id", sessionId) // Look up by Stripe Session ID instead of User ID
           .single();
 
         if (error) throw error;
+        
         if (data) {
           setLatestOrder(data);
-          // 3. Fire the notification when the order data successfully loads here
           addNotification(
             "Order Confirmed! 🎉", 
             `Your payment was successful. Order #${data.id.slice(0, 8)} is being prepared.`
@@ -53,7 +61,7 @@ export default function SuccessPage() {
     }
 
     fetchLatestOrder();
-  }, [user, addNotification]);
+  }, [addNotification]);
 
   // Generate an estimated delivery target date 5 days out formatted in MM-DD-YYYY
   const getEstimatedDeliveryDate = () => {
