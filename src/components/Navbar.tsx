@@ -103,7 +103,6 @@ const UserMenu = ({ closeMenu }: { closeMenu: () => void }) => {
         <button type="submit" className="w-full py-3.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 font-bold transition-colors cursor-pointer text-sm uppercase tracking-wider shadow-md mt-2">Login</button>
       </form>
 
-      {/* Sign Up Link */}
       <div className="mt-4 text-center text-xs text-slate-600 pt-2 border-t border-slate-100">
         Don't have an account?{" "}
         <button 
@@ -171,7 +170,7 @@ const Navbar = () => {
       {/* Brand Identity Bundle + Left Mobile Burger */}
       <div className="flex items-center gap-3 md:gap-12 shrink-0">
         
-        {/* Mobile Burger Button (Moved to Left) */}
+        {/* Left Mobile Burger Button */}
         <button 
           onClick={() => { setMobileMenuOpen(!mobileMenuOpen); setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); }}
           className="focus:outline-none md:hidden flex items-center justify-center shrink-0 cursor-pointer text-slate-800 h-6 w-6 mr-1"
@@ -195,7 +194,7 @@ const Navbar = () => {
           <div className="text-xl md:text-3xl font-black tracking-tight text-slate-900 font-heading">Bills Collection</div>
         </Link>
 
-        {/* Global Navigation links */}
+        {/* Desktop Global Navigation links */}
         <nav className="hidden lg:flex items-center gap-8 text-lg font-semibold">
           <NavLink 
             to="/" 
@@ -242,35 +241,71 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Panel Overlay */}
+      {/* Redesigned Mobile Drawer Panel */}
       {mobileMenuOpen && (
-        <div className="absolute top-20 left-0 w-full bg-[#f4f3ef] p-5 border-t border-slate-200/60 shadow-2xl flex flex-col gap-5 md:hidden z-40 animate-fadeIn">
-          <div className="w-full">
-            <SearchBar onSearch={() => setMobileMenuOpen(false)} />
+        <div className="absolute top-20 left-0 w-full bg-[#f4f3ef]/98 backdrop-blur-xl p-6 border-b border-slate-300/60 shadow-2xl flex flex-col gap-6 md:hidden z-40 animate-fadeIn">
+          
+          {/* Full-width Left-Aligned Search Container */}
+          <div className="w-full flex justify-start">
+            <div className="w-full">
+              <SearchBar onSearch={() => setMobileMenuOpen(false)} />
+            </div>
           </div>
-          <div className="flex flex-col gap-1 font-bold text-lg pt-4 border-t border-slate-200/60">
+
+          {/* Nav Links & Track Order Callout */}
+          <nav className="flex flex-col gap-1.5 pt-2 border-t border-slate-300/50">
             <Link 
               to="/" 
               onClick={() => setMobileMenuOpen(false)} 
-              className="py-3 px-3 text-slate-800 hover:text-slate-900 transition-colors"
+              className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
             >
-              Home
+              <span>Home</span>
+              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+              </svg>
             </Link>
+
             <Link 
               to="/about" 
               onClick={() => setMobileMenuOpen(false)} 
-              className="py-3 px-3 text-slate-800 hover:text-slate-900 transition-colors"
+              className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
             >
-              About
+              <span>About</span>
+              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+              </svg>
             </Link>
+
             <Link 
               to="/contact" 
               onClick={() => setMobileMenuOpen(false)} 
-              className="py-3 px-3 text-slate-800 hover:text-slate-900 transition-colors"
+              className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
             >
-              Contact
+              <span>Contact</span>
+              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+              </svg>
             </Link>
-          </div>
+
+            {/* Track Order Button */}
+            <Link 
+              to="/track-order" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="mt-3 flex items-center justify-between py-3.5 px-4 rounded-xl bg-slate-900 text-white font-bold text-sm tracking-wide uppercase shadow-md active:scale-[0.98] transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span>Track Order</span>
+              </div>
+              <span className="text-[10px] bg-slate-800 border border-slate-700 px-2.5 py-0.5 rounded-md text-slate-300 font-semibold tracking-wider">
+                LOOKUP
+              </span>
+            </Link>
+          </nav>
+
         </div>
       )}
     </div>
