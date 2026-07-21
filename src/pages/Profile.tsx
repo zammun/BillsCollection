@@ -143,7 +143,6 @@ const ProfilePage = () => {
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 items-start">
         
         {/* Left Side Sidebar Overview Panel */}
-        {/* FIXED: Changed sticky top-28 to md:sticky md:top-28 so mobile scrolls naturally */}
         <div className="w-full md:w-80 bg-white rounded-2xl border border-slate-200/60 p-6 shadow-xs flex flex-col gap-6 md:sticky md:top-28">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xl uppercase shadow-xs flex-shrink-0">

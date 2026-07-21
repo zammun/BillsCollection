@@ -25,10 +25,10 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
       // 1. DYNAMIC TAX CALCULATION
       automatic_tax: { enabled: true },
 
-      // 2. DASHBOARD SHIPPING RATES (IDs from your screenshot)
+      // 2. DASHBOARD SHIPPING RATES
       shipping_options: [
-        { shipping_rate: 'shr_1Tvh0DQqpuEMN1BgSn5I8L2a' }, // Free Shipping
-        { shipping_rate: 'shr_1TvgzSQqpuEMN1BgCiL0hQrC' }, // Express Shipping ($12.00)
+        { shipping_rate: 'shr_1Tvh0DQqpuEMN1BgSn5I8L2a' },
+        { shipping_rate: 'shr_1TvgzSQqpuEMN1BgCiL0hQrC' },
       ],
 
       // 3. ADDRESS COLLECTION FOR TAX & SHIPPING
@@ -37,7 +37,6 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
       },
     };
 
-    // If address is pre-filled from your store, attach it to pre-populate Stripe Checkout
     if (userAddress) {
       sessionConfig.payment_intent_data = {
         shipping: {

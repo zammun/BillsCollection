@@ -127,7 +127,6 @@ export default function OrdersPage() {
               <div className="p-6 divide-y divide-slate-100">
                 {order.items?.map((item) => (
                   <div key={item.id} className="flex gap-4 py-4 first:pt-0 last:pb-0 items-center">
-                    {/* FIXED: Reconfigured background container fill parameters to hide default border blocks */}
                     <img 
                       src={item.image} 
                       alt={item.name} 

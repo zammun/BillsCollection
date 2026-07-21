@@ -35,7 +35,6 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
     const isValidUuid = rawUserId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(rawUserId);
     let finalUserId = isValidUuid ? rawUserId : null;
 
-    // 2. FALLBACK: If no valid userId in metadata, lookup user in Supabase by email
     if (!finalUserId && customerEmail) {
       try {
         const { data: usersData } = await supabase.auth.admin.listUsers();

@@ -14,7 +14,6 @@ const Filter = () => {
   const [availableTypes, setAvailableTypes] = useState<string[]>([]);
   const [availableColors, setAvailableColors] = useState<string[]>([]);
 
-  // Local state staging area to hold selections on mobile before hitting "Apply"
   const [localFilters, setLocalFilters] = useState({
     type: searchParams.get("type") || "",
     min: searchParams.get("min") || "",
@@ -23,7 +22,6 @@ const Filter = () => {
     sort: searchParams.get("sort") || "",
   });
 
-  // Keep local state synchronized if URL parameters change externally
   useEffect(() => {
     setLocalFilters({
       type: searchParams.get("type") || "",

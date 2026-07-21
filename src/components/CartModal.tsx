@@ -36,8 +36,6 @@ const CartModal = ({ onClose }: CartModalProps) => {
         setConfirmDeleteId(null);
     };
 
-    // --- STRIPE SECURE CHECKOUT FOR MODAL ---
-    // --- STRIPE SECURE CHECKOUT FOR MODAL ---
     // --- STRIPE SECURE CHECKOUT ---
     const handleCheckout = async () => {
         setIsCheckingOut(true);

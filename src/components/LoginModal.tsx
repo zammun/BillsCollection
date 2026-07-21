@@ -8,7 +8,6 @@ const LoginModal = ({ onClose }: { onClose: () => void }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Core Form Controlled State Registries
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

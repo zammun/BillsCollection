@@ -15,7 +15,7 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
       return new Response(JSON.stringify({ error: 'Order ID and Email are required.' }), { status: 400 });
     }
 
-    // Query order requiring BOTH order ID/stripe session ID and matching email
+
     const { data: order, error } = await supabase
       .from('orders')
       .select('*')

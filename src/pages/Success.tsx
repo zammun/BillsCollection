@@ -107,7 +107,6 @@ export default function SuccessPage() {
         </div>
 
         <div className="flex flex-col gap-3 mt-8">
-          {/* Only show Track via Order History to logged-in users */}
           {user && (
             <Link to="/orders" className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md cursor-pointer">
               Track via Order History
