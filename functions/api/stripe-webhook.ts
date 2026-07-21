@@ -192,7 +192,7 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top: 32px;">
                 <tr>
                   <td align="center">
-                    <a href="https://billscollection.co/orders" target="_blank" style="display: block; width: 100%; box-sizing: border-box; background-color: #0f172a; color: #ffffff; text-align: center; text-decoration: none; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 16px 24px; border-radius: 12px;">
+                    <a href="https://billscollection.co/track-order" target="_blank" style="display: block; width: 100%; box-sizing: border-box; background-color: #0f172a; color: #ffffff; text-align: center; text-decoration: none; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 16px 24px; border-radius: 12px;">
                       View Order & Status
                     </a>
                   </td>
