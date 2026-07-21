@@ -66,14 +66,7 @@ function App() {
           <Route path="/affiliates" element={<Affiliates />} />
           <Route path="/tech-support" element={<TechSupport />} />
           {/* Secure Protected Routes */}
-          <Route 
-            path="/cart" 
-            element={
-              <ProtectedRoute>
-                <CartPage />
-              </ProtectedRoute>
-            } 
-          />
+          <Route path="/cart" element={<CartPage />} />
           <Route 
             path="/profile" 
             element={
