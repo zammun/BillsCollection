@@ -69,7 +69,7 @@ const CartModal = ({ onClose }: CartModalProps) => {
                 quantity: item.quantity,
             }));
 
-            const response = await fetch('http://localhost:9999/.netlify/functions/checkout', {
+            const response = await fetch('/api/stripe-checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
