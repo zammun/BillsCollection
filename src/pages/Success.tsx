@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
 import { useCartStore } from "../store/useCartStore";
-import { useNotificationStore } from "../store/useNotificationStore"; // 1. Import store
+import { useNotificationStore } from "../store/useNotificationStore";
 import { supabase } from "../supabase";
 
 interface OrderSummary {
@@ -14,7 +14,7 @@ interface OrderSummary {
 export default function SuccessPage() {
   const { user } = useAuthContext();
   const clearCart = useCartStore((state) => state.clearCart);
-  const addNotification = useNotificationStore((state) => state.addNotification); // 2. Pull hook
+  const addNotification = useNotificationStore((state) => state.addNotification);
   const [latestOrder, setLatestOrder] = useState<OrderSummary | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -23,15 +23,12 @@ export default function SuccessPage() {
     clearCart();
   }, [clearCart]);
 
-  // 2. Fetch the newly written order row from Supabase to provide clear receipt records
   // 2. Fetch the newly written order row from Supabase
   useEffect(() => {
     async function fetchLatestOrder() {
-      // Grab the session_id from the URL (e.g., /success?session_id=cs_test_123...)
       const searchParams = new URLSearchParams(window.location.search);
       const sessionId = searchParams.get('session_id');
 
-      // If there's no session ID, stop loading and exit
       if (!sessionId) {
         setLoading(false);
         return;
@@ -41,7 +38,7 @@ export default function SuccessPage() {
         const { data, error } = await supabase
           .from("orders")
           .select("id, total_amount, created_at")
-          .eq("stripe_session_id", sessionId) // Look up by Stripe Session ID instead of User ID
+          .eq("stripe_session_id", sessionId)
           .single();
 
         if (error) throw error;
@@ -110,9 +107,13 @@ export default function SuccessPage() {
         </div>
 
         <div className="flex flex-col gap-3 mt-8">
-          <Link to="/orders" className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md cursor-pointer">
-            Track via Order History
-          </Link>
+          {/* Only show Track via Order History to logged-in users */}
+          {user && (
+            <Link to="/orders" className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md cursor-pointer">
+              Track via Order History
+            </Link>
+          )}
+          
           <Link to="/" className="w-full py-3 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer">
             Continue Shopping
           </Link>
