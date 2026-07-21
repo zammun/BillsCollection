@@ -40,7 +40,6 @@ const Footer = () => {
     };
 
     return (
-        /* FIXED: Swapped bg-gray-100 to bg-[#e6e4dc] to look a tinge darker than the luxury backdrop */
         <div className='relative py-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 bg-[#e6e4dc] text-sm mt-24'>
             
             {/* Top Section */}
@@ -69,7 +68,7 @@ const Footer = () => {
                     </div>
                 </div>
                 
-                {/* Center */}
+                {/* Center (Desktop Only) */}
                 <div className='hidden lg:flex justify-start gap-24 w-1/2'> 
                     <div className='flex flex-col gap-6'>
                         <h1 className='font-medium text-lg'>COMPANY</h1>
@@ -138,9 +137,24 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Mobile Technical Support Callout Button */}
+            <div className="flex lg:hidden justify-center w-full mt-12">
+                <Link
+                    to="/tech-support"
+                    className="w-full max-w-xs py-3.5 px-6 bg-slate-900 text-white text-xs font-bold tracking-wide uppercase rounded-xl shadow-xs hover:bg-slate-800 transition-all text-center flex items-center justify-center gap-2 border border-slate-800"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    Technical Support
+                </Link>
+            </div>
             
             {/* Sub-Footer: Legal & Compliance */}
-            <div className='mt-20 pt-8 border-t border-slate-300/60 flex flex-col gap-6 text-xs text-slate-500/80'>
+            <div className='mt-12 pt-8 border-t border-slate-300/60 flex flex-col gap-6 text-xs text-slate-500/80'>
                 
                 {/* Legal Links (Row 1) */}
                 <div className='flex flex-wrap justify-center gap-x-3 gap-y-3'>

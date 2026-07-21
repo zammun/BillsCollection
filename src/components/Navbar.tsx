@@ -130,7 +130,6 @@ const Navbar = () => {
   const cartItems = useCartStore((state) => state.cartItems);
   const totalItemsInCart = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
-  // FIXED: Simply toggles menu open/close without navigating to /profile
   const handleProfileClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (userMenuOpen) {
@@ -169,8 +168,24 @@ const Navbar = () => {
   return (
     <div className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 z-50 flex items-center justify-between gap-4 transition-all duration-300 bg-[#f4f3ef]/90 backdrop-blur-md border-b border-slate-200/60 shadow-xs">
       
-      {/* Brand Identity Bundle */}
-      <div className="flex items-center gap-6 md:gap-12 shrink-0">
+      {/* Brand Identity Bundle + Left Mobile Burger */}
+      <div className="flex items-center gap-3 md:gap-12 shrink-0">
+        
+        {/* Mobile Burger Button (Moved to Left) */}
+        <button 
+          onClick={() => { setMobileMenuOpen(!mobileMenuOpen); setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); }}
+          className="focus:outline-none md:hidden flex items-center justify-center shrink-0 cursor-pointer text-slate-800 h-6 w-6 mr-1"
+          aria-label="Toggle navigation menu"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            {mobileMenuOpen ? (
+              <path d="M18 6 6 18M6 6l12 12" />
+            ) : (
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
+
         <Link to="/" className="flex items-center gap-2 md:gap-4 shrink-0" onClick={() => { setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); setMobileMenuOpen(false); }}>
           <img 
               src="/logo.png" 
@@ -222,21 +237,6 @@ const Navbar = () => {
             onNotificationClick={handleNotificationClick}
             setIsNotificationOpen={setNotificationOpen}
           />
-          
-          {/* Centered Burger Button */}
-          <button 
-            onClick={() => { setMobileMenuOpen(!mobileMenuOpen); setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); }}
-            className="focus:outline-none md:hidden flex items-center justify-center shrink-0 cursor-pointer text-slate-800 h-6 w-6"
-            aria-label="Toggle navigation menu"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              {mobileMenuOpen ? (
-                <path d="M18 6 6 18M6 6l12 12" />
-              ) : (
-                <path d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
 
           {userMenuOpen && <UserMenu closeMenu={() => setUserMenuOpen(false)} />}
         </div>

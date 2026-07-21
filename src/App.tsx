@@ -31,73 +31,88 @@ import CaliforniaTransparencyPage from './pages/CaliSupplyChain';
 import Affiliates from './pages/Affiliates';
 import TechSupport from './pages/TechSupport';
 import PlantTest from './components/PlantTest';
+import PullToRefresh from './components/PullToRefresh';
+import TrackOrderPage from './pages/TrackOrder';
 
 function App() {
   return (
     <Router>
-      {/* FIXED: Swapped light text-amber-50/90 for a clear text-slate-900 light-theme baseline */}
-      <div className="suave-luxury-theme min-h-screen text-slate-900">
-      <Navbar />
-      <ScrollToTop />
-      
-      <main className="pt-16 md:pt-20 min-h-screen flex flex-col justify-between">
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/list" element={<ListPage />} />
-          <Route path="/product/:id" element={<SinglePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/careers" element={<CareersPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/results" element={<ResultsPage />} />
-          <Route path="/success" element={<SuccessPage />} />
-          <Route path="/cancel" element={<CancelPage />} />
-          <Route path="/ToS" element={<TosPage />} />
-          <Route path="/Accessibility" element={<AccessibilityPage />} />
-          <Route path="/DoNotSell" element={<DoNotSellPage />} />
-          <Route path="/PricingPolicy" element={<PricingPolicyPage />} />
-          <Route path="/PrivacyPolicy" element={<PrivacyPolicyPage />} />
-          <Route path="/stores" element={<StoresPage />} />
-          <Route path="/cookie-preferences" element={<CookiesPage />} />
-          <Route path="/california-privacy-rights" element={<CaliforniaPrivacyRightsPage />} />
-          <Route path="/interest-based-ads" element={<InterestBasedAdsPage />} />
-          <Route path="/supply-chain-transparency" element={<CaliforniaTransparencyPage />} />
-          <Route path="/affiliates" element={<Affiliates />} />
-          <Route path="/tech-support" element={<TechSupport />} />
-          <Route path="/plant-test" element={<PlantTest />} />
-          {/* Secure Protected Routes */}
-          <Route path="/cart" element={<CartPage />} />
-          <Route 
-            path="/profile" 
-            element={
-              <ProtectedRoute>
-                <ProfilePage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/orders" 
-            element={
-              <ProtectedRoute>
-                <OrdersPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/admin" 
-            element={
-              <ProtectedRoute>
-                <AdminPage />
-              </ProtectedRoute>
-            } 
-          />
-        </Routes>
-      </main>
+      <PullToRefresh>
+        <div className="suave-luxury-theme min-h-screen text-slate-900 relative">
+          
+          {/* Fixed Background Artwork */}
+          {/* <PlantTest /> */}
 
-      <Footer />
-      </div>
+          {/* Foreground App Content */}
+          <div className="relative z-10 flex flex-col min-h-screen justify-between">
+            <div>
+              <Navbar />
+              <ScrollToTop />
+            </div>
+            
+            <main className="pt-16 md:pt-20 flex-grow">
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/" element={<HomePage />} />
+                <Route path="/list" element={<ListPage />} />
+                <Route path="/product/:id" element={<SinglePage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/careers" element={<CareersPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/results" element={<ResultsPage />} />
+                <Route path="/success" element={<SuccessPage />} />
+                <Route path="/cancel" element={<CancelPage />} />
+                <Route path="/ToS" element={<TosPage />} />
+                <Route path="/Accessibility" element={<AccessibilityPage />} />
+                <Route path="/DoNotSell" element={<DoNotSellPage />} />
+                <Route path="/PricingPolicy" element={<PricingPolicyPage />} />
+                <Route path="/PrivacyPolicy" element={<PrivacyPolicyPage />} />
+                <Route path="/stores" element={<StoresPage />} />
+                <Route path="/cookie-preferences" element={<CookiesPage />} />
+                <Route path="/california-privacy-rights" element={<CaliforniaPrivacyRightsPage />} />
+                <Route path="/interest-based-ads" element={<InterestBasedAdsPage />} />
+                <Route path="/supply-chain-transparency" element={<CaliforniaTransparencyPage />} />
+                <Route path="/affiliates" element={<Affiliates />} />
+                <Route path="/tech-support" element={<TechSupport />} />
+                <Route path="/track-order" element={<TrackOrderPage />} />
+                <Route path="/plant-test" element={<PlantTest />} />
+
+                {/* Secure Protected Routes */}
+                <Route path="/cart" element={<CartPage />} />
+                <Route 
+                  path="/profile" 
+                  element={
+                    <ProtectedRoute>
+                      <ProfilePage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/orders" 
+                  element={
+                    <ProtectedRoute>
+                      <OrdersPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin" 
+                  element={
+                    <ProtectedRoute>
+                      <AdminPage />
+                    </ProtectedRoute>
+                  } 
+                />
+              </Routes>
+            </main>
+
+            <Footer />
+          </div>
+
+        </div>
+      </PullToRefresh>
     </Router>
   );
 }

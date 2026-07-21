@@ -27,10 +27,27 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
+    const customerEmail = session.customer_details?.email || session.customer_email;
     
+    // 1. Validate metadata userId
     const rawUserId = session.metadata?.userId;
     const isValidUuid = rawUserId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(rawUserId);
-    const userId = isValidUuid ? rawUserId : null;
+    let finalUserId = isValidUuid ? rawUserId : null;
+
+    // 2. FALLBACK: If no valid userId in metadata, lookup user in Supabase by email
+    if (!finalUserId && customerEmail) {
+      try {
+        const { data: usersData } = await supabase.auth.admin.listUsers();
+        const matchedUser = usersData?.users?.find(
+          (u) => u.email?.toLowerCase() === customerEmail.toLowerCase()
+        );
+        if (matchedUser) {
+          finalUserId = matchedUser.id;
+        }
+      } catch (lookupErr) {
+        console.warn('Fallback user lookup by email failed:', lookupErr);
+      }
+    }
 
     try {
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
@@ -48,14 +65,13 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
         };
       });
 
-      const customerEmail = session.customer_details?.email;
       const totalAmount = (session.amount_total || 0) / 100;
 
-      // 1. Insert into Supabase
+      // 3. Insert order into Supabase
       const { error: orderError } = await supabase
         .from('orders')
         .insert([{
-          user_id: userId,
+          user_id: finalUserId,
           customer_email: customerEmail,
           total_amount: totalAmount,
           payment_status: 'Paid',
@@ -69,7 +85,7 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
         throw orderError;
       }
 
-      // 2. Send Email via Resend
+      // 4. Send Confirmation Email via Resend
       if (customerEmail) {
         const itemListHtml = formattedItems
           .map((item: any) => `<li>${item.name} (x${item.quantity}) - $${item.price.toFixed(2)}</li>`)

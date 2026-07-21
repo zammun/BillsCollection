@@ -21,8 +21,23 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
       cancel_url: `${env.VITE_SITE_URL || env.NEXT_PUBLIC_SITE_URL}/cart`,
       customer_email: userEmail || undefined,
       metadata: { userId: userId },
+
+      // 1. DYNAMIC TAX CALCULATION
+      automatic_tax: { enabled: true },
+
+      // 2. DASHBOARD SHIPPING RATES (IDs from your screenshot)
+      shipping_options: [
+        { shipping_rate: 'shr_1TvgzSQpuEMN1BgCiL0hQrC' }, // Free Shipping
+        { shipping_rate: 'shr_1Tvh0DQpuEMN1BgSn5I8L2a' }, // Express Shipping ($12.00)
+      ],
+
+      // 3. ADDRESS COLLECTION FOR TAX & SHIPPING
+      shipping_address_collection: { 
+        allowed_countries: ['US', 'CA', 'GB'] 
+      },
     };
 
+    // If address is pre-filled from your store, attach it to pre-populate Stripe Checkout
     if (userAddress) {
       sessionConfig.payment_intent_data = {
         shipping: {
@@ -36,8 +51,6 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
           },
         },
       };
-    } else {
-      sessionConfig.shipping_address_collection = { allowed_countries: ['US', 'CA', 'GB'] };
     }
 
     const session = await stripe.checkout.sessions.create(sessionConfig);
@@ -52,7 +65,7 @@ export const onRequestPost = async (context: { request: Request; env: Record<str
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
-  };
+  }
 };
 
 export const onRequestOptions = async () => {

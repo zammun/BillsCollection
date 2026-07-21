@@ -46,7 +46,7 @@ const CartPage = () => {
         try {
             const { data: { user } } = await supabase.auth.getUser();
             
-            const currentUserId = user ? user.id : 'guest';
+            const currentUserId = user?.id || null;
             const userEmail = user ? user.email : undefined;
             const metadata = user ? user.user_metadata : null;
             

@@ -101,31 +101,29 @@ const ProfilePage = () => {
   };
 
   const handleAccountDeletion = async (e: React.SyntheticEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  setDeleteError("");
+    e.preventDefault();
+    setDeleteError("");
 
-  try {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user?.email) throw new Error("No authenticated user session found.");
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user?.email) throw new Error("No authenticated user session found.");
 
-    // FIXED: Changed 'value' to 'email' to match Supabase's expected credentials type object
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email: user.email,
-      password: deletePassword,
-    });
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: deletePassword,
+      });
 
-    if (authError) throw new Error("Incorrect validation password.");
+      if (authError) throw new Error("Incorrect validation password.");
 
-    // Invoke remote database cleanup protocol
-    const { error: delError } = await supabase.rpc('delete_user_account');
-    if (delError) throw delError;
+      const { error: delError } = await supabase.rpc('delete_user_account');
+      if (delError) throw delError;
 
-    await supabase.auth.signOut();
-    navigate("/");
-  } catch (err: any) {
-    setDeleteError(err.message || "Failed to remove account parameters.");
-  }
-};
+      await supabase.auth.signOut();
+      navigate("/");
+    } catch (err: any) {
+      setDeleteError(err.message || "Failed to remove account parameters.");
+    }
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -141,13 +139,12 @@ const ProfilePage = () => {
   }
 
   return (
-    /* FIXED: Cleared hard dark slate background wrapper to allow canvas transparent layout scaling */
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 pt-32 pb-24 min-h-[80vh] bg-transparent">
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 items-start">
         
         {/* Left Side Sidebar Overview Panel */}
-        {/* FIXED: Restyled borders to thin slate-200 bounds */}
-        <div className="w-full md:w-80 bg-white rounded-2xl border border-slate-200/60 p-6 shadow-xs flex flex-col gap-6 sticky top-28">
+        {/* FIXED: Changed sticky top-28 to md:sticky md:top-28 so mobile scrolls naturally */}
+        <div className="w-full md:w-80 bg-white rounded-2xl border border-slate-200/60 p-6 shadow-xs flex flex-col gap-6 md:sticky md:top-28">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xl uppercase shadow-xs flex-shrink-0">
               {profile?.name.charAt(0)}
@@ -190,7 +187,6 @@ const ProfilePage = () => {
         {/* Right Side Complex Information Form Control */}
         <div className="flex-1 w-full flex flex-col gap-6 text-left">
           
-          {/* FIXED: Restyled borders to match premium thin-line layout rules */}
           <form onSubmit={handleUpdateProfile} className="bg-white rounded-2xl border border-slate-200/60 p-8 shadow-xs flex flex-col gap-8">
             <div>
               <h1 className="text-2xl font-bold text-slate-900">Profile Configuration</h1>
@@ -226,7 +222,6 @@ const ProfilePage = () => {
 
               <div className="flex flex-col gap-1.5">
                 <label className="text-[11px] font-bold uppercase tracking-wide text-gray-400">Registered Email Address</label>
-                {/* FIXED: Set explicit background tint to match global theme layer */}
                 <input 
                   type="email" 
                   disabled 
@@ -311,7 +306,7 @@ const ProfilePage = () => {
           {isDeleting && (
             <div className="bg-white rounded-2xl border border-slate-200/60 p-8 shadow-xs flex flex-col gap-4 animate-fadeIn">
               <div>
-                <h2 className="text-base font-bold text-gray-900">Account Account Removal Verification</h2>
+                <h2 className="text-base font-bold text-gray-900">Account Removal Verification</h2>
                 <p className="text-xs text-gray-400 mt-0.5">To completely wipe your parameters and credentials, confirm your identity password below.</p>
               </div>
               
