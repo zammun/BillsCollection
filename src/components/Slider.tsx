@@ -69,8 +69,9 @@ const Slider = () => {
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
-      className={`h-[calc(100dvh-80px)] overflow-hidden relative transition-all duration-1000 ease-out
-      ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+      /* FIXED: Changed transition-all to transition-opacity to stop dynamic address-bar height animations */
+      className={`h-[calc(100dvh-80px)] overflow-hidden relative transition-opacity duration-700 ease-out
+      ${isLoaded ? "opacity-100" : "opacity-0"}`}
     >
       {/* Horizontal Slider Wrapper */}
       <div 
@@ -98,13 +99,13 @@ const Slider = () => {
                   {slide.subtitle}
                 </span>
 
-                {/* Editorial Heading - Balanced Sizing & Letter Spacing */}
-               <h1 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-black text-white mb-5 drop-shadow-2xl tracking-tight leading-[0.95] transition-all duration-700 ease-out transform will-change-transform
-  ${isActive ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-16 scale-95"}`}
-  style={{ transitionDelay: isActive ? '500ms' : '0ms' }}
->
-  {slide.title}
-</h1>
+                {/* Editorial Heading */}
+                <h1 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-black text-white mb-5 drop-shadow-2xl tracking-tight leading-[0.95] transition-all duration-700 ease-out transform will-change-transform
+                  ${isActive ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-16 scale-95"}`}
+                  style={{ transitionDelay: isActive ? '500ms' : '0ms' }}
+                >
+                  {slide.title}
+                </h1>
 
                 {/* Subheading */}
                 <p className={`text-sm md:text-lg text-slate-200 mb-8 max-w-md font-medium drop-shadow-md transition-all duration-700 ease-out

@@ -13,7 +13,6 @@ const PullToRefresh = ({ children, onRefresh }: PullToRefreshProps) => {
   const touchStartY = useRef(0);
   const hasVibrated = useRef(false);
 
-  // Helper to reliably check if user is at top of page across mobile browsers
   const isAtTop = () => {
     return (window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0) <= 0;
   };
@@ -31,13 +30,10 @@ const PullToRefresh = ({ children, onRefresh }: PullToRefreshProps) => {
     const currentY = e.touches[0].clientY;
     const distance = currentY - touchStartY.current;
 
-    // Finger dragging DOWNwards at the top of the page
     if (distance > 0) {
-      // Elastic damping formula
       const dampenedDistance = Math.min(distance * 0.45, 120);
       setPullDistance(dampenedDistance);
 
-      // Trigger haptic vibration once when crossing threshold
       if (dampenedDistance >= PULL_THRESHOLD && !hasVibrated.current) {
         if ("vibrate" in navigator) {
           navigator.vibrate(15);
@@ -70,31 +66,31 @@ const PullToRefresh = ({ children, onRefresh }: PullToRefreshProps) => {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      /* overscroll-y-none disables native browser pull-to-refresh */
       className="relative min-h-screen overscroll-y-none"
     >
-      {/* Loading Indicator */}
-      <div
-        className="absolute top-0 left-0 right-0 flex items-center justify-center z-50 pointer-events-none transition-opacity duration-150"
-        style={{
-          height: `${pullDistance}px`,
-          opacity: Math.min(pullDistance / PULL_THRESHOLD, 1),
-        }}
-      >
-        <div
-          className={`w-7 h-7 border-2 border-slate-900 border-t-transparent rounded-full shadow-md bg-white/80 backdrop-blur-xs p-1 ${
-            isRefreshing ? "animate-spin" : ""
-          }`}
-        />
-      </div>
-
       {/* Elastic Pull Wrapper */}
       <div
+        className="relative"
         style={{
           transform: `translateY(${pullDistance}px)`,
           transition: touchStartY.current === 0 ? "transform 0.3s cubic-bezier(0.1, 0.8, 0.3, 1)" : "none",
         }}
       >
+        {/* FIXED: Loading Indicator is now attached inside the pulled wrapper at -top-12 
+            so it reveals itself directly inside the gap pulled down underneath the navbar */}
+        <div
+          className="absolute -top-12 left-0 right-0 flex items-center justify-center pointer-events-none"
+          style={{
+            opacity: Math.min(pullDistance / PULL_THRESHOLD, 1),
+          }}
+        >
+          <div
+            className={`w-7 h-7 border-2 border-slate-900 border-t-transparent rounded-full shadow-md bg-white p-1 ${
+              isRefreshing ? "animate-spin" : ""
+            }`}
+          />
+        </div>
+
         {children}
       </div>
     </div>
