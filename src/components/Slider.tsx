@@ -42,8 +42,7 @@ const Slider = () => {
     return () => clearInterval(interval);
   }, [current]);
 
-  // DEBOUNCED SCROLL: This is the magic fix for the mobile stutter.
-  // It prevents React from re-rendering the heavy DOM *during* the swipe.
+  // DEBOUNCED SCROLL: Prevents React from re-rendering the heavy DOM *during* the swipe.
   const handleScroll = () => {
     if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
     
@@ -57,7 +56,7 @@ const Slider = () => {
       if (newIndex !== current) {
         setCurrent(newIndex);
       }
-    }, 100); // Waits 100ms after scroll stops before firing animations
+    }, 100); 
   };
 
   const scrollToSlide = (index: number) => {
@@ -67,7 +66,7 @@ const Slider = () => {
       left: slideWidth * index,
       behavior: 'smooth'
     });
-    setCurrent(index); // Immediate update for button clicks
+    setCurrent(index); 
   };
 
   const prevSlide = () => {
@@ -80,11 +79,10 @@ const Slider = () => {
     scrollToSlide(nextIndex);
   };
 
-  // Height reduced to 80vh on mobile to ensure room at the bottom for page scrolling
+{/* Height increased to 85vh and min-h-550px for a larger, more pronounced mobile footprint */}
   return (
-    <div className="h-[80vh] min-h-[480px] max-h-[800px] md:h-[calc(100vh-96px)] md:min-h-[600px] md:max-h-none overflow-hidden relative">
+    <div className="h-[85vh] min-h-[550px] max-h-[850px] md:h-[calc(100vh-96px)] md:min-h-[600px] md:max-h-none overflow-hidden relative">
       
-      {/* Native CSS Scroll Snapping (touch utility classes removed entirely) */}
       <div 
         ref={scrollContainerRef}
         onScroll={handleScroll}
@@ -97,41 +95,45 @@ const Slider = () => {
           return (
             <div className="w-full h-full flex-shrink-0 relative flex justify-center items-center snap-center snap-always overflow-hidden" key={slide.id}>
               
-              {/* Subtle slow-zoom animation on the active image */}
+              {/* Highly pronounced slow-zoom animation on the active image (scale-115 over 12s) */}
               <img 
                 src={slide.img} 
                 alt={slide.title} 
-                className={`w-full h-full object-cover transition-transform duration-[8s] ease-out transform-gpu
-                  ${isActive ? "scale-105" : "scale-100"}`} 
+                className={`w-full h-full object-cover transition-transform duration-[12s] ease-out transform-gpu
+                  ${isActive ? "scale-[1.15]" : "scale-100"}`} 
                 loading={index === 0 ? "eager" : "lazy"}
               />
               
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20 pointer-events-none" />
 
-              {/* Staggered text animations triggered when slide becomes active */}
+              {/* Staggered text animations with deep blurs, scaling, and high y-axis translates */}
               <div className="absolute w-full px-6 text-center z-10 max-w-5xl flex flex-col items-center top-1/2 -translate-y-1/2">
                 
-                <span className={`text-xs md:text-sm font-semibold tracking-[0.25em] text-[#d4af37] uppercase mb-2 md:mb-3 transition-all duration-700 delay-100 ease-out transform-gpu
-                  ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                {/* 1. Subtitle: Dramatic letter-spacing snap and fade */}
+                <span className={`text-xs md:text-sm font-semibold text-[#d4af37] uppercase mb-2 md:mb-3 transition-all duration-1000 delay-100 ease-out transform-gpu
+                  ${isActive ? "opacity-100 translate-y-0 tracking-[0.25em] blur-0" : "opacity-0 translate-y-10 tracking-[1em] blur-md"}`}
                 >
                   {slide.subtitle}
                 </span>
 
-                <h1 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-black text-white mb-3 md:mb-4 drop-shadow-2xl tracking-tight leading-[1] md:leading-[0.95] transition-all duration-700 delay-200 ease-out transform-gpu
-                  ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+                {/* 2. Title: Deep blur-in from below with a punchy scale-up effect */}
+                <h1 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-black text-white mb-3 md:mb-4 drop-shadow-2xl leading-[1] md:leading-[0.95] transition-all duration-1000 delay-300 ease-[cubic-bezier(0.25,1,0.5,1)] transform-gpu
+                  ${isActive ? "opacity-100 translate-y-0 scale-100 blur-0" : "opacity-0 translate-y-16 scale-90 blur-lg"}`}
                 >
                   {slide.title}
                 </h1>
 
-                <p className={`text-xs sm:text-sm md:text-lg text-slate-200 mb-6 md:mb-8 max-w-md font-medium drop-shadow-md transition-all duration-700 delay-300 ease-out transform-gpu
-                  ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                {/* 3. Description: Smooth fade-up from deep blur */}
+                <p className={`text-xs sm:text-sm md:text-lg text-slate-200 mb-6 md:mb-8 max-w-md font-medium drop-shadow-md transition-all duration-1000 delay-500 ease-out transform-gpu
+                  ${isActive ? "opacity-100 translate-y-0 blur-0" : "opacity-0 translate-y-12 blur-md"}`}
                 >
                   {slide.description}
                 </p>
                 
+                {/* 4. Button: Delayed crisp entrance from bottom */}
                 <Link 
                   to={slide.url}
-                  className={`transition-all duration-700 delay-500 ease-out transform-gpu ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                  className={`transition-all duration-1000 delay-700 ease-out transform-gpu ${isActive ? "opacity-100 translate-y-0 blur-0" : "opacity-0 translate-y-10 blur-sm"}`}
                 >
                   <button className="bg-[#faf8f5] hover:bg-[#e6e4dc] border border-[#e2e0d9] text-zinc-900 rounded-full px-6 py-2.5 md:px-8 md:py-3 text-sm md:text-base font-bold transition-all shadow-md active:scale-95 cursor-pointer">
                     Explore Collection

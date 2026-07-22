@@ -153,8 +153,11 @@ const Footer = () => {
                 </Link>
             </div>
             
+            {/* Luxurious Pronounced Divider */}
+            <div className="w-full mt-14 mb-10 h-[1.5px] bg-gradient-to-r from-transparent via-slate-400 to-transparent"></div>
+            
             {/* Sub-Footer: Legal & Compliance */}
-            <div className='mt-12 pt-8 border-t border-slate-300/60 flex flex-col gap-6 text-xs text-slate-500/80'>
+            <div className='flex flex-col gap-6 text-xs text-slate-500/80'>
                 
                 {/* Legal Links (Row 1) */}
                 <div className='flex flex-wrap justify-center gap-x-3 gap-y-3'>

@@ -5,7 +5,7 @@ import ScrollReveal from "../components/ScrollReveal";
 
 const HomePage = () => {
   return (
-    <div className="pb-24">
+    <div className="pb-8 -mt-20 md:-mt-24">
       <Slider />
       
       <div className="mt-8"><Filter /></div>
