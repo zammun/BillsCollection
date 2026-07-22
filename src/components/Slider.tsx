@@ -59,27 +59,6 @@ const Slider = () => {
     }
   }, []); 
 
-  // Restrict momentum flings to a maximum of 1 slide when scroll motion finishes
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const handleScrollEnd = () => {
-      const slideWidth = container.getBoundingClientRect().width;
-      if (slideWidth === 0) return;
-      const targetIndex = Math.round(container.scrollLeft / slideWidth);
-      
-      const diff = targetIndex - current;
-      if (Math.abs(diff) > 1) {
-        const clampedIndex = current + (diff > 0 ? 1 : -1);
-        container.scrollTo({ left: slideWidth * clampedIndex, behavior: 'smooth' });
-      }
-    };
-
-    container.addEventListener('scrollend', handleScrollEnd);
-    return () => container.removeEventListener('scrollend', handleScrollEnd);
-  }, [current]);
-
   // Snap tightly aligned on browser window resizes
   useEffect(() => {
     const handleResize = () => {
@@ -100,7 +79,7 @@ const Slider = () => {
     return () => clearInterval(interval);
   }, [current]);
 
-  // INSTANT SCROLL & INFINITE LOOP TELEPORT: Zero lag, zero rewind glitch
+  // INSTANT SCROLL & INFINITE LOOP TELEPORT
   const handleScroll = () => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -140,7 +119,8 @@ const Slider = () => {
       <div 
         ref={scrollContainerRef}
         onScroll={handleScroll}
-        className="w-full h-full flex overflow-x-auto snap-x snap-mandatory scrollbar-none"
+        // md:overflow-hidden kills desktop trackpad scrolling, leaving only mobile touch swipe
+        className="w-full h-full flex overflow-x-auto md:overflow-hidden snap-x snap-mandatory scrollbar-none"
       >
         {extendedSlides.map((slide, index) => {
           
@@ -152,7 +132,8 @@ const Slider = () => {
             (current === slides.length && index === 0);
 
           return (
-            <div className="w-full h-full flex-shrink-0 relative flex justify-center items-center snap-center overflow-hidden" key={`${slide.id}-${index}`}>
+            // snap-always natively forces mobile browsers to stop at 1 slide per swipe
+            <div className="w-full h-full flex-shrink-0 relative flex justify-center items-center snap-center snap-always overflow-hidden" key={`${slide.id}-${index}`}>
               
               <img 
                 src={slide.img} 
