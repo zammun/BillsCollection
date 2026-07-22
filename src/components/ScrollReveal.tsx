@@ -28,10 +28,10 @@ export default function ScrollReveal({ children, delay = "", className = "" }: S
   return (
     <div
       ref={ref}
-      className={`transition-[opacity,transform,filter] duration-1000 ease-out transform-gpu ${delay} ${className}
+      className={`transition-[opacity,transform] duration-700 ease-out transform-gpu ${delay} ${className}
         ${isVisible 
-          ? "opacity-100 translate-y-0 blur-none" 
-          : "opacity-0 translate-y-6 blur-[1px]"
+          ? "opacity-100 translate-y-0" 
+          : "opacity-0 translate-y-6"
         }`}
     >
       {children}

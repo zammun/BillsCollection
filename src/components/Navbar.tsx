@@ -179,7 +179,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 z-50 flex items-center justify-between gap-4 transition-all duration-300 bg-[#f4f3ef]/90 backdrop-blur-md border-b border-slate-200/60 shadow-xs transform-gpu">
+      <div className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 z-50 flex items-center justify-between gap-4 transition-all duration-300 bg-[#f4f3ef]/90  border-b border-slate-200/60 shadow-xs transform-gpu">
         
         {/* Brand Identity Bundle + Left Mobile Burger */}
         <div className="flex items-center gap-3 md:gap-12 shrink-0">
