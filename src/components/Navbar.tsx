@@ -129,7 +129,7 @@ const Navbar = () => {
   const cartItems = useCartStore((state) => state.cartItems);
   const totalItemsInCart = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
-  // FIXED: Prevent background page scrolling when mobile menu drawer is open
+  // Prevent background page scrolling when mobile menu drawer is open
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -179,7 +179,8 @@ const Navbar = () => {
   return (
     <>
       <div 
-className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 z-50 flex items-center justify-between gap-4 transition-all duration-300 bg-[#E6E4DC]/40 backdrop-blur-lg shadow-sm transform-gpu"      >
+        className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 z-50 flex items-center justify-between gap-4 transition-all duration-300 bg-[#E6E4DC]/80 backdrop-blur-lg shadow-sm transform-gpu"
+      >
         
         {/* Brand Identity Bundle + Left Mobile Burger */}
         <div className="flex items-center gap-3 md:gap-12 shrink-0">
@@ -187,7 +188,7 @@ className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32
           {/* Left Mobile Burger Button */}
           <button 
             onClick={() => { setMobileMenuOpen(!mobileMenuOpen); setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); }}
-            className="focus:outline-none md:hidden flex items-center justify-center shrink-0 cursor-pointer text-slate-800 h-6 w-6 mr-1"
+            className="focus:outline-none md:hidden flex items-center justify-center shrink-0 cursor-pointer text-slate-900 h-6 w-6 mr-1"
             aria-label="Toggle navigation menu"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -257,7 +258,7 @@ className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32
 
         {/* Redesigned Mobile Drawer Panel */}
         {mobileMenuOpen && (
-          <div className="absolute top-20 left-0 w-full bg-[#f4f3ef]/98 backdrop-blur-xl p-6 border-b border-slate-300/60 shadow-2xl flex flex-col gap-6 md:hidden z-50 animate-fadeIn">
+          <div className="absolute top-20 left-0 w-full bg-[#D9D7D0] backdrop-blur-xl p-6 border-b border-slate-300/60 shadow-2xl flex flex-col gap-6 md:hidden z-50 animate-fadeIn">
             
             {/* Full-width Left-Aligned Search Container */}
             <div className="w-full flex justify-start">
@@ -267,14 +268,14 @@ className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32
             </div>
 
             {/* Nav Links & Track Order Callout */}
-            <nav className="flex flex-col gap-1.5 pt-2 border-t border-slate-300/50">
+            <nav className="flex flex-col gap-2 pt-2 border-t border-slate-400/30">
               <Link 
                 to="/" 
                 onClick={() => setMobileMenuOpen(false)} 
-                className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
+                className="flex items-center justify-between py-3.5 px-4 rounded-xl bg-slate-900 text-white font-bold text-sm tracking-wide uppercase shadow-md active:scale-[0.98] transition-all hover:bg-slate-800"
               >
                 <span>Home</span>
-                <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
                 </svg>
               </Link>
@@ -282,10 +283,10 @@ className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32
               <Link 
                 to="/about" 
                 onClick={() => setMobileMenuOpen(false)} 
-                className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
+                className="flex items-center justify-between py-3.5 px-4 rounded-xl bg-slate-900 text-white font-bold text-sm tracking-wide uppercase shadow-md active:scale-[0.98] transition-all hover:bg-slate-800"
               >
                 <span>About</span>
-                <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
                 </svg>
               </Link>
@@ -293,10 +294,10 @@ className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32
               <Link 
                 to="/contact" 
                 onClick={() => setMobileMenuOpen(false)} 
-                className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
+                className="flex items-center justify-between py-3.5 px-4 rounded-xl bg-slate-900 text-white font-bold text-sm tracking-wide uppercase shadow-md active:scale-[0.98] transition-all hover:bg-slate-800"
               >
                 <span>Contact</span>
-                <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
                 </svg>
               </Link>
@@ -305,7 +306,7 @@ className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32
               <Link 
                 to="/track-order" 
                 onClick={() => setMobileMenuOpen(false)} 
-                className="mt-3 flex items-center justify-between py-3.5 px-4 rounded-xl bg-slate-900 text-white font-bold text-sm tracking-wide uppercase shadow-md active:scale-[0.98] transition-all"
+                className="flex items-center justify-between py-3.5 px-4 rounded-xl bg-slate-900 text-white font-bold text-sm tracking-wide uppercase shadow-md active:scale-[0.98] transition-all hover:bg-slate-800"
               >
                 <div className="flex items-center gap-3">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -324,7 +325,7 @@ className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32
         )}
       </div>
 
-      {/* FIXED: Dark Backdrop Overlay when mobile drawer is active */}
+      {/* Dark Backdrop Overlay when mobile drawer is active */}
       {mobileMenuOpen && (
         <div 
           onClick={() => setMobileMenuOpen(false)}

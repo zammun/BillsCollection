@@ -71,10 +71,10 @@ const Slider = () => {
     <div 
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
-      /* Restored large height using static vh to prevent reflow stutter */
-      className="h-[calc(100vh-80px)] min-h-[600px] md:h-[calc(100vh-96px)] overflow-hidden relative touch-pan-y"
+      /* FIXED: Replaced static 100vh & 600px min-height with dynamic 100dvh for mobile viewports */
+      className="h-[calc(100dvh-80px)] md:h-[calc(100vh-96px)] md:min-h-[600px] overflow-hidden relative touch-pan-y"
     >
-      {/* Horizontal Slider Wrapper using percentage transforms for GPU acceleration */}
+      {/* Horizontal Slider Wrapper */}
       <div 
         className="w-full h-full flex transition-transform ease-in-out duration-700 transform-gpu"
         style={{ transform: `translateX(-${current * 100}%)` }}
@@ -93,22 +93,22 @@ const Slider = () => {
               
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20 pointer-events-none" />
 
-              {/* Positioned higher on mobile (bottom-28) to avoid Safari/Chrome bottom bar overlay */}
-              <div className="absolute w-full px-6 text-center z-10 max-w-5xl flex flex-col items-center bottom-28 md:bottom-auto md:top-1/2 md:-translate-y-1/2">
+              {/* Centered overlay content cleanly across mobile and desktop */}
+              <div className="absolute w-full px-6 text-center z-10 max-w-5xl flex flex-col items-center top-1/2 -translate-y-1/2">
                 
-                <span className={`text-xs md:text-sm font-semibold tracking-[0.25em] text-[#d4af37] uppercase mb-3 transition-all duration-500 ease-out transform-gpu
+                <span className={`text-xs md:text-sm font-semibold tracking-[0.25em] text-[#d4af37] uppercase mb-2 md:mb-3 transition-all duration-500 ease-out transform-gpu
                   ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
                 >
                   {slide.subtitle}
                 </span>
 
-                <h1 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-black text-white mb-4 drop-shadow-2xl tracking-tight leading-[0.95] transition-all duration-500 ease-out transform-gpu
+                <h1 className={`text-3xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-black text-white mb-3 md:mb-4 drop-shadow-2xl tracking-tight leading-[1] md:leading-[0.95] transition-all duration-500 ease-out transform-gpu
                   ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
                 >
                   {slide.title}
                 </h1>
 
-                <p className={`text-sm md:text-lg text-slate-200 mb-8 max-w-md font-medium drop-shadow-md transition-all duration-500 ease-out transform-gpu
+                <p className={`text-xs sm:text-sm md:text-lg text-slate-200 mb-6 md:mb-8 max-w-md font-medium drop-shadow-md transition-all duration-500 ease-out transform-gpu
                   ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
                 >
                   {slide.description}
@@ -118,7 +118,7 @@ const Slider = () => {
                   to={slide.url}
                   className={`transition-all duration-500 ease-out transform-gpu ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
                 >
-                  <button className="bg-[#faf8f5] hover:bg-[#e6e4dc] border border-[#e2e0d9] text-zinc-900 rounded-full px-8 py-3 font-bold transition-all shadow-md active:scale-95 cursor-pointer">
+                  <button className="bg-[#faf8f5] hover:bg-[#e6e4dc] border border-[#e2e0d9] text-zinc-900 rounded-full px-6 py-2.5 md:px-8 md:py-3 text-sm md:text-base font-bold transition-all shadow-md active:scale-95 cursor-pointer">
                     Explore Collection
                   </button>
                 </Link>
@@ -150,7 +150,7 @@ const Slider = () => {
       </button>
 
       {/* Indicators */}
-      <div className="absolute left-1/2 bottom-8 -translate-x-1/2 z-20 flex gap-3">
+      <div className="absolute left-1/2 bottom-6 md:bottom-8 -translate-x-1/2 z-20 flex gap-3">
         {slides.map((slide, index) => (
           <button 
             key={slide.id}

@@ -175,7 +175,6 @@ const ProductsDashboard = () => {
         try {
             const uploadedUrls: string[] = [...existingImageUrls];
 
-            // Upload any NEW images before saving the template
             for (const file of images) {
                 const fileExt = file.name.split('.').pop();
                 const fileName = `${Math.random()}.${fileExt}`;
@@ -200,7 +199,7 @@ const ProductsDashboard = () => {
                 color: formData.color,
                 type: formData.type,
                 sizes: { ...formData.sizes },
-                image_urls: uploadedUrls // Use the combined uploaded URLs
+                image_urls: uploadedUrls
             };
 
             const { error } = await supabase
@@ -209,8 +208,6 @@ const ProductsDashboard = () => {
 
             if (error) throw error;
 
-            // Move the newly uploaded images into the "existing" array in the UI 
-            // so we don't upload them twice if the user clicks "Publish Item" right after.
             setOriginalImageUrls(uploadedUrls);
             imagePreviews.forEach(url => URL.revokeObjectURL(url));
             setImages([]);
@@ -254,7 +251,7 @@ const ProductsDashboard = () => {
         
         triggerConfirmation(
             "Remove Template Blueprint",
-            "Are you sure you want to delete this structural listing template blueprint from your permanent database context?",
+            "Are you sure you want to delete this structural listing template blueprint from your database context?",
             async () => {
                 try {
                     const { error } = await supabase
@@ -280,7 +277,7 @@ const ProductsDashboard = () => {
         
         triggerConfirmation(
             "Delete Live Product",
-            `Are you sure you want to permanently remove "${name}" from the active public storefront catalog? This cannot be undone.`,
+            `Are you sure you want to permanently remove "${name}" from the active catalog? This cannot be undone.`,
             async () => {
                 try {
                     const { error } = await supabase
@@ -378,32 +375,37 @@ const ProductsDashboard = () => {
     };
 
     return (
-        <div className="w-full">
+        <div className="w-full font-sans antialiased text-zinc-800">
             {/* --- TOAST NOTIFICATIONS UI NODE --- */}
             {toast && (
-                <div className={`fixed top-6 right-6 z-[999] flex items-center gap-3 px-5 py-3.5 rounded-xl border shadow-xl animate-fadeIn transition-all duration-300 max-w-sm font-medium text-xs tracking-wide uppercase
-                    ${toast.type === 'success' ? 'bg-white border-emerald-200 text-emerald-800' : ''}
-                    ${toast.type === 'error' ? 'bg-white border-rose-200 text-rose-800' : ''}
-                    ${toast.type === 'info' ? 'bg-white border-indigo-100 text-indigo-900' : ''}
+                <div className={`fixed top-6 right-6 z-[999] flex items-center gap-3 px-5 py-3.5 rounded-2xl border bg-white shadow-xl animate-fadeIn transition-all duration-300 max-w-sm
+                    ${toast.type === 'success' ? 'border-emerald-200' : ''}
+                    ${toast.type === 'error' ? 'border-rose-200' : ''}
+                    ${toast.type === 'info' ? 'border-indigo-200' : ''}
                 `}>
-                    <span>{toast.type === 'success' ? '✓' : toast.type === 'error' ? '✕' : 'ℹ'}</span>
-                    <p className="normal-case font-semibold text-slate-700">{toast.message}</p>
+                    <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">
+                        {toast.type === 'success' ? 'STATUS' : toast.type === 'error' ? 'ALERT' : 'INFO'}
+                    </span>
+                    <p className="text-xs font-semibold text-zinc-700">{toast.message}</p>
                 </div>
             )}
 
-            {/* --- ACTION CONFIRMATION MODAL UI OVERLAY NODE --- */}
+            {/* --- ACTION CONFIRMATION MODAL OVERLAY --- */}
             {confirmModal.isOpen && (
-                <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-fadeIn">
-                    <div className="bg-white border border-slate-100 rounded-2xl max-w-sm w-full p-6 shadow-2xl flex flex-col gap-4">
+                <div className="fixed inset-0 bg-zinc-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-fadeIn">
+                    <div className="bg-white border border-zinc-200/60 rounded-3xl max-w-sm w-full p-8 shadow-2xl flex flex-col gap-6">
                         <div>
-                            <h3 className="text-base font-bold text-slate-900 tracking-tight">{confirmModal.title}</h3>
-                            <p className="text-xs text-slate-500 leading-relaxed mt-1.5">{confirmModal.message}</p>
+                            <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">
+                                Confirmation Required
+                            </span>
+                            <h3 className="text-xl font-bold text-zinc-900 tracking-tight mt-1">{confirmModal.title}</h3>
+                            <p className="text-xs text-zinc-600 leading-relaxed mt-2">{confirmModal.message}</p>
                         </div>
-                        <div className="flex gap-3 mt-2">
-                            <button onClick={closeConfirmation} className="flex-1 py-2 rounded-xl text-xs font-bold text-slate-600 bg-slate-50 border border-slate-200 hover:bg-slate-100 cursor-pointer transition-colors">
+                        <div className="flex gap-3">
+                            <button onClick={closeConfirmation} className="flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-zinc-600 bg-zinc-100 hover:bg-zinc-200 cursor-pointer transition-colors">
                                 Cancel
                             </button>
-                            <button onClick={confirmModal.onConfirm} className="flex-1 py-2 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 cursor-pointer transition-colors shadow-xs">
+                            <button onClick={confirmModal.onConfirm} className="flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-white bg-rose-600 hover:bg-rose-700 cursor-pointer transition-colors shadow-sm">
                                 Confirm
                             </button>
                         </div>
@@ -411,74 +413,89 @@ const ProductsDashboard = () => {
                 </div>
             )}
 
-            <div className="mb-10">
-                <h1 className="text-3xl font-bold text-slate-900">Products Control Center</h1>
-                <p className="text-sm text-slate-500 mt-1">View and update products here</p>
+            {/* Header Section */}
+            <div className="mb-10 space-y-1">
+                <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">
+                    Catalog Management
+                </span>
+                <h1 className="text-3xl md:text-4xl font-bold text-zinc-900 tracking-tight font-heading">
+                    Products <span className="text-[#d4af37]">Control Center</span>
+                </h1>
+                <p className="text-sm md:text-base text-zinc-600">View, create, and update public catalog offerings.</p>
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 items-start">
-                {/* Form Panel */}
-                <form onSubmit={handleSubmit} className="xl:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-xs p-8 flex flex-col lg:flex-row gap-8">
-                    <div className="flex-1 flex flex-col gap-5">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">
-                                {editingProductId !== null ? `⚡ Editing Mode Active` : "✨ Add New Product"}
-                            </h3>
+                {/* Main Form Card */}
+                <form onSubmit={handleSubmit} className="xl:col-span-2 bg-white rounded-3xl border border-zinc-200/60 shadow-xl p-8 md:p-10 flex flex-col lg:flex-row gap-8">
+                    <div className="flex-1 flex flex-col gap-6">
+                        <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
+                            <div>
+                                <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">
+                                    {editingProductId !== null ? "Editing Mode Active" : "Add New Item"}
+                                </span>
+                                <h2 className="text-xl font-bold text-zinc-900 tracking-tight">
+                                    {editingProductId !== null ? "Update Product Details" : "Product Specification"}
+                                </h2>
+                            </div>
                             {editingProductId !== null && (
-                                <button type="button" onClick={handleCancelEdit} className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 underline cursor-pointer">
+                                <button type="button" onClick={handleCancelEdit} className="text-xs font-bold text-zinc-900 hover:text-[#d4af37] underline cursor-pointer transition-colors">
                                     Switch to Add Item
                                 </button>
                             )}
                         </div>
 
-                        <div className="flex flex-col gap-1.5">
-                            <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Product Name</label>
-                            <input required type="text" placeholder="Product Title" className="border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all bg-transparent" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                        <div className="flex flex-col gap-2">
+                            <label className="text-xs font-bold text-zinc-700 uppercase tracking-wider">Product Name</label>
+                            <input required type="text" placeholder="Product Title" className="border border-zinc-200/80 rounded-xl p-3.5 text-sm focus:outline-none focus:border-zinc-400 focus:bg-white transition-all bg-zinc-50/50 text-zinc-900 placeholder-zinc-400" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="flex flex-col gap-1.5">
-                                <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Price ($)</label>
-                                <input required type="number" step="0.01" placeholder="0.00" className="border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all bg-transparent" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} />
+                            <div className="flex flex-col gap-2">
+                                <label className="text-xs font-bold text-zinc-700 uppercase tracking-wider">Price ($)</label>
+                                <input required type="number" step="0.01" placeholder="0.00" className="border border-zinc-200/80 rounded-xl p-3.5 text-sm focus:outline-none focus:border-zinc-400 focus:bg-white transition-all bg-zinc-50/50 text-zinc-900 placeholder-zinc-400" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} />
                             </div>
-                            <div className="flex flex-col gap-1.5">
-                                <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Item Type</label>
-                                <select required className="border border-slate-200 bg-white rounded-xl p-3 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all h-[46px]" value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}>
+                            <div className="flex flex-col gap-2">
+                                <label className="text-xs font-bold text-zinc-700 uppercase tracking-wider">Item Type</label>
+                                <select required className="border border-zinc-200/80 bg-zinc-50/50 text-zinc-900 rounded-xl p-3.5 text-sm focus:outline-none focus:border-zinc-400 focus:bg-white transition-all h-[48px]" value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}>
                                     {typeOptions.map(option => <option key={option} value={option}>{option}</option>)}
                                 </select>
                             </div>
                         </div>
 
-                        <div className="flex flex-col gap-1.5">
-                            <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Color Base</label>
-                            <input required type="text" placeholder="e.g. Matte Black" className="border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all bg-transparent" value={formData.color} onChange={e => setFormData({...formData, color: e.target.value})} />
+                        <div className="flex flex-col gap-2">
+                            <label className="text-xs font-bold text-zinc-700 uppercase tracking-wider">Color Base</label>
+                            <input required type="text" placeholder="e.g. Matte Black" className="border border-zinc-200/80 rounded-xl p-3.5 text-sm focus:outline-none focus:border-zinc-400 focus:bg-white transition-all bg-zinc-50/50 text-zinc-900 placeholder-zinc-400" value={formData.color} onChange={e => setFormData({...formData, color: e.target.value})} />
                         </div>
 
-                        <label className="text-xs font-bold uppercase text-slate-500 mt-2">Inventory Count (Per Size)</label>
-                        <div className="grid grid-cols-4 gap-2">
-                            {['S', 'M', 'L', 'XL'].map((size) => (
-                                <div key={size} className="flex flex-col">
-                                    <label className="text-[10px] text-slate-400 font-bold">{size}</label>
-                                    <input type="number" min="0" required className="border border-slate-200 p-2 rounded-lg text-sm bg-transparent" value={formData.sizes[size as keyof typeof formData.sizes]} onChange={e => setFormData({...formData, sizes: {...formData.sizes, [size]: e.target.value}})} />
-                                </div>
-                            ))}
+                        <div className="flex flex-col gap-2">
+                            <label className="text-xs font-bold uppercase text-zinc-700 tracking-wider">Inventory Count (Per Size)</label>
+                            <div className="grid grid-cols-4 gap-3">
+                                {['S', 'M', 'L', 'XL'].map((size) => (
+                                    <div key={size} className="flex flex-col gap-1">
+                                        <label className="text-[11px] text-zinc-500 font-bold uppercase">{size}</label>
+                                        <input type="number" min="0" required className="border border-zinc-200/80 p-2.5 rounded-xl text-sm bg-zinc-50/50 text-zinc-900 text-center font-semibold focus:outline-none focus:border-zinc-400 focus:bg-white transition-all" value={formData.sizes[size as keyof typeof formData.sizes]} onChange={e => setFormData({...formData, sizes: {...formData.sizes, [size]: e.target.value}})} />
+                                    </div>
+                                ))}
+                            </div>
                         </div>
 
-                        <div className="flex flex-col gap-1.5">
-                            <textarea rows={3} placeholder="Describe item metrics (optional)..." className="border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all resize-none bg-transparent" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
+                        <div className="flex flex-col gap-2">
+                            <label className="text-xs font-bold text-zinc-700 uppercase tracking-wider">Description</label>
+                            <textarea rows={3} placeholder="Describe item details..." className="border border-zinc-200/80 rounded-xl p-3.5 text-sm focus:outline-none focus:border-zinc-400 focus:bg-white transition-all resize-none bg-zinc-50/50 text-zinc-900 placeholder-zinc-400" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
                         </div>
                     </div>
 
-                    <div className="w-full lg:w-64 flex flex-col gap-4 lg:justify-between">
+                    <div className="w-full lg:w-72 flex flex-col gap-6 lg:justify-between pt-2">
                         <div className="flex flex-col gap-4">
-                            <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Media Files</label>
-                            <div className="border-2 border-dashed border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center bg-slate-50/50 hover:bg-slate-100/30 relative h-24 cursor-pointer group">
+                            <label className="text-xs font-bold text-zinc-700 uppercase tracking-wider">Media Files</label>
+                            <div className="border-2 border-dashed border-zinc-200 rounded-2xl p-4 flex flex-col items-center justify-center bg-zinc-50/50 hover:bg-zinc-100/50 relative h-28 cursor-pointer transition-colors">
                                 {loading ? (
-                                    <span className="text-xs font-bold text-indigo-600 animate-pulse">Uploading...</span>
+                                    <span className="text-xs font-bold uppercase tracking-wider text-[#d4af37] animate-pulse">Uploading Media...</span>
                                 ) : (
                                     <>
                                         <input multiple type="file" accept="image/*" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
-                                        <span className="text-xs font-medium text-slate-600">Upload New Photos</span>
+                                        <span className="text-xs font-bold text-zinc-900 uppercase tracking-wide">Upload Photos</span>
+                                        <span className="text-[10px] text-zinc-500 mt-1">PNG, JPG, or WEBP</span>
                                     </>
                                 )}
                             </div>
@@ -486,22 +503,22 @@ const ProductsDashboard = () => {
                             {(existingImageUrls.length > 0 || imagePreviews.length > 0) && (
                                 <div className="grid grid-cols-2 gap-3 mt-2">
                                     {existingImageUrls.map((url, idx) => (
-                                        <div key={`exist-${idx}`} className="relative aspect-square rounded-lg overflow-hidden border border-slate-200">
+                                        <div key={`exist-${idx}`} className="relative aspect-square rounded-xl overflow-hidden border border-zinc-200 shadow-xs">
                                             <img src={url} alt="existing" className="w-full h-full object-cover" />
-                                            <button type="button" onClick={() => removeImage(idx, true)} className="absolute top-1.5 right-1.5 bg-black/60 hover:bg-red-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full transition-colors">✕</button>
-                                            <div className="absolute bottom-1.5 left-1.5 flex gap-1 bg-black/40 p-0.5 rounded">
-                                                <button type="button" onClick={() => moveImage(idx, 'left', true)} className="text-white text-[10px] w-4 hover:text-indigo-300">←</button>
-                                                <button type="button" onClick={() => moveImage(idx, 'right', true)} className="text-white text-[10px] w-4 hover:text-indigo-300">→</button>
+                                            <button type="button" onClick={() => removeImage(idx, true)} className="absolute top-1.5 right-1.5 bg-zinc-900/80 hover:bg-rose-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full transition-colors cursor-pointer">✕</button>
+                                            <div className="absolute bottom-1.5 left-1.5 flex gap-1 bg-zinc-900/70 p-0.5 rounded-lg">
+                                                <button type="button" onClick={() => moveImage(idx, 'left', true)} className="text-white text-[10px] w-4 hover:text-[#d4af37] cursor-pointer">←</button>
+                                                <button type="button" onClick={() => moveImage(idx, 'right', true)} className="text-white text-[10px] w-4 hover:text-[#d4af37] cursor-pointer">→</button>
                                             </div>
                                         </div>
                                     ))}
                                     {imagePreviews.map((url, idx) => (
-                                        <div key={`new-${idx}`} className="relative aspect-square rounded-lg overflow-hidden border border-emerald-300">
+                                        <div key={`new-${idx}`} className="relative aspect-square rounded-xl overflow-hidden border border-emerald-500 shadow-xs">
                                             <img src={url} alt="preview" className="w-full h-full object-cover" />
-                                            <button type="button" onClick={() => removeImage(idx, false)} className="absolute top-1.5 right-1.5 bg-black/60 hover:bg-red-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full transition-colors">✕</button>
-                                            <div className="absolute bottom-1.5 left-1.5 flex gap-1 bg-black/40 p-0.5 rounded">
-                                                <button type="button" onClick={() => moveImage(idx, 'left', false)} className="text-white text-[10px] w-4 hover:text-emerald-300">←</button>
-                                                <button type="button" onClick={() => moveImage(idx, 'right', false)} className="text-white text-[10px] w-4 hover:text-emerald-300">→</button>
+                                            <button type="button" onClick={() => removeImage(idx, false)} className="absolute top-1.5 right-1.5 bg-zinc-900/80 hover:bg-rose-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full transition-colors cursor-pointer">✕</button>
+                                            <div className="absolute bottom-1.5 left-1.5 flex gap-1 bg-zinc-900/70 p-0.5 rounded-lg">
+                                                <button type="button" onClick={() => moveImage(idx, 'left', false)} className="text-white text-[10px] w-4 hover:text-emerald-300 cursor-pointer">←</button>
+                                                <button type="button" onClick={() => moveImage(idx, 'right', false)} className="text-white text-[10px] w-4 hover:text-emerald-300 cursor-pointer">→</button>
                                             </div>
                                         </div>
                                     ))}
@@ -509,17 +526,17 @@ const ProductsDashboard = () => {
                             )}
                         </div>
 
-                        <div className="flex flex-col gap-2 mt-6 lg:mt-0">
-                            <button disabled={loading} type="submit" className="w-full bg-slate-900 text-white py-3 rounded-xl font-semibold text-sm hover:bg-slate-800 transition-colors disabled:bg-slate-300 cursor-pointer shadow-xs active:scale-[0.99]">
+                        <div className="flex flex-col gap-3 mt-6 lg:mt-0">
+                            <button disabled={loading} type="submit" className="w-full bg-zinc-900 text-white py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 transition-all cursor-pointer shadow-md active:scale-[0.99] disabled:bg-zinc-400">
                                 {loading ? "Processing..." : (editingProductId !== null ? "Save Changes" : "Publish Item")}
                             </button>
                             
-                            <button type="button" onClick={handleSaveAsTemplate} disabled={loading} className="w-full bg-white text-slate-700 font-semibold text-sm py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors disabled:opacity-50 cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs">
-                                💾 Save Preset Template
+                            <button type="button" onClick={handleSaveAsTemplate} disabled={loading} className="w-full bg-white text-zinc-900 font-bold text-xs uppercase tracking-wider py-3 rounded-xl border border-zinc-200 hover:bg-zinc-50 transition-all cursor-pointer shadow-xs disabled:opacity-50">
+                                Save Preset Template
                             </button>
 
                             {editingProductId !== null && (
-                                <button type="button" onClick={handleCancelEdit} className="w-full bg-white text-slate-700 font-semibold text-sm py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer shadow-2xs">
+                                <button type="button" onClick={handleCancelEdit} className="w-full bg-zinc-100 text-zinc-700 font-bold text-xs uppercase tracking-wider py-3 rounded-xl hover:bg-zinc-200 transition-all cursor-pointer">
                                     Cancel Edit
                                 </button>
                             )}
@@ -528,71 +545,75 @@ const ProductsDashboard = () => {
                 </form>
 
                 {/* Sidebar Stack */}
-                <div className="xl:col-span-1 flex flex-col gap-6">
-                    {/* Live Catalog View */}
-                    <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 max-h-[400px] flex flex-col overflow-hidden">
-                        <h2 className="font-bold text-slate-900 text-lg mb-4 flex-shrink-0">Catalog ({products.length})</h2>
+                <div className="xl:col-span-1 flex flex-col gap-8">
+                    {/* Live Catalog Card */}
+                    <div className="bg-white rounded-3xl border border-zinc-200/60 shadow-xl p-6 md:p-8 max-h-[420px] flex flex-col overflow-hidden">
+                        <div className="mb-4 flex-shrink-0">
+                            <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">Live Inventory</span>
+                            <h2 className="font-bold text-zinc-900 text-xl tracking-tight mt-0.5">Catalog ({products.length})</h2>
+                        </div>
                         <div className="overflow-y-auto flex flex-col gap-3 pr-1 custom-scrollbar">
                             {products.map((item) => (
                                 <div 
                                     key={item.id} 
                                     onClick={() => handleStartEdit(item)} 
-                                    className={`flex items-center justify-between border p-2.5 rounded-xl transition-colors group/item cursor-pointer text-left
-                                        ${editingProductId === item.id ? 'bg-indigo-50/50 border-indigo-200 shadow-2xs' : 'border-slate-100 hover:bg-slate-50/70'}`}
+                                    className={`flex items-center justify-between border p-3 rounded-2xl transition-colors cursor-pointer text-left
+                                        ${editingProductId === item.id ? 'bg-zinc-50 border-zinc-400 shadow-xs' : 'border-zinc-100 hover:bg-zinc-50/80'}`}
                                 >
                                     <div className="flex items-center gap-3 overflow-hidden mr-2">
-                                        <div className="w-10 h-10 bg-slate-50 rounded-lg overflow-hidden border border-slate-200 flex-shrink-0">
+                                        <div className="w-11 h-11 bg-zinc-100 rounded-xl overflow-hidden border border-zinc-200 flex-shrink-0">
                                             {item.image_url && item.image_url[0] && (
                                                 <img src={item.image_url[0]} alt="" className="w-full h-full object-cover" />
                                             )}
                                         </div>
                                         <div className="overflow-hidden">
-                                            <div className="text-xs font-bold text-slate-800 line-clamp-1">{item.name}</div>
-                                            <div className="text-[10px] uppercase tracking-wide font-medium text-slate-400 mt-0.5">
+                                            <div className="text-xs font-bold text-zinc-900 line-clamp-1">{item.name}</div>
+                                            <div className="text-[10px] uppercase tracking-wider font-semibold text-zinc-500 mt-0.5">
                                                 S:{item.sizes?.S || 0} M:{item.sizes?.M || 0} L:{item.sizes?.L || 0} XL:{item.sizes?.XL || 0}
                                             </div>
                                         </div>
                                     </div>
-                                    <button onClick={(e) => handleDeleteProduct(e, item.id, item.name)} className="text-slate-400 hover:text-red-600 p-1.5 rounded-lg text-xs cursor-pointer flex-shrink-0">✕</button>
+                                    <button onClick={(e) => handleDeleteProduct(e, item.id, item.name)} className="text-zinc-400 hover:text-rose-600 p-1.5 rounded-lg text-xs cursor-pointer flex-shrink-0 transition-colors">✕</button>
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    {/* Database Blueprints View */}
-                    <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 max-h-[400px] flex flex-col overflow-hidden">
+                    {/* Saved Templates Card */}
+                    <div className="bg-white rounded-3xl border border-zinc-200/60 shadow-xl p-6 md:p-8 max-h-[420px] flex flex-col overflow-hidden">
                         <div className="mb-4 flex-shrink-0">
-                            <h2 className="font-bold text-slate-900 text-lg">Saved Templates ({templates.length})</h2>
-                            <p className="text-[11px] text-slate-400 mt-0.5">Click any layout preset to instantly re-populate your design parameters form from your secure cloud ledger.</p>
+                            <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">Database Presets</span>
+                            <h2 className="font-bold text-zinc-900 text-xl tracking-tight mt-0.5">Saved Templates ({templates.length})</h2>
+                            <p className="text-[11px] text-zinc-500 mt-1">Select a blueprint preset to re-populate form parameters.</p>
                         </div>
                         <div className="overflow-y-auto flex flex-col gap-3 pr-1 custom-scrollbar">
                             {templates.length === 0 ? (
-                                <div className="text-center py-8 border border-dashed border-slate-100 rounded-xl text-xs text-slate-400">
-                                    No cloud database blueprints saved yet.
+                                <div className="text-center py-8 border border-dashed border-zinc-200 rounded-2xl text-xs text-zinc-500 font-medium">
+                                    No database blueprints saved yet.
                                 </div>
                             ) : (
                                 templates.map((template) => (
                                     <div 
                                         key={template.id} 
                                         onClick={() => handleLoadTemplate(template)}
-                                        className="flex items-center justify-between border border-slate-100 p-2.5 rounded-xl hover:bg-slate-50/70 transition-colors cursor-pointer group/template text-left"
+                                        className="flex items-center justify-between border border-zinc-100 p-3 rounded-2xl hover:bg-zinc-50/80 transition-colors cursor-pointer text-left"
                                     >
                                         <div className="flex items-center gap-3 overflow-hidden mr-2">
-                                            <div className="w-10 h-10 bg-slate-50 rounded-lg overflow-hidden border border-slate-200 flex-shrink-0 flex items-center justify-center">
+                                            <div className="w-11 h-11 bg-zinc-100 rounded-xl overflow-hidden border border-zinc-200 flex-shrink-0 flex items-center justify-center">
                                                 {template.image_urls && template.image_urls[0] ? (
                                                     <img src={template.image_urls[0]} alt="" className="w-full h-full object-cover" />
                                                 ) : (
-                                                    <span className="text-xs text-slate-400 font-bold">📋</span>
+                                                    <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-wider">LAYOUT</span>
                                                 )}
                                             </div>
                                             <div className="overflow-hidden">
-                                                <div className="text-xs font-bold text-slate-700 line-clamp-1">{template.name}</div>
-                                                <div className="text-[10px] uppercase tracking-wide font-medium text-indigo-500 mt-0.5">
-                                                    Preset Layout · {template.type}
+                                                <div className="text-xs font-bold text-zinc-900 line-clamp-1">{template.name}</div>
+                                                <div className="text-[10px] uppercase tracking-wider font-bold text-[#d4af37] mt-0.5">
+                                                    Preset · {template.type}
                                                 </div>
                                             </div>
                                         </div>
-                                        <button onClick={(e) => handleDeleteTemplate(e, template.id)} className="text-slate-400 hover:text-red-500 p-1.5 rounded-lg text-xs cursor-pointer flex-shrink-0">✕</button>
+                                        <button onClick={(e) => handleDeleteTemplate(e, template.id)} className="text-zinc-400 hover:text-rose-600 p-1.5 rounded-lg text-xs cursor-pointer flex-shrink-0 transition-colors">✕</button>
                                     </div>
                                 ))
                             )}

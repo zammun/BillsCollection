@@ -32,6 +32,7 @@ import Affiliates from './pages/Affiliates';
 import TechSupport from './pages/TechSupport';
 import PlantTest from './components/PlantTest';
 import TrackOrderPage from './pages/TrackOrder';
+import LegalNotice from './pages/LegalNotice';
 
 function App() {
   return (
@@ -69,6 +70,7 @@ function App() {
               <Route path="/tech-support" element={<TechSupport />} />
               <Route path="/track-order" element={<TrackOrderPage />} />
               <Route path="/plant-test" element={<PlantTest />} />
+              <Route path="/legalnotice" element={<LegalNotice />} />
 
               {/* Secure Protected Routes */}
               <Route path="/cart" element={<CartPage />} />

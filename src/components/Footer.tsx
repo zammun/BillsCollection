@@ -47,7 +47,7 @@ const Footer = () => {
                 {/* Left */}
                 <div className='w-full md:w-1/2 lg:w-1/4 flex flex-col gap-8'>
                     <Link to='/'> 
-                        <div className='text-2xl tracking-wide font-bold'>Bills Collection</div>
+                        <div className='text-2xl font-black tracking-tight text-slate-900 font-heading'>Bills Collection</div>
                     </Link>
                     <p>365 Carteret Avenue, Carteret, New Jersey, USA</p>
                     <span className='font-semibold'>contact@billscollection.co</span>
