@@ -213,7 +213,7 @@ export const ProductCard = React.memo(({ product }: { product: any }) => {
                     ${stockForSelectedSize === 0 
                       ? 'border border-[#e2e0d9] text-gray-400 bg-[#e6e4dc]/50' 
                       : isAdded 
-                        ? 'bg-[#F35C7A] text-white ring-1 ring-[#F35C7A] scale-[1.02]' 
+                        ? 'bg-emerald-800 text-white ring-1 ring-emerald-800 scale-[1.02]' 
                         : 'border border-[#e2e0d9] text-slate-900 bg-[#faf8f5] hover:bg-slate-900 hover:text-white hover:border-slate-900'
                     }`}
             >
@@ -306,7 +306,13 @@ const ProductList = () => {
     if (filteredProducts.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center py-20 px-4 text-center mt-12 bg-[#faf8f5]/60 rounded-2xl border border-[#e2e0d9] max-w-2xl mx-auto animate-fadeIn">
-                <div className="text-5xl mb-4 text-gray-400 select-none">🛒</div>
+                <div className="mb-4 text-slate-400 select-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="8" cy="21" r="1"/>
+                        <circle cx="19" cy="21" r="1"/>
+                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+                    </svg>
+                </div>
                 <h3 className="text-xl font-bold text-gray-900 tracking-tight">Your search drew a blank</h3>
                 <p className="text-sm text-gray-500 max-w-sm mt-2 leading-relaxed">
                     We couldn't find items matching those exact parameter options. Try wiping your active dashboard parameters to browse full catalog stock.
