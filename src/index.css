@@ -9,6 +9,7 @@
 body {
   font-family: var(--font-sans);
   color: #0f172a;
+  background-color: #E6E4DC;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -46,7 +47,7 @@ input[type="submit"],
 }
 
 .suave-luxury-theme {
-  background-color: #f4f3ef; 
+  background-color: #E6E4DC; 
   background-image: none; 
 }
 
@@ -54,10 +55,10 @@ input[type="submit"],
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #f4f3ef;
+  background: #E6E4DC;
 }
 ::-webkit-scrollbar-thumb {
-  background: #e2e0d9;
+  background: #d4d0c5;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -73,14 +74,14 @@ input[type="submit"],
 }
 
 .btn-offwhite:hover {
-  background-color: #e6e4dc;
+  background-color: #E6E4DC;
   border-color: #d4d0c5;
 }
 
 /* Optional: Dark inverted button with soft off-white text */
 .btn-dark {
   background-color: #0f172a;
-  color: #f4f3ef;
+  color: #E6E4DC;
   border: 1px solid #0f172a;
   transition: all 0.2s ease-in-out;
 }

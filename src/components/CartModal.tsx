@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCartStore } from '../store/useCartStore';
-import { supabase } from '../supabase'; // <-- Added Supabase import for auth check
+import { supabase } from '../supabase';
 
 interface CartModalProps {
     onClose: () => void;
@@ -13,7 +13,7 @@ const CartModal = ({ onClose }: CartModalProps) => {
     const updateQuantity = useCartStore((state) => state.updateQuantity);
 
     const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
-    const [isCheckingOut, setIsCheckingOut] = useState(false); // <-- Added loading state
+    const [isCheckingOut, setIsCheckingOut] = useState(false);
 
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
@@ -46,7 +46,6 @@ const CartModal = ({ onClose }: CartModalProps) => {
             const userEmail = user ? user.email : undefined;
             const metadata = user ? user.user_metadata : null;
             
-            // Extract shipping data if it exists in the profile
             const userAddress = metadata?.streetAddress ? {
                 name: metadata.name || userEmail?.split("@")[0],
                 streetAddress: metadata.streetAddress,
@@ -73,8 +72,8 @@ const CartModal = ({ onClose }: CartModalProps) => {
                 body: JSON.stringify({
                     lineItems,
                     userId: currentUserId,
-                    userEmail, // Sent to backend
-                    userAddress // Sent to backend
+                    userEmail, 
+                    userAddress 
                 }),
             });
 
@@ -94,14 +93,14 @@ const CartModal = ({ onClose }: CartModalProps) => {
     };
 
     return (
-        <div className="absolute top-14 right-0 w-[calc(100vw-24px)] max-w-sm sm:w-96 p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white border border-gray-100 flex flex-col gap-6 z-[100] pointer-events-auto">
+        <div className="absolute top-14 right-0 w-[calc(100vw-24px)] max-w-sm sm:w-96 p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-[#D9D7D0] border border-slate-300/60 flex flex-col gap-6 z-[100] pointer-events-auto">
             
             <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gray-900 tracking-tight">Shopping Cart</h2>
+                <h2 className="text-xl font-bold text-slate-900 tracking-tight">Shopping Cart</h2>
                 {cartItems.length > 0 && (
                     <button 
                         onClick={onClose} 
-                        className="text-gray-400 hover:text-gray-900 transition-colors p-1 cursor-pointer"
+                        className="text-slate-500 hover:text-slate-900 transition-colors p-1 cursor-pointer"
                         aria-label="Close cart"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -113,7 +112,7 @@ const CartModal = ({ onClose }: CartModalProps) => {
             </div>
             
             {cartItems.length === 0 ? (
-                <div className="text-gray-500 text-sm pb-2 text-center font-medium">No items in cart</div>
+                <div className="text-slate-600 text-sm pb-2 text-center font-medium">No items in cart</div>
             ) : (
                 <>
                     <div className="flex flex-col gap-6 max-h-[50vh] overflow-y-auto pr-2">
@@ -128,7 +127,7 @@ const CartModal = ({ onClose }: CartModalProps) => {
                                         <Link 
                                             to={`/product/${item.id}`}
                                             onClick={onClose}
-                                            className="w-20 h-24 bg-gray-50 rounded-xl p-1 flex-shrink-0 border border-gray-100 block hover:opacity-80 transition-opacity"
+                                            className="w-20 h-24 bg-[#E6E4DC] rounded-xl p-1 flex-shrink-0 border border-slate-300/50 block hover:opacity-80 transition-opacity"
                                         >
                                             <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
                                         </Link>
@@ -139,19 +138,19 @@ const CartModal = ({ onClose }: CartModalProps) => {
                                                     <Link 
                                                         to={`/product/${item.id}`}
                                                         onClick={onClose}
-                                                        className="hover:text-indigo-600 transition-colors flex-1"
+                                                        className="hover:text-slate-600 transition-colors flex-1"
                                                     >
-                                                        <h3 className="font-semibold text-gray-900 line-clamp-1">{item.name}</h3>
+                                                        <h3 className="font-semibold text-slate-900 line-clamp-1">{item.name}</h3>
                                                     </Link>
-                                                    <span className="font-semibold text-gray-900">${(item.price * item.quantity).toFixed(2)}</span>
+                                                    <span className="font-semibold text-slate-900">${(item.price * item.quantity).toFixed(2)}</span>
                                                 </div>
-                                                <div className="text-xs text-gray-400 mt-0.5 uppercase tracking-wide">
+                                                <div className="text-xs text-slate-500 mt-0.5 uppercase tracking-wide">
                                                     {item.color} / {item.size}
                                                 </div>
                                             </div>
                                             
                                             <div className="flex items-center justify-between text-sm">
-                                                <div className="flex items-center bg-gray-50 rounded-lg ring-1 ring-gray-200/60 h-7 text-xs font-bold" onClick={(e) => e.stopPropagation()}>
+                                                <div className="flex items-center bg-[#E6E4DC] rounded-lg ring-1 ring-slate-300/60 h-7 text-xs font-bold" onClick={(e) => e.stopPropagation()}>
                                                     <button 
                                                         onClick={(e) => {
                                                             e.preventDefault();
@@ -161,9 +160,9 @@ const CartModal = ({ onClose }: CartModalProps) => {
                                                                 updateQuantity(item.id, item.color, item.size, item.quantity - 1);
                                                             }
                                                         }}
-                                                        className="w-7 h-full flex items-center justify-center hover:bg-gray-200/70 rounded-l-lg transition-colors cursor-pointer"
+                                                        className="w-7 h-full flex items-center justify-center hover:bg-[#D9D7D0] rounded-l-lg transition-colors cursor-pointer"
                                                     >-</button>
-                                                    <span className="w-7 text-center text-gray-800">{item.quantity}</span>
+                                                    <span className="w-7 text-center text-slate-800">{item.quantity}</span>
                                                     <button 
                                                         disabled={item.quantity >= item.size_inventory}
                                                         onClick={(e) => {
@@ -171,13 +170,13 @@ const CartModal = ({ onClose }: CartModalProps) => {
                                                             updateQuantity(item.id, item.color, item.size, item.quantity + 1);
                                                         }}
                                                         className={`w-7 h-full flex items-center justify-center rounded-r-lg transition-colors cursor-pointer 
-                                                            ${item.quantity >= item.size_inventory ? 'bg-gray-100 text-gray-300 cursor-not-allowed' : 'hover:bg-gray-200/70'}`}
+                                                            ${item.quantity >= item.size_inventory ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'hover:bg-[#D9D7D0]'}`}
                                                     >+</button>
                                                 </div>
 
                                                 <button 
                                                     onClick={(e) => handleRemoveClick(e, itemKey)}
-                                                    className="text-gray-400 font-medium hover:text-red-600 text-xs transition-colors cursor-pointer"
+                                                    className="text-slate-500 font-medium hover:text-red-600 text-xs transition-colors cursor-pointer"
                                                 >
                                                     Remove
                                                 </button>
@@ -194,7 +193,7 @@ const CartModal = ({ onClose }: CartModalProps) => {
                                         <div className="flex gap-2 flex-shrink-0">
                                             <button 
                                                 onClick={cancelDelete}
-                                                className="px-3 py-1.5 text-xs font-bold bg-white text-gray-700 hover:bg-gray-50 rounded-lg shadow-xs ring-1 ring-gray-200 transition-all cursor-pointer"
+                                                className="px-3 py-1.5 text-xs font-bold bg-[#E6E4DC] text-slate-700 hover:bg-[#D9D7D0] rounded-lg shadow-xs ring-1 ring-slate-300 transition-all cursor-pointer"
                                             >
                                                 Cancel
                                             </button>
@@ -212,22 +211,21 @@ const CartModal = ({ onClose }: CartModalProps) => {
                         })}
                     </div>
 
-                    <div className="flex flex-col gap-4 border-t border-gray-100 pt-6">
-                        <div className="flex items-center justify-between font-bold text-lg text-gray-900">
+                    <div className="flex flex-col gap-4 border-t border-slate-400/30 pt-6">
+                        <div className="flex items-center justify-between font-bold text-lg text-slate-900">
                             <span>Subtotal</span>
                             <span>${subtotal.toFixed(2)}</span>
                         </div>
-                        <p className="text-xs text-gray-500">Shipping and taxes calculated at checkout.</p>
+                        <p className="text-xs text-slate-600">Shipping and taxes calculated at checkout.</p>
                         
                         <div className="flex justify-between gap-3 mt-2">
                             <Link 
                                 to="/cart" 
                                 onClick={onClose}
-                                className="flex-1 rounded-xl py-3 px-4 ring-1 ring-gray-300 text-gray-900 font-semibold text-center hover:bg-gray-50 transition-all active:scale-[0.98]"
+                                className="flex-1 rounded-xl py-3 px-4 ring-1 ring-slate-400 text-slate-900 font-semibold text-center hover:bg-[#E6E4DC] transition-all active:scale-[0.98]"
                             >
                                 View Cart
                             </Link>
-                            {/* Updated Checkout Button */}
                             <button 
                                 onClick={handleCheckout}
                                 disabled={isCheckingOut}

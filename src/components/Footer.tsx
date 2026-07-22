@@ -40,7 +40,7 @@ const Footer = () => {
     };
 
     return (
-        <div className='relative py-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 bg-[#e6e4dc] text-sm mt-24'>
+        <div className='relative py-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 bg-[#D9D7D0] text-sm mt-24'>
             
             {/* Top Section */}
             <div className='flex flex-col md:flex-row justify-between gap-24'>
