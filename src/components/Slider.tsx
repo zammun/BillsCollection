@@ -59,6 +59,27 @@ const Slider = () => {
     }
   }, []); 
 
+  // Restrict momentum flings to a maximum of 1 slide when scroll motion finishes
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScrollEnd = () => {
+      const slideWidth = container.getBoundingClientRect().width;
+      if (slideWidth === 0) return;
+      const targetIndex = Math.round(container.scrollLeft / slideWidth);
+      
+      const diff = targetIndex - current;
+      if (Math.abs(diff) > 1) {
+        const clampedIndex = current + (diff > 0 ? 1 : -1);
+        container.scrollTo({ left: slideWidth * clampedIndex, behavior: 'smooth' });
+      }
+    };
+
+    container.addEventListener('scrollend', handleScrollEnd);
+    return () => container.removeEventListener('scrollend', handleScrollEnd);
+  }, [current]);
+
   // Snap tightly aligned on browser window resizes
   useEffect(() => {
     const handleResize = () => {
@@ -79,7 +100,7 @@ const Slider = () => {
     return () => clearInterval(interval);
   }, [current]);
 
-  // INSTANT SCROLL & INFINITE LOOP TELEPORT: Restricts movement to max 1 slide per swipe
+  // INSTANT SCROLL & INFINITE LOOP TELEPORT: Zero lag, zero rewind glitch
   const handleScroll = () => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -87,17 +108,9 @@ const Slider = () => {
     const slideWidth = container.getBoundingClientRect().width;
     if (slideWidth === 0) return;
     
-    const rawIndex = Math.round(scrollPosition / slideWidth);
-
-    // Prevent fast swipes/flings from skipping more than 1 slide at a time
-    if (Math.abs(rawIndex - current) > 1) {
-      const clampedIndex = current + (rawIndex > current ? 1 : -1);
-      container.scrollLeft = slideWidth * clampedIndex;
-      setCurrent(clampedIndex);
-      return;
-    }
-
-    if (rawIndex !== current) setCurrent(rawIndex);
+    // Update active indicators/animations
+    const newIndex = Math.round(scrollPosition / slideWidth);
+    if (newIndex !== current) setCurrent(newIndex);
 
     // The Invisible Cut: If user swipes onto a clone, teleport instantly to the real slide
     if (scrollPosition <= 0) {
@@ -151,7 +164,7 @@ const Slider = () => {
               
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20 pointer-events-none" />
 
-              <div className="absolute w-full px-6 text-center z-10 max-w-5xl flex flex-col items-center bottom-28 md:bottom-250 md:top-1/2 md:-translate-y-1/2">
+              <div className="absolute w-full px-6 text-center z-10 max-w-5xl flex flex-col items-center bottom-28 md:bottom-300 md:top-1/2 md:-translate-y-1/2">
                 
                 <span className={`text-xs md:text-sm font-semibold text-[#d4af37] uppercase mb-2 md:mb-3 transition-all duration-1000 delay-100 ease-out transform-gpu
                   ${isActive ? "opacity-100 translate-y-0 tracking-[0.25em] blur-0" : "opacity-0 translate-y-10 tracking-[1em] blur-md"}`}
