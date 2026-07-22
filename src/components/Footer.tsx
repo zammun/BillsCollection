@@ -43,7 +43,7 @@ const Footer = () => {
         <div className='relative py-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 bg-[#D9D7D0] text-sm mt-24'>
             
             {/* Top Section */}
-            <div className='flex flex-col md:flex-row justify-between gap-24'>
+            <div className='flex flex-col md:flex-row justify-between gap-16 lg:gap-24'>
                 {/* Left */}
                 <div className='w-full md:w-1/2 lg:w-1/4 flex flex-col gap-8'>
                     <Link to='/'> 
@@ -68,32 +68,44 @@ const Footer = () => {
                     </div>
                 </div>
                 
-                {/* Center (Desktop Only - Cleaned up to 2 balanced sections) */}
-                <div className='hidden lg:flex justify-start gap-24 w-1/2'> 
+                {/* Center Navigation (Desktop Only - 3 Columns: COMPANY -> ACCOUNT -> HELP) */}
+                <div className='hidden lg:flex justify-between gap-12 w-1/2 max-w-xl'> 
+                    
+                    {/* 1. COMPANY */}
                     <div className='flex flex-col gap-6'>
-                        <h1 className='font-medium text-lg'>COMPANY</h1>
-                        <div className='flex flex-col gap-6'>
+                        <h1 className='font-medium text-lg text-slate-900'>COMPANY</h1>
+                        <div className='flex flex-col gap-4 text-slate-700'>
                             <Link to='/about' className="hover:text-indigo-600 transition-colors">About Us</Link>
                             <Link to='/careers' className="hover:text-indigo-600 transition-colors">Careers</Link>
                             <Link to='/affiliates' className="hover:text-indigo-600 transition-colors">Affiliates</Link>
                             <Link to='/contact' className="hover:text-indigo-600 transition-colors">Contact Us</Link>
                         </div>
                     </div>
+
+                    {/* 2. ACCOUNT */}
                     <div className='flex flex-col gap-6'>
-                        <h1 className='font-medium text-lg'>HELP</h1>
-                        <div className='flex flex-col gap-6'>
-                            <Link to='/contact' className="hover:text-indigo-600 transition-colors">Customer Service</Link>
+                        <h1 className='font-medium text-lg text-slate-900'>ACCOUNT</h1>
+                        <div className='flex flex-col gap-4 text-slate-700'>
                             <Link to='/profile' className="hover:text-indigo-600 transition-colors">My Account</Link>
                             <Link to="/track-order" className="hover:text-indigo-600 transition-colors">Track Order</Link>
+                        </div>
+                    </div>
+
+                    {/* 3. HELP */}
+                    <div className='flex flex-col gap-6'>
+                        <h1 className='font-medium text-lg text-slate-900'>HELP</h1>
+                        <div className='flex flex-col gap-4 text-slate-700'>
+                            <Link to='/contact' className="hover:text-indigo-600 transition-colors">Customer Service</Link>
                             <Link to='/stores' className="hover:text-indigo-600 transition-colors">Find a Store</Link>
                             <Link to='/tech-support' className="hover:text-indigo-600 transition-colors">Technical Support</Link>
                         </div>
                     </div>
+
                 </div>
 
                 {/* Right */}
                 <div className='w-full md:w-1/2 lg:w-1/4 flex flex-col gap-8'>
-                    <h1 className='font-medium text-lg'>SUBSCRIBE</h1>
+                    <h1 className='font-medium text-lg text-slate-900'>SUBSCRIBE</h1>
                     <p>Be the first to get updates and offers from Bills Collection, and teasers about our latest designs.</p>
                     
                     {/* Newsletter Form */}
@@ -190,15 +202,15 @@ const Footer = () => {
             </div>
 
             {/* Scroll to Top Button */}
-<button 
-    onClick={scrollToTop}
-    className='fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-[#E6E4DC]/10 backdrop-blur-md text-slate-800 p-3 rounded-full shadow-md border border-slate-300/60 hover:bg-[#E6E4DC]/90 hover:scale-105 transition-all duration-300 z-50 flex items-center justify-center cursor-pointer transform-gpu'
-    aria-label="Scroll to top"
->
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="m18 15-6-6-6 6"/>
-    </svg>
-</button>
+            <button 
+                onClick={scrollToTop}
+                className='fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-[#E6E4DC]/10 backdrop-blur-md text-slate-800 p-3 rounded-full shadow-md border border-slate-300/60 hover:bg-[#E6E4DC]/90 hover:scale-105 transition-all duration-300 z-50 flex items-center justify-center cursor-pointer transform-gpu'
+                aria-label="Scroll to top"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m18 15-6-6-6 6"/>
+                </svg>
+            </button>
         </div>
     );
 };

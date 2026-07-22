@@ -97,7 +97,7 @@ const NavIcons = ({
         />
         
         {totalItemsInCart > 0 && (
-          <div className={`absolute -top-2.5 -right-2.5 w-5 h-5 bg-slate-900 text-[#faf8f5] rounded-full text-[10px] font-bold flex items-center justify-center select-none shadow-xs border border-[#faf8f5] transition-all
+          <div className={`absolute -top-2.5 -right-2.5 w-5 h-5 bg-rose-600 text-white rounded-full text-[10px] font-bold flex items-center justify-center select-none shadow-xs border border-white transition-all
             ${shouldAnimate ? 'animate-bubble-pop' : ''}`}
           >
             {totalItemsInCart}
