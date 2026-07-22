@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useCartStore } from '../store/useCartStore';
 import { supabase } from '../supabase'; 
+import ScrollReveal from './ScrollReveal';
 
 export const ProductCard = React.memo(({ product }: { product: any }) => {
     const [selectedSize, setSelectedSize] = useState('S'); 
@@ -26,11 +27,11 @@ export const ProductCard = React.memo(({ product }: { product: any }) => {
         };
     }, []);
 
-    // Sync state when native CSS scroll occurs
     const handleScroll = () => {
         if (!scrollContainerRef.current) return;
         const scrollPosition = scrollContainerRef.current.scrollLeft;
         const width = scrollContainerRef.current.offsetWidth;
+        if (width === 0) return;
         const newIndex = Math.round(scrollPosition / width);
         if (newIndex !== currentImgIdx) setCurrentImgIdx(newIndex);
     };
@@ -81,7 +82,6 @@ export const ProductCard = React.memo(({ product }: { product: any }) => {
 
     return (
         <div className='w-full flex flex-col gap-4 relative group/card'>
-            {/* Image Box utilizing native horizontal scrolling for pure smoothness */}
             <div className='relative w-full h-80 bg-transparent rounded-md overflow-hidden flex items-center justify-center group/slider'>
                 
                 {stockForSelectedSize > 0 && stockForSelectedSize < 5 && (
@@ -90,11 +90,10 @@ export const ProductCard = React.memo(({ product }: { product: any }) => {
                     </div>
                 )}
 
-                {/* Native Snap Container */}
                 <div 
                     ref={scrollContainerRef}
                     onScroll={handleScroll}
-                    className="w-full h-full flex overflow-x-auto snap-x snap-mandatory scrollbar-none touch-pan-y pointer-events-auto"
+                    className="w-full h-full flex overflow-x-auto snap-x snap-mandatory scrollbar-none pointer-events-auto"
                 >
                     {images.map((imgUrl: string, idx: number) => (
                         <Link 
@@ -113,7 +112,6 @@ export const ProductCard = React.memo(({ product }: { product: any }) => {
                     ))}
                 </div>
 
-                {/* Mobile Dot Indicators */}
                 {images.length > 1 && (
                     <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-20 md:hidden pointer-events-none">
                         {images.map((_: string, idx: number) => (
@@ -129,13 +127,13 @@ export const ProductCard = React.memo(({ product }: { product: any }) => {
                     <>
                         <button 
                             onClick={prevSlide}
-                            className="absolute left-2 top-1/2 -translate-y-1/2 bg-[#faf8f5]/90 hover:bg-[#e6e4dc] border border-[#e2e0d9] text-slate-900 shadow-md rounded-full w-9 h-9 md:w-8 md:h-8 flex items-center justify-center text-lg font-bold z-10 opacity-100 md:opacity-0 md:group-hover/slider:opacity-100 transition-all cursor-pointer"
+                            className="absolute left-2 top-1/2 -translate-y-1/2 bg-[#faf8f5]/90 md:hover:bg-[#e6e4dc] border border-[#e2e0d9] text-slate-900 shadow-md rounded-full w-9 h-9 md:w-8 md:h-8 flex items-center justify-center text-lg font-bold z-10 opacity-100 md:opacity-0 md:group-hover/slider:opacity-100 transition-all cursor-pointer"
                         >
                             ‹
                         </button>
                         <button 
                             onClick={nextSlide}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#faf8f5]/90 hover:bg-[#e6e4dc] border border-[#e2e0d9] text-slate-900 shadow-md rounded-full w-9 h-9 md:w-8 md:h-8 flex items-center justify-center text-lg font-bold z-10 opacity-100 md:opacity-0 md:group-hover/slider:opacity-100 transition-all cursor-pointer"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#faf8f5]/90 md:hover:bg-[#e6e4dc] border border-[#e2e0d9] text-slate-900 shadow-md rounded-full w-9 h-9 md:w-8 md:h-8 flex items-center justify-center text-lg font-bold z-10 opacity-100 md:opacity-0 md:group-hover/slider:opacity-100 transition-all cursor-pointer"
                         >
                             ›
                         </button>
@@ -144,13 +142,13 @@ export const ProductCard = React.memo(({ product }: { product: any }) => {
             </div>
 
             {images.length > 1 && (
-                <div className="flex gap-2 overflow-x-auto py-1 scrollbar-none justify-start touch-pan-x">
+                <div className="flex gap-2 overflow-x-auto py-1 scrollbar-none justify-start">
                     {images.map((url: string, idx: number) => (
                         <button
                             key={idx}
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); scrollToImage(idx); }}
                             className={`w-12 h-12 bg-transparent rounded border aspect-square overflow-hidden p-0.5 flex-shrink-0 transition-all cursor-pointer
-                                ${currentImgIdx === idx ? 'border-slate-900 ring-1 ring-slate-900 scale-95' : 'border-[#e2e0d9] hover:border-slate-400'}`}
+                                ${currentImgIdx === idx ? 'border-slate-900 ring-1 ring-slate-900 scale-95' : 'border-[#e2e0d9] md:hover:border-slate-400'}`}
                         >
                             <img src={url} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover rounded-[2px]" />
                         </button>
@@ -165,7 +163,6 @@ export const ProductCard = React.memo(({ product }: { product: any }) => {
                 </div>
             </Link>
 
-            {/* Size Selector Buttons */}
             <div className="flex gap-2 my-1">
                 {['S', 'M', 'L', 'XL'].map((size: string) => {
                     const stock = product.sizes ? (product.sizes[size] || 0) : 0;
@@ -177,8 +174,8 @@ export const ProductCard = React.memo(({ product }: { product: any }) => {
                             disabled={isOutOfStock}
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); if(!isOutOfStock) setSelectedSize(size); }}
                             className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium transition-all border relative z-10 cursor-pointer
-                                ${selectedSize === size && !isOutOfStock ? 'bg-slate-900 text-white border-slate-900' : 'bg-[#faf8f5] text-slate-800 border-[#e2e0d9] hover:bg-[#e6e4dc]'}
-                                ${isOutOfStock ? 'text-gray-300 line-through cursor-not-allowed border-[#e2e0d9]/50 bg-[#faf8f5]/50' : 'hover:border-slate-400'}`}
+                                ${selectedSize === size && !isOutOfStock ? 'bg-slate-900 text-white border-slate-900' : 'bg-[#faf8f5] text-slate-800 border-[#e2e0d9] md:hover:bg-[#e6e4dc]'}
+                                ${isOutOfStock ? 'text-gray-300 line-through cursor-not-allowed border-[#e2e0d9]/50 bg-[#faf8f5]/50' : 'md:hover:border-slate-400'}`}
                         >
                             {size}
                         </button>
@@ -186,7 +183,6 @@ export const ProductCard = React.memo(({ product }: { product: any }) => {
                 })}
             </div>
 
-            {/* Add to Cart Button */}
             <button 
                 onClick={handleAddToCart}
                 disabled={stockForSelectedSize === 0}
@@ -195,7 +191,7 @@ export const ProductCard = React.memo(({ product }: { product: any }) => {
                       ? 'border border-[#e2e0d9] text-gray-400 bg-[#e6e4dc]/50' 
                       : isAdded 
                         ? 'bg-emerald-800 text-white ring-1 ring-emerald-800 scale-[1.02]' 
-                        : 'border border-[#e2e0d9] text-slate-900 bg-[#faf8f5] hover:bg-slate-900 hover:text-white hover:border-slate-900'
+                        : 'border border-[#e2e0d9] text-slate-900 bg-[#faf8f5] md:hover:bg-slate-900 md:hover:text-white md:hover:border-slate-900'
                     }`}
             >
                 {stockForSelectedSize === 0 ? "Out of Stock" : isAdded ? "Added to Cart ✓" : "Add to Cart"}
@@ -300,7 +296,7 @@ const ProductList = () => {
                 </p>
                 <button 
                     onClick={() => setSearchParams({})} 
-                    className="mt-6 px-5 py-2.5 bg-slate-900 text-white text-xs font-bold tracking-wide uppercase rounded-xl hover:bg-slate-800 transition-all active:scale-[0.97] shadow-md cursor-pointer"
+                    className="mt-6 px-5 py-2.5 bg-slate-900 text-white text-xs font-bold tracking-wide uppercase rounded-xl md:hover:bg-slate-800 transition-all active:scale-[0.97] shadow-md cursor-pointer"
                 >
                     Reset All Filters
                 </button>
@@ -310,9 +306,14 @@ const ProductList = () => {
 
     return (
         <div className='mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16'>
-            {filteredProducts.map((product: any) => (
-                <ProductCard key={product.id} product={product} />
-            ))}
+            {filteredProducts.map((product: any, idx: number) => {
+                const delays = ["", "delay-75", "delay-150", "delay-200"];
+                return (
+                    <ScrollReveal key={product.id} delay={delays[idx % 4]}>
+                        <ProductCard product={product} />
+                    </ScrollReveal>
+                );
+            })}
         </div>
     );
 };
