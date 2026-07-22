@@ -5,7 +5,13 @@ import { supabase } from '../supabase';
 import ScrollReveal from './ScrollReveal';
 
 export const ProductCard = React.memo(({ product }: { product: any }) => {
-    const [selectedSize, setSelectedSize] = useState('S'); 
+    // Dynamically find the first available size in stock, default to 'S' if all out
+    const [selectedSize, setSelectedSize] = useState(() => {
+        if (!product.sizes) return 'S';
+        const availableSize = ['S', 'M', 'L', 'XL'].find(size => product.sizes[size] > 0);
+        return availableSize || 'S';
+    }); 
+    
     const [currentImgIdx, setCurrentImgIdx] = useState(0);
     const [isAdded, setIsAdded] = useState(false); 
     
