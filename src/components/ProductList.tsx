@@ -9,12 +9,8 @@ export const ProductCard = React.memo(({ product }: { product: any }) => {
     const [isAdded, setIsAdded] = useState(false); 
     
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
     const addToCart = useCartStore((state) => state.addToCart);
-
-    // Touch gesture tracking refs
-    const touchStartX = useRef<number | null>(null);
-    const touchStartY = useRef<number | null>(null);
-    const isSwiping = useRef(false);
 
     const stockForSelectedSize = product.sizes ? (product.sizes[selectedSize] || 0) : 0;
 
@@ -30,42 +26,19 @@ export const ProductCard = React.memo(({ product }: { product: any }) => {
         };
     }, []);
 
-    // Touch gesture handlers optimized for native vertical scroll pass-through
-    const handleTouchStart = (e: React.TouchEvent) => {
-        touchStartX.current = e.touches[0].clientX;
-        touchStartY.current = e.touches[0].clientY;
-        isSwiping.current = false;
+    // Sync state when native CSS scroll occurs
+    const handleScroll = () => {
+        if (!scrollContainerRef.current) return;
+        const scrollPosition = scrollContainerRef.current.scrollLeft;
+        const width = scrollContainerRef.current.offsetWidth;
+        const newIndex = Math.round(scrollPosition / width);
+        if (newIndex !== currentImgIdx) setCurrentImgIdx(newIndex);
     };
 
-    const handleTouchEnd = (e: React.TouchEvent) => {
-        if (touchStartX.current === null || touchStartY.current === null) return;
-
-        const touchEndX = e.changedTouches[0].clientX;
-        const touchEndY = e.changedTouches[0].clientY;
-
-        const diffX = touchStartX.current - touchEndX;
-        const diffY = touchStartY.current - touchEndY;
-
-        // Only handle horizontal swipe if horizontal distance significantly exceeds vertical drag
-        if (Math.abs(diffX) > Math.abs(diffY) * 1.5 && Math.abs(diffX) > 35) {
-            isSwiping.current = true;
-            if (diffX > 0) {
-                setCurrentImgIdx((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-            } else {
-                setCurrentImgIdx((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-            }
-        }
-
-        touchStartX.current = null;
-        touchStartY.current = null;
-    };
-
-    const handleLinkClick = (e: React.MouseEvent) => {
-        if (isSwiping.current) {
-            e.preventDefault();
-            e.stopPropagation();
-            isSwiping.current = false;
-        }
+    const scrollToImage = (index: number) => {
+        if (!scrollContainerRef.current) return;
+        const width = scrollContainerRef.current.offsetWidth;
+        scrollContainerRef.current.scrollTo({ left: width * index, behavior: 'smooth' });
     };
 
     const handleAddToCart = (e: React.MouseEvent) => {
@@ -95,28 +68,50 @@ export const ProductCard = React.memo(({ product }: { product: any }) => {
     const nextSlide = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        setCurrentImgIdx((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+        const nextIdx = currentImgIdx === images.length - 1 ? 0 : currentImgIdx + 1;
+        scrollToImage(nextIdx);
     };
 
     const prevSlide = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        setCurrentImgIdx((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+        const prevIdx = currentImgIdx === 0 ? images.length - 1 : currentImgIdx - 1;
+        scrollToImage(prevIdx);
     };
 
     return (
-        <div className='w-full flex flex-col gap-4 relative group/card transform-gpu'>
-            {/* Image Box with touch-pan-y allowing smooth native page scrolling */}
-            <div 
-                className='relative w-full h-80 bg-transparent rounded-md overflow-hidden p-4 flex items-center justify-center group/slider touch-pan-y'
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-            >
+        <div className='w-full flex flex-col gap-4 relative group/card'>
+            {/* Image Box utilizing native horizontal scrolling for pure smoothness */}
+            <div className='relative w-full h-80 bg-transparent rounded-md overflow-hidden flex items-center justify-center group/slider'>
+                
                 {stockForSelectedSize > 0 && stockForSelectedSize < 5 && (
                     <div className="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md z-20 shadow-xs pointer-events-none">
                         Act fast, only {stockForSelectedSize} left
                     </div>
                 )}
+
+                {/* Native Snap Container */}
+                <div 
+                    ref={scrollContainerRef}
+                    onScroll={handleScroll}
+                    className="w-full h-full flex overflow-x-auto snap-x snap-mandatory scrollbar-none touch-pan-y pointer-events-auto"
+                >
+                    {images.map((imgUrl: string, idx: number) => (
+                        <Link 
+                            key={idx}
+                            to={`/product/${product.id}`} 
+                            className="w-full h-full flex-shrink-0 snap-center snap-always block p-4"
+                        >
+                            <img 
+                                src={imgUrl} 
+                                alt={product.name} 
+                                loading="lazy"
+                                decoding="async"
+                                className='w-full h-full object-contain pointer-events-none select-none'
+                            />
+                        </Link>
+                    ))}
+                </div>
 
                 {/* Mobile Dot Indicators */}
                 {images.length > 1 && (
@@ -129,20 +124,6 @@ export const ProductCard = React.memo(({ product }: { product: any }) => {
                         ))}
                     </div>
                 )}
-
-                <Link 
-                    to={`/product/${product.id}`} 
-                    className="w-full h-full block"
-                    onClick={handleLinkClick}
-                >
-                    <img 
-                        src={images[currentImgIdx]} 
-                        alt={product.name} 
-                        loading="lazy"
-                        decoding="async"
-                        className='w-full h-full object-contain pointer-events-none select-none'
-                    />
-                </Link>
 
                 {images.length > 1 && (
                     <>
@@ -167,7 +148,7 @@ export const ProductCard = React.memo(({ product }: { product: any }) => {
                     {images.map((url: string, idx: number) => (
                         <button
                             key={idx}
-                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrentImgIdx(idx); }}
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); scrollToImage(idx); }}
                             className={`w-12 h-12 bg-transparent rounded border aspect-square overflow-hidden p-0.5 flex-shrink-0 transition-all cursor-pointer
                                 ${currentImgIdx === idx ? 'border-slate-900 ring-1 ring-slate-900 scale-95' : 'border-[#e2e0d9] hover:border-slate-400'}`}
                         >

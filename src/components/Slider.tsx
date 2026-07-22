@@ -30,60 +30,70 @@ const slides = [
 
 const Slider = () => {
   const [current, setCurrent] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const touchStartX = useRef<number | null>(null);
-  const touchStartY = useRef<number | null>(null);
-
+  // Auto-advance interval
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+      setCurrent((prev) => {
+        const nextIndex = prev === slides.length - 1 ? 0 : prev + 1;
+        scrollToSlide(nextIndex);
+        return nextIndex;
+      });
     }, 12000);
     return () => clearInterval(interval);
   }, []);
 
-  const prevSlide = () => setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-  const nextSlide = () => setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-
-  const onTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
+  // Update current dot indicator based on native scroll position
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
+    const scrollPosition = scrollContainerRef.current.scrollLeft;
+    const slideWidth = scrollContainerRef.current.offsetWidth;
+    const newIndex = Math.round(scrollPosition / slideWidth);
+    
+    if (newIndex !== current) {
+      setCurrent(newIndex);
+    }
   };
 
-  const onTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null || touchStartY.current === null) return;
+  const scrollToSlide = (index: number) => {
+    if (!scrollContainerRef.current) return;
+    const slideWidth = scrollContainerRef.current.offsetWidth;
+    scrollContainerRef.current.scrollTo({
+      left: slideWidth * index,
+      behavior: 'smooth'
+    });
+    setCurrent(index);
+  };
 
-    const touchEndX = e.changedTouches[0].clientX;
-    const touchEndY = e.changedTouches[0].clientY;
+  const prevSlide = () => {
+    const nextIndex = current === 0 ? slides.length - 1 : current - 1;
+    scrollToSlide(nextIndex);
+  };
 
-    const diffX = touchStartX.current - touchEndX;
-    const diffY = touchStartY.current - touchEndY;
-
-    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
-      if (diffX > 0) nextSlide();
-      else prevSlide();
-    }
-
-    touchStartX.current = null;
-    touchStartY.current = null;
+  const nextSlide = () => {
+    const nextIndex = current === slides.length - 1 ? 0 : current + 1;
+    scrollToSlide(nextIndex);
   };
 
   return (
-    <div 
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-      /* FIXED: Replaced static 100vh & 600px min-height with dynamic 100dvh for mobile viewports */
-      className="h-[calc(100dvh-80px)] md:h-[calc(100vh-96px)] md:min-h-[600px] overflow-hidden relative touch-pan-y"
-    >
-      {/* Horizontal Slider Wrapper */}
+    <div className="h-[calc(100dvh-80px)] md:h-[calc(100vh-96px)] md:min-h-[600px] overflow-hidden relative">
+      
+      {/* 
+        Native CSS Scroll Snapping Container
+        Removes touch event conflicts and stutters 
+      */}
       <div 
-        className="w-full h-full flex transition-transform ease-in-out duration-700 transform-gpu"
-        style={{ transform: `translateX(-${current * 100}%)` }}
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
+        className="w-full h-full flex overflow-x-auto snap-x snap-mandatory scrollbar-none touch-pan-x"
+        style={{ scrollBehavior: 'smooth' }}
       >
         {slides.map((slide, index) => {
           const isActive = current === index;
 
           return (
-            <div className="w-full h-full flex-shrink-0 relative flex justify-center items-center" key={slide.id}>
+            <div className="w-full h-full flex-shrink-0 relative flex justify-center items-center snap-center snap-always" key={slide.id}>
               <img 
                 src={slide.img} 
                 alt={slide.title} 
@@ -93,7 +103,7 @@ const Slider = () => {
               
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20 pointer-events-none" />
 
-              {/* Centered overlay content cleanly across mobile and desktop */}
+              {/* Centered overlay content */}
               <div className="absolute w-full px-6 text-center z-10 max-w-5xl flex flex-col items-center top-1/2 -translate-y-1/2">
                 
                 <span className={`text-xs md:text-sm font-semibold tracking-[0.25em] text-[#d4af37] uppercase mb-2 md:mb-3 transition-all duration-500 ease-out transform-gpu
@@ -154,7 +164,7 @@ const Slider = () => {
         {slides.map((slide, index) => (
           <button 
             key={slide.id}
-            onClick={() => setCurrent(index)}
+            onClick={() => scrollToSlide(index)}
             className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${current === index ? "w-8 bg-white" : "w-2 bg-white/40 hover:bg-white/70"}`}
             aria-label={`Go to slide ${index + 1}`}
           />
