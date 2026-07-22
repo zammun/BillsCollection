@@ -103,7 +103,7 @@ const Slider = () => {
   const nextSlide = () => scrollToSlide(current + 1);
 
   return (
-    <div className="h-[99vh] min-h-[600px] max-h-[950px] md:h-screen md:min-h-[700px] md:max-h-none overflow-hidden relative">
+    <div className="h-[100vh] min-h-[600px] max-h-[1050px] md:h-screen md:min-h-[700px] md:max-h-none overflow-hidden relative">
       
       <div 
         ref={scrollContainerRef}
