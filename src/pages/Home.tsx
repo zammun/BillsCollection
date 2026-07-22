@@ -5,7 +5,8 @@ import ScrollReveal from "../components/ScrollReveal";
 
 const HomePage = () => {
   return (
-    <div className="pb-24">
+    /* -mt-20 md:-mt-24 pulls the slider all the way up behind the fixed navbar */
+    <div className="pb-24 -mt-20 md:-mt-24">
       <Slider />
       
       <div className="mt-8"><Filter /></div>
