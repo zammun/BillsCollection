@@ -79,7 +79,7 @@ const Slider = () => {
     return () => clearInterval(interval);
   }, [current]);
 
-  // INSTANT SCROLL & INFINITE LOOP TELEPORT: Zero lag, zero rewind glitch
+  // INSTANT SCROLL & INFINITE LOOP TELEPORT: Restricts movement to max 1 slide per swipe
   const handleScroll = () => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -87,9 +87,17 @@ const Slider = () => {
     const slideWidth = container.getBoundingClientRect().width;
     if (slideWidth === 0) return;
     
-    // Update active indicators/animations
-    const newIndex = Math.round(scrollPosition / slideWidth);
-    if (newIndex !== current) setCurrent(newIndex);
+    const rawIndex = Math.round(scrollPosition / slideWidth);
+
+    // Prevent fast swipes/flings from skipping more than 1 slide at a time
+    if (Math.abs(rawIndex - current) > 1) {
+      const clampedIndex = current + (rawIndex > current ? 1 : -1);
+      container.scrollLeft = slideWidth * clampedIndex;
+      setCurrent(clampedIndex);
+      return;
+    }
+
+    if (rawIndex !== current) setCurrent(rawIndex);
 
     // The Invisible Cut: If user swipes onto a clone, teleport instantly to the real slide
     if (scrollPosition <= 0) {
