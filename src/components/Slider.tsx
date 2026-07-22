@@ -76,7 +76,7 @@ const Slider = () => {
 
   return (
     /* Height increased to 92vh on mobile to fill almost the entire screen */
-    <div className="h-[92vh] min-h-[600px] max-h-[950px] md:h-[calc(100vh-96px)] md:min-h-[600px] md:max-h-none overflow-hidden relative">
+    <div className="h-[99vh] min-h-[600px] max-h-[950px] md:h-[calc(100vh)] md:min-h-[600px] md:max-h-none overflow-hidden relative">
       
       <div 
         ref={scrollContainerRef}
