@@ -18,7 +18,8 @@ const UserMenu = ({ closeMenu }: { closeMenu: () => void }) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    // FIXED: Use pointerdown to support both touch and mouse clicks reliably
+    const handleClickOutside = (event: PointerEvent) => {
       const target = event.target as Element;
       if (target.closest('#profile-icon')) return;
       
@@ -27,8 +28,8 @@ const UserMenu = ({ closeMenu }: { closeMenu: () => void }) => {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("pointerdown", handleClickOutside);
+    return () => document.removeEventListener("pointerdown", handleClickOutside);
   }, [closeMenu]);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -48,7 +49,7 @@ const UserMenu = ({ closeMenu }: { closeMenu: () => void }) => {
     const isAdmin = authorizedEmails.includes(user.email || '');
 
     return (
-      <div ref={menuRef} className="absolute top-full right-0 mt-3 w-72 bg-white shadow-2xl border border-slate-200/60 rounded-xl p-2 z-[100] pointer-events-auto text-base">
+      <div ref={menuRef} className="absolute top-full right-0 mt-3 w-72 bg-white shadow-2xl border border-slate-200/60 rounded-xl p-2 z-[100] pointer-events-auto text-base animate-fadeIn">
         <div className="px-4 py-4 border-b border-slate-100/50">
           <p className="font-bold text-slate-800 truncate text-lg">{fullName}</p>
           <p className="text-sm text-slate-500 truncate mt-0.5">{user.email}</p>
@@ -86,7 +87,7 @@ const UserMenu = ({ closeMenu }: { closeMenu: () => void }) => {
   }
 
   return (
-    <div ref={menuRef} className="absolute top-full right-0 mt-3 w-[calc(100vw-32px)] sm:w-80 bg-white shadow-xl rounded-2xl p-6 z-[100] pointer-events-auto text-base border border-slate-200/60">
+    <div ref={menuRef} className="absolute top-full right-0 mt-3 w-[calc(100vw-32px)] sm:w-80 bg-white shadow-xl rounded-2xl p-6 z-[100] pointer-events-auto text-base border border-slate-200/60 animate-fadeIn">
       <button onClick={loginWithGoogle} className="flex items-center justify-center w-full py-3 border border-slate-200 rounded-xl hover:bg-slate-50 min-h-[48px] text-slate-800 font-semibold transition-colors cursor-pointer shadow-sm">
         <img src="/google.svg" alt="Google" className="w-5 h-5 mr-3" /> Sign in with Google
       </button>
@@ -129,6 +130,18 @@ const Navbar = () => {
   const cartItems = useCartStore((state) => state.cartItems);
   const totalItemsInCart = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
+  // FIXED: Prevent background page scrolling when mobile menu drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
   const handleProfileClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (userMenuOpen) {
@@ -165,150 +178,160 @@ const Navbar = () => {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 z-50 flex items-center justify-between gap-4 transition-all duration-300 bg-[#f4f3ef]/90 backdrop-blur-md border-b border-slate-200/60 shadow-xs">
-      
-      {/* Brand Identity Bundle + Left Mobile Burger */}
-      <div className="flex items-center gap-3 md:gap-12 shrink-0">
+    <>
+      <div className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 z-50 flex items-center justify-between gap-4 transition-all duration-300 bg-[#f4f3ef]/90 backdrop-blur-md border-b border-slate-200/60 shadow-xs transform-gpu">
         
-        {/* Left Mobile Burger Button */}
-        <button 
-          onClick={() => { setMobileMenuOpen(!mobileMenuOpen); setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); }}
-          className="focus:outline-none md:hidden flex items-center justify-center shrink-0 cursor-pointer text-slate-800 h-6 w-6 mr-1"
-          aria-label="Toggle navigation menu"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            {mobileMenuOpen ? (
-              <path d="M18 6 6 18M6 6l12 12" />
-            ) : (
-              <path d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
-
-        <Link to="/" className="flex items-center gap-2 md:gap-4 shrink-0" onClick={() => { setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); setMobileMenuOpen(false); }}>
-          <img 
-              src="/logo.png" 
-              alt="Logo" 
-              className="w-14 h-14 md:w-[70px] md:h-[70px] shrink-0" 
-          />
-          <div className="text-xl md:text-3xl font-black tracking-tight text-slate-900 font-heading">Bills Collection</div>
-        </Link>
-
-        {/* Desktop Global Navigation links */}
-        <nav className="hidden lg:flex items-center gap-8 text-lg font-semibold">
-          <NavLink 
-            to="/" 
-            end 
-            className={({ isActive }) => `transition-colors duration-300 ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
-          >
-            Home
-          </NavLink>
-          <NavLink 
-            to="/about" 
-            className={({ isActive }) => `transition-colors duration-300 ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
-          >
-            About
-          </NavLink>
-          <NavLink 
-            to="/contact" 
-            className={({ isActive }) => `transition-colors duration-300 ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
-          >
-            Contact
-          </NavLink>
-        </nav>
-      </div>
-
-      {/* Primary Actions Deck */}
-      <div className="flex-grow flex items-center justify-end gap-4 md:gap-6">
-        
-        <div className="hidden md:flex flex-1 max-w-[280px] justify-end">
-          <SearchBar />
-        </div>
-        
-        <div className="relative shrink-0 flex items-center gap-4 text-slate-800">
-          <NavIcons 
-            onProfileClick={handleProfileClick} 
-            isProfileOpen={userMenuOpen}
-            onCartClick={handleCartClick}
-            isCartOpen={cartOpen}
-            setIsCartOpen={setCartOpen}
-            isNotificationOpen={notificationOpen}
-            onNotificationClick={handleNotificationClick}
-            setIsNotificationOpen={setNotificationOpen}
-          />
-
-          {userMenuOpen && <UserMenu closeMenu={() => setUserMenuOpen(false)} />}
-        </div>
-      </div>
-
-      {/* Redesigned Mobile Drawer Panel */}
-      {mobileMenuOpen && (
-        <div className="absolute top-20 left-0 w-full bg-[#f4f3ef]/98 backdrop-blur-xl p-6 border-b border-slate-300/60 shadow-2xl flex flex-col gap-6 md:hidden z-40 animate-fadeIn">
+        {/* Brand Identity Bundle + Left Mobile Burger */}
+        <div className="flex items-center gap-3 md:gap-12 shrink-0">
           
-          {/* Full-width Left-Aligned Search Container */}
-          <div className="w-full flex justify-start">
-            <div className="w-full">
-              <SearchBar onSearch={() => setMobileMenuOpen(false)} />
-            </div>
-          </div>
+          {/* Left Mobile Burger Button */}
+          <button 
+            onClick={() => { setMobileMenuOpen(!mobileMenuOpen); setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); }}
+            className="focus:outline-none md:hidden flex items-center justify-center shrink-0 cursor-pointer text-slate-800 h-6 w-6 mr-1"
+            aria-label="Toggle navigation menu"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              {mobileMenuOpen ? (
+                <path d="M18 6 6 18M6 6l12 12" />
+              ) : (
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
 
-          {/* Nav Links & Track Order Callout */}
-          <nav className="flex flex-col gap-1.5 pt-2 border-t border-slate-300/50">
-            <Link 
+          <Link to="/" className="flex items-center gap-2 md:gap-4 shrink-0" onClick={() => { setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); setMobileMenuOpen(false); }}>
+            <img 
+                src="/logo.png" 
+                alt="Logo" 
+                className="w-14 h-14 md:w-[70px] md:h-[70px] shrink-0" 
+            />
+            <div className="text-xl md:text-3xl font-black tracking-tight text-slate-900 font-heading">Bills Collection</div>
+          </Link>
+
+          {/* Desktop Global Navigation links */}
+          <nav className="hidden lg:flex items-center gap-8 text-lg font-semibold">
+            <NavLink 
               to="/" 
-              onClick={() => setMobileMenuOpen(false)} 
-              className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
+              end 
+              className={({ isActive }) => `transition-colors duration-300 ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
             >
-              <span>Home</span>
-              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </Link>
-
-            <Link 
+              Home
+            </NavLink>
+            <NavLink 
               to="/about" 
-              onClick={() => setMobileMenuOpen(false)} 
-              className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
+              className={({ isActive }) => `transition-colors duration-300 ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
             >
-              <span>About</span>
-              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </Link>
-
-            <Link 
+              About
+            </NavLink>
+            <NavLink 
               to="/contact" 
-              onClick={() => setMobileMenuOpen(false)} 
-              className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
+              className={({ isActive }) => `transition-colors duration-300 ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
             >
-              <span>Contact</span>
-              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </Link>
-
-            {/* Track Order Button */}
-            <Link 
-              to="/track-order" 
-              onClick={() => setMobileMenuOpen(false)} 
-              className="mt-3 flex items-center justify-between py-3.5 px-4 rounded-xl bg-slate-900 text-white font-bold text-sm tracking-wide uppercase shadow-md active:scale-[0.98] transition-all"
-            >
-              <div className="flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                  <circle cx="12" cy="10" r="3"/>
-                </svg>
-                <span>Track Order</span>
-              </div>
-              <span className="text-[10px] bg-slate-800 border border-slate-700 px-2.5 py-0.5 rounded-md text-slate-300 font-semibold tracking-wider">
-                LOOKUP
-              </span>
-            </Link>
+              Contact
+            </NavLink>
           </nav>
-
         </div>
+
+        {/* Primary Actions Deck */}
+        <div className="flex-grow flex items-center justify-end gap-4 md:gap-6">
+          
+          <div className="hidden md:flex flex-1 max-w-[280px] justify-end">
+            <SearchBar />
+          </div>
+          
+          <div className="relative shrink-0 flex items-center gap-4 text-slate-800">
+            <NavIcons 
+              onProfileClick={handleProfileClick} 
+              isProfileOpen={userMenuOpen}
+              onCartClick={handleCartClick}
+              isCartOpen={cartOpen}
+              setIsCartOpen={setCartOpen}
+              isNotificationOpen={notificationOpen}
+              onNotificationClick={handleNotificationClick}
+              setIsNotificationOpen={setNotificationOpen}
+            />
+
+            {userMenuOpen && <UserMenu closeMenu={() => setUserMenuOpen(false)} />}
+          </div>
+        </div>
+
+        {/* Redesigned Mobile Drawer Panel */}
+        {mobileMenuOpen && (
+          <div className="absolute top-20 left-0 w-full bg-[#f4f3ef]/98 backdrop-blur-xl p-6 border-b border-slate-300/60 shadow-2xl flex flex-col gap-6 md:hidden z-50 animate-fadeIn">
+            
+            {/* Full-width Left-Aligned Search Container */}
+            <div className="w-full flex justify-start">
+              <div className="w-full">
+                <SearchBar onSearch={() => setMobileMenuOpen(false)} />
+              </div>
+            </div>
+
+            {/* Nav Links & Track Order Callout */}
+            <nav className="flex flex-col gap-1.5 pt-2 border-t border-slate-300/50">
+              <Link 
+                to="/" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
+              >
+                <span>Home</span>
+                <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </Link>
+
+              <Link 
+                to="/about" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
+              >
+                <span>About</span>
+                <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </Link>
+
+              <Link 
+                to="/contact" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
+              >
+                <span>Contact</span>
+                <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </Link>
+
+              {/* Track Order Button */}
+              <Link 
+                to="/track-order" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="mt-3 flex items-center justify-between py-3.5 px-4 rounded-xl bg-slate-900 text-white font-bold text-sm tracking-wide uppercase shadow-md active:scale-[0.98] transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  <span>Track Order</span>
+                </div>
+                <span className="text-[10px] bg-slate-800 border border-slate-700 px-2.5 py-0.5 rounded-md text-slate-300 font-semibold tracking-wider">
+                  LOOKUP
+                </span>
+              </Link>
+            </nav>
+
+          </div>
+        )}
+      </div>
+
+      {/* FIXED: Dark Backdrop Overlay when mobile drawer is active */}
+      {mobileMenuOpen && (
+        <div 
+          onClick={() => setMobileMenuOpen(false)}
+          className="fixed inset-0 bg-slate-900/30 backdrop-blur-xs z-40 md:hidden animate-fadeIn" 
+        />
       )}
-    </div>
+    </>
   );
 };
 

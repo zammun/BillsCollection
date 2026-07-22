@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useCartStore } from '../store/useCartStore';
 import { supabase } from '../supabase'; 
@@ -18,9 +18,11 @@ export const ProductCard = ({ product }: { product: any }) => {
 
     const stockForSelectedSize = product.sizes ? (product.sizes[selectedSize] || 0) : 0;
 
-    const images = Array.isArray(product.image_url) && product.image_url.length > 0 
-        ? product.image_url 
-        : [product.image_url || ''];
+    const images = useMemo(() => {
+        return Array.isArray(product.image_url) && product.image_url.length > 0 
+            ? product.image_url 
+            : [product.image_url || ''];
+    }, [product.image_url]);
 
     useEffect(() => {
         return () => {
@@ -109,12 +111,12 @@ export const ProductCard = ({ product }: { product: any }) => {
         <div className='w-full flex flex-col gap-4 relative group/card'>
             {/* Image Box with Touch Event Listeners */}
             <div 
-                className='relative w-full h-80 bg-transparent rounded-md overflow-hidden p-4 flex items-center justify-center group/slider touch-pan-y'
+                className='relative w-full h-80 bg-transparent rounded-md overflow-hidden p-4 flex items-center justify-center group/slider'
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
             >
                 {stockForSelectedSize > 0 && stockForSelectedSize < 5 && (
-                    <div className="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md z-20 shadow-xs pointer-events-none animate-pulse">
+                    <div className="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md z-20 shadow-xs pointer-events-none">
                         Act fast, only {stockForSelectedSize} left
                     </div>
                 )}
@@ -139,7 +141,9 @@ export const ProductCard = ({ product }: { product: any }) => {
                     <img 
                         src={images[currentImgIdx]} 
                         alt={product.name} 
-                        className='w-full h-full object-contain pointer-events-none mix-blend-multiply select-none'
+                        loading="lazy"
+                        decoding="async"
+                        className='w-full h-full object-contain pointer-events-none select-none'
                     />
                 </Link>
 
@@ -170,7 +174,7 @@ export const ProductCard = ({ product }: { product: any }) => {
                             className={`w-12 h-12 bg-transparent rounded border aspect-square overflow-hidden p-0.5 flex-shrink-0 transition-all cursor-pointer
                                 ${currentImgIdx === idx ? 'border-slate-900 ring-1 ring-slate-900 scale-95' : 'border-[#e2e0d9] hover:border-slate-400'}`}
                         >
-                            <img src={url} alt="" className="w-full h-full object-cover rounded-[2px] mix-blend-multiply" />
+                            <img src={url} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover rounded-[2px]" />
                         </button>
                     ))}
                 </div>
@@ -206,18 +210,18 @@ export const ProductCard = ({ product }: { product: any }) => {
 
             {/* Add to Cart Button */}
             <button 
-  onClick={handleAddToCart}
-  disabled={stockForSelectedSize === 0}
-  className={`w-full py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-300 active:scale-[0.98] z-10 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs cursor-pointer
-    ${stockForSelectedSize === 0 
-      ? 'border border-[#e2e0d9] text-gray-400 bg-[#e6e4dc]/50' 
-      : isAdded 
-        ? 'bg-[#F35C7A] text-white ring-1 ring-[#F35C7A] scale-[1.02]' 
-        : 'border border-[#e2e0d9] text-slate-900 bg-[#faf8f5] hover:bg-slate-900 hover:text-white hover:border-slate-900'
-    }`}
->
-  {stockForSelectedSize === 0 ? "Out of Stock" : isAdded ? "Added to Cart ✓" : "Add to Cart"}
-</button>
+                onClick={handleAddToCart}
+                disabled={stockForSelectedSize === 0}
+                className={`w-full py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-300 active:scale-[0.98] z-10 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs cursor-pointer
+                    ${stockForSelectedSize === 0 
+                      ? 'border border-[#e2e0d9] text-gray-400 bg-[#e6e4dc]/50' 
+                      : isAdded 
+                        ? 'bg-[#F35C7A] text-white ring-1 ring-[#F35C7A] scale-[1.02]' 
+                        : 'border border-[#e2e0d9] text-slate-900 bg-[#faf8f5] hover:bg-slate-900 hover:text-white hover:border-slate-900'
+                    }`}
+            >
+                {stockForSelectedSize === 0 ? "Out of Stock" : isAdded ? "Added to Cart ✓" : "Add to Cart"}
+            </button>
         </div>
     );
 };
@@ -238,41 +242,45 @@ const ProductList = () => {
         fetchProducts();
     }, []);
 
-    let filteredProducts = [...products];
-    const typeParam = searchParams.get("type");
-    const colorParam = searchParams.get("color");
-    const minParam = searchParams.get("min");
-    const maxParam = searchParams.get("max");
-    const sortParam = searchParams.get("sort");
-    const searchParam = searchParams.get("search");
+    const filteredProducts = useMemo(() => {
+        let result = [...products];
+        const typeParam = searchParams.get("type");
+        const colorParam = searchParams.get("color");
+        const minParam = searchParams.get("min");
+        const maxParam = searchParams.get("max");
+        const sortParam = searchParams.get("sort");
+        const searchParam = searchParams.get("search");
 
-    if (typeParam) filteredProducts = filteredProducts.filter(p => p.type === typeParam);
-    if (colorParam) filteredProducts = filteredProducts.filter(p => p.color === colorParam);
-    
-    if (minParam && !isNaN(Number(minParam))) {
-        filteredProducts = filteredProducts.filter(p => p.price >= Number(minParam));
-    }
-    if (maxParam && !isNaN(Number(maxParam))) {
-        filteredProducts = filteredProducts.filter(p => p.price <= Number(maxParam));
-    }
-
-    if (searchParam) {
-        filteredProducts = filteredProducts.filter(p => 
-            p.name?.toLowerCase().includes(searchParam.toLowerCase())
-        );
-    }
-
-    if (sortParam) {
-        if (sortParam === "price-asc") {
-            filteredProducts.sort((a, b) => a.price - b.price);
-        } else if (sortParam === "price-desc") {
-            filteredProducts.sort((a, b) => b.price - a.price);
-        } else if (sortParam === "date-desc") {
-            filteredProducts.sort((a, b) => new Date(b.created_at || b.id).getTime() - new Date(a.created_at || a.id).getTime());
-        } else if (sortParam === "date-asc") {
-            filteredProducts.sort((a, b) => new Date(a.created_at || a.id).getTime() - new Date(b.created_at || b.id).getTime());
+        if (typeParam) result = result.filter(p => p.type === typeParam);
+        if (colorParam) result = result.filter(p => p.color === colorParam);
+        
+        if (minParam && !isNaN(Number(minParam))) {
+            result = result.filter(p => p.price >= Number(minParam));
         }
-    }
+        if (maxParam && !isNaN(Number(maxParam))) {
+            result = result.filter(p => p.price <= Number(maxParam));
+        }
+
+        if (searchParam) {
+            result = result.filter(p => 
+                p.name?.toLowerCase().includes(searchParam.toLowerCase())
+            );
+        }
+
+        if (sortParam) {
+            if (sortParam === "price-asc") {
+                result.sort((a, b) => a.price - b.price);
+            } else if (sortParam === "price-desc") {
+                result.sort((a, b) => b.price - a.price);
+            } else if (sortParam === "date-desc") {
+                result.sort((a, b) => new Date(b.created_at || b.id).getTime() - new Date(a.created_at || a.id).getTime());
+            } else if (sortParam === "date-asc") {
+                result.sort((a, b) => new Date(a.created_at || a.id).getTime() - new Date(b.created_at || b.id).getTime());
+            }
+        }
+
+        return result;
+    }, [products, searchParams]);
 
     if (loading) {
         return (

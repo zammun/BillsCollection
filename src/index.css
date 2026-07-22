@@ -17,8 +17,10 @@ body {
   font-family: var(--font-heading);
 }
 
+/* ✅ FIXED: Allows native mobile pull-to-refresh */
 html, body {
-  overscroll-behavior-y: none;
+  overscroll-behavior-y: auto;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .font-display {
@@ -41,10 +43,6 @@ input[type="button"],
 input[type="submit"], 
 [role="button"] {
   cursor: pointer !important;
-}
-
-html, body {
-  -webkit-tap-highlight-color: transparent;
 }
 
 .suave-luxury-theme {
