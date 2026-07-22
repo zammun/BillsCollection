@@ -31,9 +31,8 @@ const slides = [
 const Slider = () => {
   const [current, setCurrent] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const scrollTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Auto-advance interval (resets whenever the slide changes so it doesn't fight manual swipes)
+  // Auto-advance interval
   useEffect(() => {
     const interval = setInterval(() => {
       const nextIndex = current === slides.length - 1 ? 0 : current + 1;
@@ -42,21 +41,17 @@ const Slider = () => {
     return () => clearInterval(interval);
   }, [current]);
 
-  // DEBOUNCED SCROLL: Prevents React from re-rendering the heavy DOM *during* the swipe.
+  // INSTANT SCROLL: Updates active slide immediately on scroll/swipe without any pause
   const handleScroll = () => {
-    if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+    if (!scrollContainerRef.current) return;
+    const scrollPosition = scrollContainerRef.current.scrollLeft;
+    const slideWidth = scrollContainerRef.current.offsetWidth;
+    if (slideWidth === 0) return;
     
-    scrollTimeout.current = setTimeout(() => {
-      if (!scrollContainerRef.current) return;
-      const scrollPosition = scrollContainerRef.current.scrollLeft;
-      const slideWidth = scrollContainerRef.current.offsetWidth;
-      if (slideWidth === 0) return;
-      
-      const newIndex = Math.round(scrollPosition / slideWidth);
-      if (newIndex !== current) {
-        setCurrent(newIndex);
-      }
-    }, 100); 
+    const newIndex = Math.round(scrollPosition / slideWidth);
+    if (newIndex !== current) {
+      setCurrent(newIndex);
+    }
   };
 
   const scrollToSlide = (index: number) => {
@@ -79,9 +74,9 @@ const Slider = () => {
     scrollToSlide(nextIndex);
   };
 
-{/* Height increased to 85vh and min-h-550px for a larger, more pronounced mobile footprint */}
   return (
-    <div className="h-[85vh] min-h-[550px] max-h-[850px] md:h-[calc(100vh-96px)] md:min-h-[600px] md:max-h-none overflow-hidden relative">
+    /* Height increased to 92vh on mobile to fill almost the entire screen */
+    <div className="h-[92vh] min-h-[600px] max-h-[950px] md:h-[calc(100vh-96px)] md:min-h-[600px] md:max-h-none overflow-hidden relative">
       
       <div 
         ref={scrollContainerRef}
@@ -95,7 +90,7 @@ const Slider = () => {
           return (
             <div className="w-full h-full flex-shrink-0 relative flex justify-center items-center snap-center snap-always overflow-hidden" key={slide.id}>
               
-              {/* Highly pronounced slow-zoom animation on the active image (scale-115 over 12s) */}
+              {/* Pronounced zoom animation */}
               <img 
                 src={slide.img} 
                 alt={slide.title} 
@@ -106,31 +101,27 @@ const Slider = () => {
               
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20 pointer-events-none" />
 
-              {/* Staggered text animations with deep blurs, scaling, and high y-axis translates */}
+              {/* Pronounced staggered text animations */}
               <div className="absolute w-full px-6 text-center z-10 max-w-5xl flex flex-col items-center top-1/2 -translate-y-1/2">
                 
-                {/* 1. Subtitle: Dramatic letter-spacing snap and fade */}
                 <span className={`text-xs md:text-sm font-semibold text-[#d4af37] uppercase mb-2 md:mb-3 transition-all duration-1000 delay-100 ease-out transform-gpu
                   ${isActive ? "opacity-100 translate-y-0 tracking-[0.25em] blur-0" : "opacity-0 translate-y-10 tracking-[1em] blur-md"}`}
                 >
                   {slide.subtitle}
                 </span>
 
-                {/* 2. Title: Deep blur-in from below with a punchy scale-up effect */}
                 <h1 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-black text-white mb-3 md:mb-4 drop-shadow-2xl leading-[1] md:leading-[0.95] transition-all duration-1000 delay-300 ease-[cubic-bezier(0.25,1,0.5,1)] transform-gpu
                   ${isActive ? "opacity-100 translate-y-0 scale-100 blur-0" : "opacity-0 translate-y-16 scale-90 blur-lg"}`}
                 >
                   {slide.title}
                 </h1>
 
-                {/* 3. Description: Smooth fade-up from deep blur */}
                 <p className={`text-xs sm:text-sm md:text-lg text-slate-200 mb-6 md:mb-8 max-w-md font-medium drop-shadow-md transition-all duration-1000 delay-500 ease-out transform-gpu
                   ${isActive ? "opacity-100 translate-y-0 blur-0" : "opacity-0 translate-y-12 blur-md"}`}
                 >
                   {slide.description}
                 </p>
                 
-                {/* 4. Button: Delayed crisp entrance from bottom */}
                 <Link 
                   to={slide.url}
                   className={`transition-all duration-1000 delay-700 ease-out transform-gpu ${isActive ? "opacity-100 translate-y-0 blur-0" : "opacity-0 translate-y-10 blur-sm"}`}
