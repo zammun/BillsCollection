@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 const slides = [
@@ -42,22 +42,22 @@ const Slider = () => {
   const [current, setCurrent] = useState(1); 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Instantly jump to the first REAL slide on component mount
+  // Instantly jump to the first REAL slide on component mount only
   useLayoutEffect(() => {
-  const container = scrollContainerRef.current;
-  if (container) {
-    const width = container.offsetWidth;
-    if (width > 0) {
-      container.scrollLeft = width * current;
-    } else {
-      requestAnimationFrame(() => {
-        if (container) {
-          container.scrollLeft = container.offsetWidth * current;
-        }
-      });
+    const container = scrollContainerRef.current;
+    if (container) {
+      const width = container.offsetWidth;
+      if (width > 0) {
+        container.scrollLeft = width * current;
+      } else {
+        requestAnimationFrame(() => {
+          if (container) {
+            container.scrollLeft = container.offsetWidth * current;
+          }
+        });
+      }
     }
-  }
-}, [current]);
+  }, []); // Removed [current] dependency to prevent jitter on slide change
 
   // Snap tightly aligned on browser window resizes
   useEffect(() => {
@@ -166,7 +166,6 @@ const Slider = () => {
                   to={slide.url}
                   className={`transition-all duration-1000 delay-700 ease-out transform-gpu ${isActive ? "opacity-100 translate-y-0 blur-0" : "opacity-0 translate-y-10 blur-sm"}`}
                 >
-                  {/* Updated hover background and border colors here */}
                   <button className="bg-[#faf8f5] hover:bg-[#b8b5a6] border border-[#e2e0d9] hover:border-[#c4c2b7] text-zinc-900 rounded-full px-6 py-2.5 md:px-8 md:py-3 text-sm md:text-base font-bold transition-all shadow-md active:scale-95 cursor-pointer">
                     Explore Collection
                   </button>
@@ -201,7 +200,6 @@ const Slider = () => {
       {/* Indicators */}
       <div className="absolute left-1/2 bottom-6 md:bottom-8 -translate-x-1/2 z-20 flex gap-3">
         {slides.map((slide, index) => {
-          // Adjust indicator math to correctly map to the real 3 slides while looping
           const indicatorIndex = index + 1;
           const isActiveIndicator = current === 0 ? indicatorIndex === slides.length : current === slides.length + 1 ? indicatorIndex === 1 : current === indicatorIndex;
           
