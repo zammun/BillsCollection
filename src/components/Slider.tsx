@@ -49,6 +49,7 @@ const Slider = () => {
     if (!scrollContainerRef.current) return;
     const scrollPosition = scrollContainerRef.current.scrollLeft;
     const slideWidth = scrollContainerRef.current.offsetWidth;
+    if (slideWidth === 0) return;
     const newIndex = Math.round(scrollPosition / slideWidth);
     
     if (newIndex !== current) {
@@ -81,12 +82,12 @@ const Slider = () => {
       
       {/* 
         Native CSS Scroll Snapping Container
-        Removes touch event conflicts and stutters 
+        Using touch-auto allows both vertical page scrolling and horizontal slide swiping
       */}
       <div 
         ref={scrollContainerRef}
         onScroll={handleScroll}
-        className="w-full h-full flex overflow-x-auto snap-x snap-mandatory scrollbar-none touch-pan-x"
+        className="w-full h-full flex overflow-x-auto snap-x snap-mandatory scrollbar-none touch-auto"
         style={{ scrollBehavior: 'smooth' }}
       >
         {slides.map((slide, index) => {
