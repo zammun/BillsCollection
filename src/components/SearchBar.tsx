@@ -20,41 +20,44 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
         
         if (query.trim()) {
             navigate(`/results?search=${encodeURIComponent(query.trim())}`);
-            if (onSearch) onSearch(); // Closes mobile menu on search execution
+            if (onSearch) onSearch(); // Closes mobile drawer if open
         }
     };
 
     return (
-        <form onSubmit={handleSearch} className="relative flex items-center w-full">
+        <form onSubmit={handleSearch} className="relative flex items-center w-full justify-end">
             {/* Left-Aligned Vector Search Icon */}
-            <div className="absolute left-3.5 pointer-events-none flex items-center text-slate-400 z-10">
+            <div className="absolute left-3.5 pointer-events-none flex items-center text-slate-400 z-10 transition-colors group-focus-within:text-slate-900">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="8"/>
                     <path d="m21 21-4.3-4.3"/>
                 </svg>
             </div>
 
-            {/* Clean Full-Width Luxury Input */}
+            {/* Off-White Input: Full-Width on Mobile, Expanding Width Animation on Desktop */}
             <input
                 type="text"
                 name="name"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search catalog..."
-                className="w-full py-3 md:py-2.5 pl-10 pr-9 bg-[#faf8f5] text-slate-900 placeholder-slate-400 rounded-xl border border-[#e2e0d9] focus:bg-white focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 text-sm font-medium shadow-2xs transition-all duration-200"
+                className="w-full md:w-48 lg:w-56 focus:md:w-72 focus:lg:w-80 py-2.5 pl-10 pr-9 bg-[#faf8f5] text-slate-900 placeholder-slate-400 rounded-xl border border-[#e2e0d9] hover:border-slate-400 focus:bg-white focus:outline-none focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 text-sm font-medium shadow-2xs transition-all duration-300 ease-out"
             />
 
-            {/* Quick Clear (X) Button when typing */}
-            {query && (
+            {/* Clear Button (X) or Search Action */}
+            {query ? (
                 <button 
                     type="button" 
                     onClick={() => setQuery("")}
-                    className="absolute right-3 p-1 text-slate-400 hover:text-slate-700 rounded-full cursor-pointer z-10"
+                    className="absolute right-3 p-1 text-slate-400 hover:text-slate-800 rounded-full cursor-pointer z-10 transition-colors"
+                    aria-label="Clear search"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M18 6 6 18M6 6l12 12" />
                     </svg>
                 </button>
+            ) : (
+                <button type="submit" className="sr-only">Search</button>
             )}
         </form>
     );

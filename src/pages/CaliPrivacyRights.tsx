@@ -2,84 +2,153 @@ import { Link } from 'react-router-dom';
 
 export default function CaliforniaPrivacyRightsPage() {
   return (
-    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-16 flex flex-col gap-8">
-      <h1 className="text-4xl font-semibold">California Privacy Rights</h1>
+    <div className="suave-luxury-theme text-zinc-800 py-12 md:py-16 pb-20 px-6 font-sans antialiased">
+      <div className="max-w-4xl mx-auto space-y-12">
+        
+        {/* Header Section */}
+        <div className="text-center space-y-3">
+          <h1 className="text-3xl md:text-5xl font-bold text-zinc-900 tracking-tight">
+            California <span className="text-[#d4af37]">Privacy Rights</span>
+          </h1>
+          <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">
+            Last Updated: July 15, 2026
+          </p>
+          <p className="text-base md:text-lg text-zinc-600 max-w-2xl mx-auto leading-relaxed">
+            Supplements our primary Privacy Policy for California residents under CCPA and CPRA.
+          </p>
+        </div>
 
-      <div className="flex flex-col gap-6 text-gray-700 leading-relaxed">
-        <p>
-          <strong>Last Updated: July 15, 2026</strong>
-        </p>
-        <p>
-          This California Privacy Rights Notice supplements the information contained in our Privacy Policy and applies solely to all visitors, users, and others who reside in the State of California. We adopt this notice to comply with the California Consumer Privacy Act of 2018 (CCPA) and the California Privacy Rights Act (CPRA).
-        </p>
-      </div>
+        {/* Rights Breakdown Card */}
+        <div className="bg-white border border-zinc-200/60 rounded-3xl p-8 md:p-12 shadow-xl space-y-8">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">
+              CCPA / CPRA Framework
+            </span>
+            <h2 className="text-2xl font-bold text-zinc-900 tracking-tight mt-1">
+              Your State Consumer Rights
+            </h2>
+          </div>
 
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">1. Your Rights Under the CCPA/CPRA</h2>
-        <p className="text-gray-700 leading-relaxed mb-4">
-          If you are a California resident, you have the following rights regarding your personal information:
-        </p>
-        <ul className="list-disc list-inside text-gray-700 flex flex-col gap-3 leading-relaxed">
-          <li>
-            <strong>Right to Know:</strong> You have the right to request that we disclose what personal information we collect, use, disclose, and sell about you.
-          </li>
-          <li>
-            <strong>Right to Delete:</strong> You have the right to request the deletion of your personal information that we have collected and retained, subject to certain exceptions.
-          </li>
-          <li>
-            <strong>Right to Correct:</strong> You have the right to request that we correct inaccurate personal information that we maintain about you.
-          </li>
-          <li>
-            <strong>Right to Opt-Out:</strong> You have the right to opt-out of the sale or sharing of your personal information.{' '}
-            <Link to="/DoNotSell" className="text-indigo-600 hover:underline">
-              Click here to manage your preferences.
-            </Link>
-          </li>
-          <li>
-            <strong>Right to Limit:</strong> You have the right to limit the use and disclosure of your sensitive personal information.
-          </li>
-          <li>
-            <strong>Right to Non-Discrimination:</strong> We will not discriminate against you for exercising any of your CCPA/CPRA rights.
-          </li>
-        </ul>
-      </div>
+          <div className="space-y-6 text-sm md:text-base text-zinc-600 leading-relaxed">
+            <p>
+              If you reside in California, you hold specific rights regarding the collection, retention, and processing of your personal information.
+            </p>
 
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">2. Categories of Personal Information Collected</h2>
-        <p className="text-gray-700 leading-relaxed">
-          In the preceding 12 months, we have collected the following categories of personal information: Identifiers (such as name, email, IP address), Commercial information (such as records of products purchased), Internet or other similar network activity (such as browsing history on our site), and Geolocation data (physical location derived from IP address).
-        </p>
-      </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+              <div className="p-5 rounded-2xl bg-[#faf8f5] border border-[#e2e0d9] space-y-1.5">
+                <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">Right to Know</span>
+                <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
+                  Request disclosure of what personal information we collect, use, disclose, and sell about you.
+                </p>
+              </div>
 
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">3. How to Exercise Your Rights</h2>
-        <p className="text-gray-700 leading-relaxed">
-          To exercise your rights to know, delete, or correct, please submit a verifiable consumer request to us by:
-        </p>
-        <ul className="list-disc list-inside text-gray-700 mt-4 flex flex-col gap-2 leading-relaxed">
-          <li>
-            <strong>Email:</strong>{' '}
-            <a href="mailto:contact@billscollection.co" className="text-indigo-600 hover:underline">
-              contact@billscollection.co
-            </a>
-          </li>
-          <li>
-            <strong>Phone:</strong> +1 (347) 327-6851
-          </li>
-        </ul>
-        <p className="text-gray-700 leading-relaxed mt-4">
-          Only you, or someone legally authorized to act on your behalf, may make a verifiable consumer request related to your personal information. We will need to verify your identity before processing your request.
-        </p>
-      </div>
+              <div className="p-5 rounded-2xl bg-[#faf8f5] border border-[#e2e0d9] space-y-1.5">
+                <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">Right to Delete</span>
+                <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
+                  Request erasure of personal information collected and retained, subject to statutory exceptions.
+                </p>
+              </div>
 
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">4. "Shine the Light" Law</h2>
-        <p className="text-gray-700 leading-relaxed">
-          California Civil Code Section 1798.83 permits users of our Site that are California residents to request certain information regarding our disclosure of personal information to third parties for their direct marketing purposes. To make such a request, please send an email to{' '}
-          <a href="mailto:contact@billscollection.co" className="text-indigo-600 hover:underline">
-            contact@billscollection.co
-          </a>.
-        </p>
+              <div className="p-5 rounded-2xl bg-[#faf8f5] border border-[#e2e0d9] space-y-1.5">
+                <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">Right to Correct</span>
+                <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
+                  Request corrections to inaccurate personal records maintained across our system databases.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-[#faf8f5] border border-[#e2e0d9] space-y-1.5">
+                <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">Right to Opt-Out</span>
+                <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
+                  Opt out of the sale or sharing of your personal data.{' '}
+                  <Link to="/DoNotSell" className="font-bold text-zinc-900 hover:text-[#d4af37] underline transition-colors block mt-1">
+                    Manage Preferences &rarr;
+                  </Link>
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-[#faf8f5] border border-[#e2e0d9] space-y-1.5">
+                <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">Right to Limit</span>
+                <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
+                  Limit the use and disclosure of your sensitive personal data strictly to necessary operations.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-[#faf8f5] border border-[#e2e0d9] space-y-1.5">
+                <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">Non-Discrimination</span>
+                <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
+                  We will never discriminate against you, alter service rates, or deny access for exercising privacy rights.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Categories Collected Card */}
+        <div className="bg-white border border-zinc-200/60 rounded-3xl p-8 md:p-12 shadow-xl space-y-6">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">
+            Data Auditing
+          </span>
+          <h2 className="text-2xl font-bold text-zinc-900 tracking-tight">
+            Categories of Personal Information Collected
+          </h2>
+          <p className="text-zinc-600 leading-relaxed text-sm md:text-base">
+            In the preceding 12 months, Bills Collection has collected the following categories of personal information:
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="p-4 rounded-xl bg-[#faf8f5] border border-[#e2e0d9]">
+              <p className="font-bold text-zinc-900 text-sm">Identifiers</p>
+              <p className="text-xs text-zinc-600 mt-1">Full name, email address, physical address, IP address.</p>
+            </div>
+            <div className="p-4 rounded-xl bg-[#faf8f5] border border-[#e2e0d9]">
+              <p className="font-bold text-zinc-900 text-sm">Commercial Records</p>
+              <p className="text-xs text-zinc-600 mt-1">Records of products viewed, ordered, or collected.</p>
+            </div>
+            <div className="p-4 rounded-xl bg-[#faf8f5] border border-[#e2e0d9]">
+              <p className="font-bold text-zinc-900 text-sm">Network Activity</p>
+              <p className="text-xs text-zinc-600 mt-1">Browsing history, session interactions, device metadata.</p>
+            </div>
+            <div className="p-4 rounded-xl bg-[#faf8f5] border border-[#e2e0d9]">
+              <p className="font-bold text-zinc-900 text-sm">Geolocation Data</p>
+              <p className="text-xs text-zinc-600 mt-1">Physical location derived from device connection IP.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Exercise Rights & Shine the Light Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white border border-zinc-200/60 rounded-3xl p-8 shadow-xl space-y-4">
+            <span className="text-xs font-bold text-[#d4af37] tracking-widest uppercase">
+              Requests & Verification
+            </span>
+            <h3 className="text-xl font-bold text-zinc-900">How to Exercise Your Rights</h3>
+            <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
+              Submit a verifiable consumer request directly to our privacy desk:
+            </p>
+            <div className="space-y-2 pt-2 border-t border-zinc-100 text-xs md:text-sm">
+              <p><strong className="text-zinc-900">Email:</strong> <a href="mailto:contact@billscollection.co" className="text-zinc-900 font-bold hover:text-[#d4af37] transition-colors">contact@billscollection.co</a></p>
+              <p><strong className="text-zinc-900">Phone:</strong> <span className="text-zinc-600">+1 (347) 327-6851</span></p>
+            </div>
+            <p className="text-xs text-zinc-500 leading-relaxed pt-1">
+              Verification of consumer identity is required prior to processing data requests.
+            </p>
+          </div>
+
+          <div className="bg-white border border-zinc-200/60 rounded-3xl p-8 shadow-xl space-y-4">
+            <span className="text-xs font-bold text-[#d4af37] tracking-widest uppercase">
+              Civil Code § 1798.83
+            </span>
+            <h3 className="text-xl font-bold text-zinc-900">"Shine the Light" Law</h3>
+            <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
+              California residents may request disclosures regarding any personal information shared with third parties for direct marketing operations during the preceding calendar year.
+            </p>
+            <div className="pt-2 border-t border-zinc-100 text-xs md:text-sm">
+              <a href="mailto:contact@billscollection.co" className="text-zinc-900 font-bold hover:text-[#d4af37] transition-colors">
+                Submit Request &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );

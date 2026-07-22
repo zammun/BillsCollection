@@ -1,60 +1,114 @@
 export default function CaliforniaTransparencyPage() {
   return (
-    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-16 flex flex-col gap-8">
-      <h1 className="text-4xl font-semibold">California Transparency in Supply Chains Act</h1>
+    <div className="suave-luxury-theme text-zinc-800 py-12 md:py-16 pb-20 px-6 font-sans antialiased">
+      <div className="max-w-4xl mx-auto space-y-12">
+        
+        {/* Header Section */}
+        <div className="text-center space-y-3">
+          <h1 className="text-3xl md:text-5xl font-bold text-zinc-900 tracking-tight">
+            California <span className="text-[#d4af37]">Supply Chains</span> Act
+          </h1>
+          <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">
+            Last Updated: July 15, 2026
+          </p>
+          <p className="text-base md:text-lg text-zinc-600 max-w-2xl mx-auto leading-relaxed">
+            Disclosing our commitment to ethical sourcing, fair labor practices, and eradicating human trafficking from direct supply chains.
+          </p>
+        </div>
 
-      <div className="flex flex-col gap-6 text-gray-700 leading-relaxed">
-        <p>
-          <strong>Last Updated: July 15, 2026</strong>
-        </p>
-        <p>
-          The California Transparency in Supply Chains Act of 2010 (SB 657) requires retailers and manufacturers doing business in California to disclose their efforts to eradicate slavery and human trafficking from their direct supply chains. At Bills Collection, LLC, we are deeply committed to conducting our business ethically, responsibly, and with profound respect for human rights.
-        </p>
-      </div>
+        {/* Core Statement Card */}
+        <div className="bg-white border border-zinc-200/60 rounded-3xl p-8 md:p-12 shadow-xl space-y-6">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">
+            SB 657 Compliance
+          </span>
+          <h2 className="text-2xl font-bold text-zinc-900 tracking-tight">
+            Ethical Business Standards
+          </h2>
+          <div className="space-y-4 text-zinc-600 leading-relaxed text-sm md:text-base">
+            <p>
+              The California Transparency in Supply Chains Act of 2010 (SB 657) requires retailers and manufacturers doing business in California to disclose their efforts to eradicate slavery and human trafficking from their direct supply chains.
+            </p>
+            <p>
+              At Bills Collection, LLC, we are deeply committed to conducting our business ethically, responsibly, and with profound respect for human rights across every stage of design, manufacturing, and distribution.
+            </p>
+          </div>
+        </div>
 
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">1. Verification</h2>
-        <p className="text-gray-700 leading-relaxed">
-          We actively evaluate and address the risks of human trafficking and slavery in our product supply chains. Before partnering with new vendors or factories, we conduct preliminary risk assessments based on geographic location, manufacturing processes, and industry history to ensure they align with our ethical standards.
-        </p>
-      </div>
+        {/* Supply Chain Protocols Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <div className="bg-white border border-zinc-200/60 rounded-3xl p-8 shadow-xl space-y-3">
+            <span className="text-xs font-bold text-[#d4af37] tracking-widest uppercase">
+              Risk Evaluation
+            </span>
+            <h3 className="text-xl font-bold text-zinc-900">Verification</h3>
+            <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
+              We actively evaluate and address human trafficking risks in our product supply chains. Before onboarding new vendors, preliminary risk assessments review geographic location, manufacturing processes, and industry history.
+            </p>
+          </div>
 
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">2. Supplier Audits</h2>
-        <p className="text-gray-700 leading-relaxed">
-          We monitor our suppliers’ compliance with our strict vendor code of conduct. While we currently rely on scheduled, announced evaluations conducted by our internal supply chain team rather than independent third-party unannounced audits, we hold our manufacturing partners to zero-tolerance standards regarding forced labor and human trafficking.
-        </p>
-      </div>
+          <div className="bg-white border border-zinc-200/60 rounded-3xl p-8 shadow-xl space-y-3">
+            <span className="text-xs font-bold text-[#d4af37] tracking-widest uppercase">
+              Compliance Oversight
+            </span>
+            <h3 className="text-xl font-bold text-zinc-900">Supplier Audits</h3>
+            <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
+              We monitor direct suppliers against a strict vendor code of conduct. Through scheduled evaluations conducted by our internal supply chain team, we enforce zero-tolerance standards regarding forced labor.
+            </p>
+          </div>
 
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">3. Certification</h2>
-        <p className="text-gray-700 leading-relaxed">
-          We require our direct suppliers to certify that the materials incorporated into our products comply with the laws regarding slavery and human trafficking of the country or countries in which they are doing business. Compliance with our code of conduct is a mandatory component of our master service agreements.
-        </p>
-      </div>
+          <div className="bg-white border border-zinc-200/60 rounded-3xl p-8 shadow-xl space-y-3">
+            <span className="text-xs font-bold text-[#d4af37] tracking-widest uppercase">
+              Mandatory Attestation
+            </span>
+            <h3 className="text-xl font-bold text-zinc-900">Certification</h3>
+            <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
+              Direct suppliers must certify that all incorporated materials comply with anti-slavery and human trafficking laws in their operating jurisdictions. Compliance is a mandatory component of our master service agreements.
+            </p>
+          </div>
 
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">4. Internal Accountability</h2>
-        <p className="text-gray-700 leading-relaxed">
-          We maintain internal accountability standards and procedures for employees and contractors failing to meet our company standards regarding slavery and trafficking. If we discover that a supplier, employee, or contractor is in violation of our policies, we take swift remedial action, which may include terminating the business relationship or employment.
-        </p>
-      </div>
+          <div className="bg-white border border-zinc-200/60 rounded-3xl p-8 shadow-xl space-y-3">
+            <span className="text-xs font-bold text-[#d4af37] tracking-widest uppercase">
+              Enforcement Protocols
+            </span>
+            <h3 className="text-xl font-bold text-zinc-900">Internal Accountability</h3>
+            <p className="text-xs md:text-sm text-zinc-600 leading-relaxed">
+              We enforce internal accountability standards for employees and contractors. Any partner or employee failing to meet our anti-trafficking standards faces immediate remedial action, up to contract termination.
+            </p>
+          </div>
 
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">5. Training</h2>
-        <p className="text-gray-700 leading-relaxed">
-          We provide specialized training on human trafficking and slavery, particularly with respect to mitigating risks within the supply chains of products, to our company employees and management who have direct responsibility for supply chain management. This ensures our team is equipped to identify red flags and enforce our ethical standards.
-        </p>
-      </div>
+        </div>
 
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
-        <p className="text-gray-700 leading-relaxed">
-          If you have any questions regarding our supply chain practices or this disclosure, please reach out to us at{' '}
-          <a href="mailto:contact@billscollection.co" className="text-indigo-600 hover:underline">
-            contact@billscollection.co
-          </a>.
-        </p>
+        {/* Training & Contact Grid Card */}
+        <div className="bg-white border border-zinc-200/60 rounded-3xl p-8 md:p-12 shadow-xl space-y-8">
+          
+          <div className="space-y-3">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#d4af37]">
+              Education & Awareness
+            </span>
+            <h2 className="text-2xl font-bold text-zinc-900 tracking-tight">
+              Supply Chain Training
+            </h2>
+            <p className="text-zinc-600 leading-relaxed text-sm md:text-base">
+              We provide specialized training on mitigating human trafficking and forced labor risks to company personnel and management with direct responsibility for supply chain logistics. This equips our management team to identify red flags and rigorously enforce ethical standards.
+            </p>
+          </div>
+
+          <div className="pt-6 border-t border-zinc-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <p className="font-bold text-zinc-900 text-base">Questions About Our Supply Chain Practices?</p>
+              <p className="text-xs text-zinc-500 mt-0.5">Reach out to our ethics desk for further information or inquiry details.</p>
+            </div>
+            <a 
+              href="mailto:contact@billscollection.co" 
+              className="inline-block px-6 py-3.5 bg-zinc-900 text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-zinc-800 transition-all shadow-md active:scale-[0.98] cursor-pointer shrink-0"
+            >
+              Email Ethics Desk
+            </a>
+          </div>
+
+        </div>
+
       </div>
     </div>
   );
