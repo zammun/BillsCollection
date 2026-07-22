@@ -47,7 +47,7 @@ const Footer = () => {
                 {/* Left */}
                 <div className='w-full md:w-1/2 lg:w-1/4 flex flex-col gap-8'>
                     <Link to='/'> 
-                        <div className='text-2xl tracking-wide'>Bills Collection</div>
+                        <div className='text-2xl tracking-wide font-bold'>Bills Collection</div>
                     </Link>
                     <p>365 Carteret Avenue, Carteret, New Jersey, USA</p>
                     <span className='font-semibold'>contact@billscollection.co</span>
@@ -68,7 +68,7 @@ const Footer = () => {
                     </div>
                 </div>
                 
-                {/* Center (Desktop Only) */}
+                {/* Center (Desktop Only - Cleaned up to 2 balanced sections) */}
                 <div className='hidden lg:flex justify-start gap-24 w-1/2'> 
                     <div className='flex flex-col gap-6'>
                         <h1 className='font-medium text-lg'>COMPANY</h1>
@@ -77,14 +77,6 @@ const Footer = () => {
                             <Link to='/careers' className="hover:text-indigo-600 transition-colors">Careers</Link>
                             <Link to='/affiliates' className="hover:text-indigo-600 transition-colors">Affiliates</Link>
                             <Link to='/contact' className="hover:text-indigo-600 transition-colors">Contact Us</Link>
-                        </div>
-                    </div>
-                    <div className='flex flex-col gap-6'>
-                        <h1 className='font-medium text-lg'>SHOP</h1>
-                        <div className='flex flex-col gap-6'>
-                            <Link to='/shop?sort=newest' className="hover:text-indigo-600 transition-colors">New Arrivals</Link>
-                            <Link to='/shop?type=Accessories' className="hover:text-indigo-600 transition-colors">Accessories</Link>
-                            <Link to='/shop' className="hover:text-indigo-600 transition-colors">All Products</Link>
                         </div>
                     </div>
                     <div className='flex flex-col gap-6'>
@@ -174,6 +166,8 @@ const Footer = () => {
                     <Link to='/pricingpolicy' className='hover:text-gray-900 transition-colors'>Pricing Policy</Link>
                     <span className='hidden md:block'>|</span>
                     <Link to='/accessibility' className='hover:text-gray-900 transition-colors'>Accessibility</Link>
+                    <span className='hidden md:block'>|</span>
+                    <Link to='/legalnotice' className='hover:text-gray-900 transition-colors'>Legal Notice</Link>
                 </div>
 
                 {/* Copyright & Localization */}
@@ -198,7 +192,7 @@ const Footer = () => {
             {/* Scroll to Top Button */}
             <button 
                 onClick={scrollToTop}
-                className='fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-white text-black p-3 rounded-full shadow-lg ring-1 ring-gray-200/60 hover:bg-gray-50 transition-all hover:-translate-y-1 z-50 flex items-center justify-center'
+                className='fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-white text-black p-3 rounded-full shadow-lg ring-1 ring-gray-200/60 hover:bg-gray-50 transition-all hover:-translate-y-1 z-50 flex items-center justify-center cursor-pointer'
                 aria-label="Scroll to top"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useCartStore } from '../store/useCartStore';
 import { supabase } from '../supabase'; 
 
-export const ProductCard = ({ product }: { product: any }) => {
+export const ProductCard = React.memo(({ product }: { product: any }) => {
     const [selectedSize, setSelectedSize] = useState('S'); 
     const [currentImgIdx, setCurrentImgIdx] = useState(0);
     const [isAdded, setIsAdded] = useState(false); 
@@ -30,7 +30,7 @@ export const ProductCard = ({ product }: { product: any }) => {
         };
     }, []);
 
-    // Touch gesture handlers for mobile image swiping
+    // Touch gesture handlers optimized for native vertical scroll pass-through
     const handleTouchStart = (e: React.TouchEvent) => {
         touchStartX.current = e.touches[0].clientX;
         touchStartY.current = e.touches[0].clientY;
@@ -46,14 +46,12 @@ export const ProductCard = ({ product }: { product: any }) => {
         const diffX = touchStartX.current - touchEndX;
         const diffY = touchStartY.current - touchEndY;
 
-        // Trigger slide change if gesture is primarily horizontal and > 30px
-        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
+        // Only handle horizontal swipe if horizontal distance significantly exceeds vertical drag
+        if (Math.abs(diffX) > Math.abs(diffY) * 1.5 && Math.abs(diffX) > 35) {
             isSwiping.current = true;
             if (diffX > 0) {
-                // Swiped Left -> Next Image
                 setCurrentImgIdx((prev) => (prev === images.length - 1 ? 0 : prev + 1));
             } else {
-                // Swiped Right -> Previous Image
                 setCurrentImgIdx((prev) => (prev === 0 ? images.length - 1 : prev - 1));
             }
         }
@@ -62,7 +60,6 @@ export const ProductCard = ({ product }: { product: any }) => {
         touchStartY.current = null;
     };
 
-    // Prevent accidental page navigation when completing a horizontal swipe
     const handleLinkClick = (e: React.MouseEvent) => {
         if (isSwiping.current) {
             e.preventDefault();
@@ -108,10 +105,10 @@ export const ProductCard = ({ product }: { product: any }) => {
     };
 
     return (
-        <div className='w-full flex flex-col gap-4 relative group/card'>
-            {/* Image Box with Touch Event Listeners */}
+        <div className='w-full flex flex-col gap-4 relative group/card transform-gpu'>
+            {/* Image Box with touch-pan-y allowing smooth native page scrolling */}
             <div 
-                className='relative w-full h-80 bg-transparent rounded-md overflow-hidden p-4 flex items-center justify-center group/slider'
+                className='relative w-full h-80 bg-transparent rounded-md overflow-hidden p-4 flex items-center justify-center group/slider touch-pan-y'
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
             >
@@ -121,7 +118,7 @@ export const ProductCard = ({ product }: { product: any }) => {
                     </div>
                 )}
 
-                {/* Mobile Dot Indicators for Multi-Image Items */}
+                {/* Mobile Dot Indicators */}
                 {images.length > 1 && (
                     <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-20 md:hidden pointer-events-none">
                         {images.map((_: string, idx: number) => (
@@ -166,7 +163,7 @@ export const ProductCard = ({ product }: { product: any }) => {
             </div>
 
             {images.length > 1 && (
-                <div className="flex gap-2 overflow-x-auto py-1 scrollbar-none justify-start">
+                <div className="flex gap-2 overflow-x-auto py-1 scrollbar-none justify-start touch-pan-x">
                     {images.map((url: string, idx: number) => (
                         <button
                             key={idx}
@@ -224,7 +221,9 @@ export const ProductCard = ({ product }: { product: any }) => {
             </button>
         </div>
     );
-};
+});
+
+ProductCard.displayName = 'ProductCard';
 
 const ProductList = () => {
     const [products, setProducts] = useState<any[]>([]);

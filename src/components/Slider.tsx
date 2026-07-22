@@ -30,15 +30,11 @@ const slides = [
 
 const Slider = () => {
   const [current, setCurrent] = useState(0);
-  const [isLoaded, setIsLoaded] = useState(false);
 
-  // Use refs instead of state to avoid 60fps re-renders during finger drag
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
 
   useEffect(() => {
-    setIsLoaded(true);
-
     const interval = setInterval(() => {
       setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     }, 12000);
@@ -62,13 +58,9 @@ const Slider = () => {
     const diffX = touchStartX.current - touchEndX;
     const diffY = touchStartY.current - touchEndY;
 
-    // Only trigger slide change if swipe was horizontal (diffX > diffY) and > 40px
     if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
-      if (diffX > 0) {
-        nextSlide();
-      } else {
-        prevSlide();
-      }
+      if (diffX > 0) nextSlide();
+      else prevSlide();
     }
 
     touchStartX.current = null;
@@ -79,62 +71,54 @@ const Slider = () => {
     <div 
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
-      /* touch-pan-y allows smooth vertical scrolling while preserving horizontal gestures */
-      className={`h-[calc(100dvh-80px)] overflow-hidden relative transition-opacity duration-700 ease-out touch-pan-y
-      ${isLoaded ? "opacity-100" : "opacity-0"}`}
+      /* Fixed mobile height prevents address-bar reflow stutter */
+      className="h-[550px] md:h-[calc(100vh-96px)] overflow-hidden relative touch-pan-y"
     >
-      {/* Horizontal Slider Wrapper */}
+      {/* Horizontal Slider Wrapper using percentage transforms */}
       <div 
-        className='w-max h-full flex transition-transform ease-in-out duration-1000 will-change-transform'
-        style={{ transform: `translateX(-${current * 100}vw)` }}
+        className="w-full h-full flex transition-transform ease-in-out duration-700 transform-gpu"
+        style={{ transform: `translateX(-${current * 100}%)` }}
       >
         {slides.map((slide, index) => {
           const isActive = current === index;
 
           return (
-            <div className="w-screen h-full relative flex justify-center items-center" key={slide.id}>
-              <img src={slide.img} alt={slide.title} className='w-full h-full object-cover' />
+            <div className="w-full h-full flex-shrink-0 relative flex justify-center items-center" key={slide.id}>
+              <img 
+                src={slide.img} 
+                alt={slide.title} 
+                className="w-full h-full object-cover" 
+                loading={index === 0 ? "eager" : "lazy"}
+              />
               
-              {/* Vignette Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20 pointer-events-none" />
 
-              {/* Content Overlay */}
-              <div className='absolute w-full px-6 text-center z-10 max-w-5xl flex flex-col items-center bottom-24 md:bottom-auto md:top-1/2 md:-translate-y-1/2'>
-                
-                {/* Subtitle / Tag */}
-                <span className={`text-xs md:text-sm font-semibold tracking-[0.25em] text-amber-300 uppercase mb-3 transition-all duration-700 ease-out
-                  ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-                  style={{ transitionDelay: isActive ? '300ms' : '0ms' }}
+              <div className="absolute w-full px-6 text-center z-10 max-w-5xl flex flex-col items-center bottom-16 md:bottom-auto md:top-1/2 md:-translate-y-1/2">
+                <span className={`text-xs md:text-sm font-semibold tracking-[0.25em] text-[#d4af37] uppercase mb-3 transition-all duration-500 ease-out
+                  ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
                 >
                   {slide.subtitle}
                 </span>
 
-                {/* Editorial Heading */}
-                <h1 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-black text-white mb-5 drop-shadow-2xl tracking-tight leading-[0.95] transition-all duration-700 ease-out transform
-                  ${isActive ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-16 scale-95"}`}
-                  style={{ transitionDelay: isActive ? '500ms' : '0ms' }}
+                <h1 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-black text-white mb-4 drop-shadow-2xl tracking-tight leading-[0.95] transition-all duration-500 ease-out
+                  ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
                 >
                   {slide.title}
                 </h1>
 
-                {/* Subheading */}
-                <p className={`text-sm md:text-lg text-slate-200 mb-8 max-w-md font-medium drop-shadow-md transition-all duration-700 ease-out
-                  ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-                  style={{ transitionDelay: isActive ? '600ms' : '0ms' }}
+                <p className={`text-sm md:text-lg text-slate-200 mb-8 max-w-md font-medium drop-shadow-md transition-all duration-500 ease-out
+                  ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
                 >
                   {slide.description}
                 </p>
                 
-                {/* CTA Button */}
                 <Link 
                   to={slide.url}
-                  className={`transition-all duration-500 ease-out
-                    ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-                  style={{ transitionDelay: isActive ? '750ms' : '0ms' }}
+                  className={`transition-all duration-500 ease-out ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
                 >
-                  <button className="bg-[#faf8f5] hover:bg-[#e6e4dc] border border-[#e2e0d9] text-slate-900 rounded-full px-8 py-3 font-bold transition-all">
-  Explore Collection
-</button>
+                  <button className="bg-[#faf8f5] hover:bg-[#e6e4dc] border border-[#e2e0d9] text-zinc-900 rounded-full px-8 py-3 font-bold transition-all shadow-md active:scale-95 cursor-pointer">
+                    Explore Collection
+                  </button>
                 </Link>
               </div>
             </div>
@@ -142,10 +126,10 @@ const Slider = () => {
         })}
       </div>
 
-      {/* Modern Minimal Navigation Arrows */}
+      {/* Navigation Arrows */}
       <button 
         onClick={prevSlide}
-        className="hidden md:flex absolute top-1/2 left-8 -translate-y-1/2 z-20 w-12 h-12 rounded-full glass-panel border border-white/20 items-center justify-center text-slate-900 hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer"
+        className="hidden md:flex absolute top-1/2 left-8 -translate-y-1/2 z-20 w-12 h-12 rounded-full glass-panel border border-white/20 items-center justify-center text-zinc-900 hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer"
         aria-label="Previous slide"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -155,7 +139,7 @@ const Slider = () => {
 
       <button 
         onClick={nextSlide}
-        className="hidden md:flex absolute top-1/2 right-8 -translate-y-1/2 z-20 w-12 h-12 rounded-full glass-panel border border-white/20 items-center justify-center text-slate-900 hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer"
+        className="hidden md:flex absolute top-1/2 right-8 -translate-y-1/2 z-20 w-12 h-12 rounded-full glass-panel border border-white/20 items-center justify-center text-zinc-900 hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer"
         aria-label="Next slide"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -163,13 +147,13 @@ const Slider = () => {
         </svg>
       </button>
 
-      {/* Slide Indicators */}
-      <div className='absolute left-1/2 bottom-8 -translate-x-1/2 z-20 flex gap-3'>
+      {/* Indicators */}
+      <div className="absolute left-1/2 bottom-6 -translate-x-1/2 z-20 flex gap-3">
         {slides.map((slide, index) => (
           <button 
             key={slide.id}
             onClick={() => setCurrent(index)}
-            className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${current === index ? "w-8 bg-white" : "w-2 bg-white/40 hover:bg-white/70"}`}
+            className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${current === index ? "w-8 bg-white" : "w-2 bg-white/40 hover:bg-white/70"}`}
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}

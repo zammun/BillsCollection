@@ -20,45 +20,48 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
         
         if (query.trim()) {
             navigate(`/results?search=${encodeURIComponent(query.trim())}`);
-            if (onSearch) onSearch(); // Closes mobile drawer if open
+            if (onSearch) onSearch();
         }
     };
 
     return (
-        <form onSubmit={handleSearch} className="relative flex items-center w-full justify-end">
-            {/* Left-Aligned Vector Search Icon */}
-            <div className="absolute left-3.5 pointer-events-none flex items-center text-slate-400 z-10 transition-colors group-focus-within:text-slate-900">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="m21 21-4.3-4.3"/>
-                </svg>
-            </div>
-
-            {/* Off-White Input: Full-Width on Mobile, Expanding Width Animation on Desktop */}
-            <input
-                type="text"
-                name="name"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search catalog..."
-                className="w-full md:w-48 lg:w-56 focus:md:w-72 focus:lg:w-80 py-2.5 pl-10 pr-9 bg-[#faf8f5] text-slate-900 placeholder-slate-400 rounded-xl border border-[#e2e0d9] hover:border-slate-400 focus:bg-white focus:outline-none focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 text-sm font-medium shadow-2xs transition-all duration-300 ease-out"
-            />
-
-            {/* Clear Button (X) or Search Action */}
-            {query ? (
-                <button 
-                    type="button" 
-                    onClick={() => setQuery("")}
-                    className="absolute right-3 p-1 text-slate-400 hover:text-slate-800 rounded-full cursor-pointer z-10 transition-colors"
-                    aria-label="Clear search"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M18 6 6 18M6 6l12 12" />
+        <form onSubmit={handleSearch} className="flex items-center w-full md:w-auto justify-end">
+            <div className="relative flex items-center w-full md:w-auto group">
+                
+                {/* Left-Aligned Search Icon */}
+                <div className="absolute left-3.5 pointer-events-none flex items-center text-slate-400 z-10 transition-colors group-focus-within:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.3-4.3"/>
                     </svg>
-                </button>
-            ) : (
-                <button type="submit" className="sr-only">Search</button>
-            )}
+                </div>
+
+                {/* Dark Input Matching Track Order Button (bg-slate-900) */}
+                <input
+                    type="text"
+                    name="name"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search catalog..."
+                    className="w-full md:w-48 lg:w-56 focus:md:w-72 focus:lg:w-80 py-2.5 pl-12 pr-9 bg-slate-900 text-white placeholder-slate-400 rounded-xl border border-slate-800 hover:border-slate-700 focus:bg-slate-950 focus:outline-none focus:border-slate-700 focus:ring-4 focus:ring-slate-800/50 text-sm font-medium shadow-md transition-all duration-300 ease-out"
+                />
+
+                {/* Clear Button (X) */}
+                {query ? (
+                    <button 
+                        type="button" 
+                        onClick={() => setQuery("")}
+                        className="absolute right-3 p-1 text-slate-400 hover:text-white rounded-full cursor-pointer z-10 transition-colors"
+                        aria-label="Clear search"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M18 6 6 18M6 6l12 12" />
+                        </svg>
+                    </button>
+                ) : (
+                    <button type="submit" className="sr-only">Search</button>
+                )}
+            </div>
         </form>
     );
 };
