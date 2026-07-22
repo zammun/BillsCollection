@@ -257,7 +257,7 @@ const Navbar = () => {
 
         {/* Mobile Drawer Panel with Smooth Transition */}
         <div 
-          className={`absolute top-20 left-0 w-full bg-[#D9D7D0] backdrop-blur-xl p-6 border-b border-slate-300/60 shadow-2xl flex flex-col gap-6 md:hidden z-50 transition-all duration-300 ease-in-out transform-gpu origin-top ${
+          className={`absolute top-20 left-0 w-full bg-[#E6E4DC]/40 backdrop-blur-md p-6 border-b border-slate-300/60 shadow-2xl flex flex-col gap-6 md:hidden z-50 transition-all duration-300 ease-in-out transform-gpu origin-top ${
             mobileMenuOpen 
               ? "opacity-100 scale-y-100 translate-y-0 pointer-events-auto" 
               : "opacity-0 scale-y-95 -translate-y-2 pointer-events-none"

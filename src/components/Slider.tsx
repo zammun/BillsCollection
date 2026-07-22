@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const slides = [
@@ -43,12 +43,21 @@ const Slider = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Instantly jump to the first REAL slide on component mount
-  useEffect(() => {
-    if (scrollContainerRef.current) {
-      const width = scrollContainerRef.current.offsetWidth;
-      scrollContainerRef.current.scrollLeft = width;
+  useLayoutEffect(() => {
+  const container = scrollContainerRef.current;
+  if (container) {
+    const width = container.offsetWidth;
+    if (width > 0) {
+      container.scrollLeft = width * current;
+    } else {
+      requestAnimationFrame(() => {
+        if (container) {
+          container.scrollLeft = container.offsetWidth * current;
+        }
+      });
     }
-  }, []);
+  }
+}, [current]);
 
   // Snap tightly aligned on browser window resizes
   useEffect(() => {
