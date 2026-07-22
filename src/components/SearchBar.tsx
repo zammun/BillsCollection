@@ -28,22 +28,22 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
         <form onSubmit={handleSearch} className="flex items-center w-full md:w-auto justify-end">
             <div className="relative flex items-center w-full md:w-auto group">
                 
-                {/* Left-Aligned Search Icon */}
-                <div className="absolute left-3.5 pointer-events-none flex items-center text-slate-400 z-10 transition-colors group-focus-within:text-white">
+                {/* Left-Aligned Search Icon (White) */}
+                <div className="absolute left-3.5 pointer-events-none flex items-center text-white z-10">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="11" cy="11" r="8"/>
                         <path d="m21 21-4.3-4.3"/>
                     </svg>
                 </div>
 
-                {/* Dark Input Matching Track Order Button (bg-slate-900) */}
+                {/* Dark Input with Pure White Text & Placeholder */}
                 <input
                     type="text"
                     name="name"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search catalog..."
-                    className="w-full md:w-48 lg:w-56 focus:md:w-72 focus:lg:w-80 py-2.5 pl-12 pr-9 bg-slate-900 text-white placeholder-slate-400 rounded-xl border border-slate-800 hover:border-slate-700 focus:bg-slate-950 focus:outline-none focus:border-slate-700 focus:ring-4 focus:ring-slate-800/50 text-sm font-medium shadow-md transition-all duration-300 ease-out"
+                    className="w-full md:w-48 lg:w-56 focus:md:w-72 focus:lg:w-80 py-2.5 pl-12 pr-9 bg-slate-900 text-white placeholder-white rounded-xl border border-slate-800 hover:border-slate-700 focus:bg-slate-950 focus:outline-none focus:border-slate-700 focus:ring-4 focus:ring-slate-800/50 text-sm font-medium shadow-md transition-all duration-300 ease-out"
                 />
 
                 {/* Clear Button (X) */}

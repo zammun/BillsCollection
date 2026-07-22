@@ -7,7 +7,6 @@ interface ProductImagesProps {
 const ProductImages = ({ images }: ProductImagesProps) => {
     const [index, setIndex] = useState(0);
     
-    // Store touch coordinates using refs to avoid React re-renders during gestures
     const touchStartX = useRef<number | null>(null);
     const touchStartY = useRef<number | null>(null);
 
@@ -15,7 +14,6 @@ const ProductImages = ({ images }: ProductImagesProps) => {
         return <div className="w-full h-80 bg-[#e6e4dc]/50 rounded-xl animate-pulse" />;
     }
 
-    // --- MOBILE TOUCH SWIPE LOGIC ---
     const minSwipeDistance = 40;
 
     const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
@@ -32,13 +30,10 @@ const ProductImages = ({ images }: ProductImagesProps) => {
         const diffX = touchStartX.current - touchEndX;
         const diffY = touchStartY.current - touchEndY;
 
-        // Only trigger slide change if swipe movement was primarily horizontal (diffX > diffY)
         if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > minSwipeDistance) {
             if (diffX > 0) {
-                // Swiped Left -> Next Image
                 setIndex((prev) => (prev + 1) % images.length);
             } else {
-                // Swiped Right -> Previous Image
                 setIndex((prev) => (prev - 1 + images.length) % images.length);
             }
         }
@@ -52,13 +47,12 @@ const ProductImages = ({ images }: ProductImagesProps) => {
 
     return (
         <div className="flex flex-col gap-4">
-            {/* Main Featured Image Box */}
+            {/* Main Featured Image Box - Removed explicit touch CSS classes to allow vertical scrolls */}
             <div 
-                className="h-[420px] sm:h-[500px] relative bg-transparent rounded-2xl overflow-hidden p-4 flex items-center justify-center touch-pan-y group/gallery"
+                className="h-[420px] sm:h-[500px] relative bg-transparent rounded-2xl overflow-hidden p-4 flex items-center justify-center group/gallery"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
             >
-                {/* Desktop Prev / Next Navigation Arrows */}
                 {images.length > 1 && (
                     <>
                         <button
@@ -78,7 +72,6 @@ const ProductImages = ({ images }: ProductImagesProps) => {
                     </>
                 )}
 
-                {/* Mobile Dot Indicators */}
                 {images.length > 1 && (
                     <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10 md:hidden p-2 bg-slate-900/10 rounded-full backdrop-blur-xs">
                         {images.map((_, dotIdx) => (
@@ -92,7 +85,6 @@ const ProductImages = ({ images }: ProductImagesProps) => {
                     </div>
                 )}
 
-                {/* Main Product Image */}
                 <img 
                     src={images[index]} 
                     alt="Product preview" 
@@ -100,7 +92,6 @@ const ProductImages = ({ images }: ProductImagesProps) => {
                 />
             </div>
             
-            {/* Thumbnail Grid Selector */}
             {images.length > 1 && (
                 <div className="flex gap-3 overflow-x-auto py-2 scrollbar-hide">
                     {images.map((url, idx) => (

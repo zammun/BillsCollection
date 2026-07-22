@@ -192,7 +192,7 @@ const Footer = () => {
             {/* Scroll to Top Button */}
 <button 
     onClick={scrollToTop}
-    className='fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-[#E6E4DC]/60 backdrop-blur-md text-slate-800 p-3 rounded-full shadow-md border border-slate-300/60 hover:bg-[#E6E4DC]/90 hover:scale-105 transition-all duration-300 z-50 flex items-center justify-center cursor-pointer transform-gpu'
+    className='fixed bottom-6 right-6 md:bottom-10 md:right-10 bg-[#E6E4DC]/10 backdrop-blur-md text-slate-800 p-3 rounded-full shadow-md border border-slate-300/60 hover:bg-[#E6E4DC]/90 hover:scale-105 transition-all duration-300 z-50 flex items-center justify-center cursor-pointer transform-gpu'
     aria-label="Scroll to top"
 >
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
