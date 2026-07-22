@@ -34,9 +34,9 @@ const AdminPage = () => {
     if (!authorized) return null;
 
     return (
-        <div className="suave-luxury-theme flex flex-col md:flex-row font-sans antialiased min-h-[calc(100vh-6rem)]">
+        <div className="suave-luxury-theme flex flex-col md:flex-row font-sans antialiased flex-1 min-h-[calc(100vh-20rem)] w-full relative">
             {/* Mobile Header Bar */}
-            <header className="sticky top-0 z-10 bg-[#f4f3ef]/95 backdrop-blur-md flex items-center justify-between p-4 border-b border-zinc-200/60 md:hidden">
+            <header className="sticky top-20 z-10 bg-[#E6E4DC]/95 backdrop-blur-md flex items-center justify-between p-4 border-b border-zinc-200/60 md:hidden">
                 <button 
                     onClick={() => setIsSidebarOpen(true)}
                     className="text-zinc-800 p-2 rounded-xl cursor-pointer border border-zinc-200/80 bg-white shadow-2xs"
@@ -66,7 +66,7 @@ const AdminPage = () => {
 
             {/* Global Admin Sidebar */}
             <aside className={`w-64 bg-zinc-900 text-white flex flex-col justify-between p-6 flex-shrink-0
-                fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out md:static md:translate-x-0 shadow-2xl
+                fixed top-20 bottom-0 left-0 z-40 transform transition-transform duration-300 ease-in-out md:static md:translate-x-0 shadow-2xl overflow-y-auto
                 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
             `}>
                 <div className="flex flex-col gap-8">
@@ -116,7 +116,7 @@ const AdminPage = () => {
             </aside>
 
             {/* Dynamic Dashboard Target Render Frame */}
-            <main className="flex-1 p-6 md:p-10 overflow-y-auto">
+            <main className="flex-1 p-6 md:p-10 overflow-y-auto w-full">
                 <div className="max-w-7xl mx-auto">
                     {activeTab === 'products' ? <ProductsDashboard /> : <OrdersDashboard />}
                 </div>
