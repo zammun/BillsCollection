@@ -42,28 +42,29 @@ const Slider = () => {
   const [current, setCurrent] = useState(1); 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Instantly jump to the first REAL slide on component mount only
+  // Use getBoundingClientRect for precise fractional width on mobile screens
   useLayoutEffect(() => {
     const container = scrollContainerRef.current;
     if (container) {
-      const width = container.offsetWidth;
+      const width = container.getBoundingClientRect().width;
       if (width > 0) {
         container.scrollLeft = width * current;
       } else {
         requestAnimationFrame(() => {
           if (container) {
-            container.scrollLeft = container.offsetWidth * current;
+            container.scrollLeft = container.getBoundingClientRect().width * current;
           }
         });
       }
     }
-  }, []); // Removed [current] dependency to prevent jitter on slide change
+  }, []); 
 
   // Snap tightly aligned on browser window resizes
   useEffect(() => {
     const handleResize = () => {
-      if (scrollContainerRef.current) {
-        scrollContainerRef.current.scrollLeft = scrollContainerRef.current.offsetWidth * current;
+      const container = scrollContainerRef.current;
+      if (container) {
+        container.scrollLeft = container.getBoundingClientRect().width * current;
       }
     };
     window.addEventListener('resize', handleResize);
@@ -80,10 +81,10 @@ const Slider = () => {
 
   // INSTANT SCROLL & INFINITE LOOP TELEPORT: Zero lag, zero rewind glitch
   const handleScroll = () => {
-    if (!scrollContainerRef.current) return;
     const container = scrollContainerRef.current;
+    if (!container) return;
     const scrollPosition = container.scrollLeft;
-    const slideWidth = container.offsetWidth;
+    const slideWidth = container.getBoundingClientRect().width;
     if (slideWidth === 0) return;
     
     // Update active indicators/animations
@@ -93,16 +94,17 @@ const Slider = () => {
     // The Invisible Cut: If user swipes onto a clone, teleport instantly to the real slide
     if (scrollPosition <= 0) {
       container.scrollLeft = slideWidth * slides.length;
-    } else if (scrollPosition >= slideWidth * (slides.length + 1) - 1) { // -1 accounts for sub-pixel rendering
+    } else if (scrollPosition >= slideWidth * (slides.length + 1) - 1) { 
       container.scrollLeft = slideWidth;
     }
   };
 
   // Programmatic scroll (used for buttons and auto-advance)
   const scrollToSlide = (index: number) => {
-    if (!scrollContainerRef.current) return;
-    const slideWidth = scrollContainerRef.current.offsetWidth;
-    scrollContainerRef.current.scrollTo({ 
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    const slideWidth = container.getBoundingClientRect().width;
+    container.scrollTo({ 
       left: slideWidth * index, 
       behavior: 'smooth' 
     });
@@ -121,7 +123,6 @@ const Slider = () => {
       >
         {extendedSlides.map((slide, index) => {
           
-          // Keeps clones and real slides perfectly synchronized so they teleport invisibly
           const isActive = 
             index === current || 
             (current === 0 && index === slides.length) || 
@@ -130,7 +131,7 @@ const Slider = () => {
             (current === slides.length && index === 0);
 
           return (
-            <div className="w-full h-full flex-shrink-0 relative flex justify-center items-center snap-center snap-always overflow-hidden" key={`${slide.id}-${index}`}>
+            <div className="w-full h-full flex-shrink-0 relative flex justify-center items-center snap-center overflow-hidden" key={`${slide.id}-${index}`}>
               
               <img 
                 src={slide.img} 
@@ -142,7 +143,7 @@ const Slider = () => {
               
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20 pointer-events-none" />
 
-              <div className="absolute w-full px-6 text-center z-10 max-w-5xl flex flex-col items-center bottom-28 md:bottom-1000 md:top-1/2 md:-translate-y-1/2">
+              <div className="absolute w-full px-6 text-center z-10 max-w-5xl flex flex-col items-center bottom-28 md:bottom-auto md:top-1/2 md:-translate-y-1/2">
                 
                 <span className={`text-xs md:text-sm font-semibold text-[#d4af37] uppercase mb-2 md:mb-3 transition-all duration-1000 delay-100 ease-out transform-gpu
                   ${isActive ? "opacity-100 translate-y-0 tracking-[0.25em] blur-0" : "opacity-0 translate-y-10 tracking-[1em] blur-md"}`}
@@ -166,7 +167,7 @@ const Slider = () => {
                   to={slide.url}
                   className={`transition-all duration-1000 delay-700 ease-out transform-gpu ${isActive ? "opacity-100 translate-y-0 blur-0" : "opacity-0 translate-y-10 blur-sm"}`}
                 >
-                  <button className="bg-[#faf8f5] hover:bg-[#b8b5a6] border border-[#e2e0d9] hover:border-[#c4c2b7] text-zinc-900 rounded-full px-6 py-2.5 md:px-8 md:py-3 text-sm md:text-base font-bold transition-all shadow-md active:scale-95 cursor-pointer">
+                  <button className="bg-[#faf8f5] hover:bg-[#b8b5a6] border border-[#e2e0d9] hover:border-[#a8a598] text-zinc-900 rounded-full px-6 py-2.5 md:px-8 md:py-3 text-sm md:text-base font-bold transition-all shadow-md active:scale-95 cursor-pointer">
                     Explore Collection
                   </button>
                 </Link>
@@ -177,25 +178,25 @@ const Slider = () => {
       </div>
 
       {/* Navigation Arrows */}
-<button 
-  onClick={prevSlide}
-  className="hidden md:flex absolute top-[calc(50%+24px)] md:top-[calc(50%+32px)] left-8 -translate-y-1/2 z-20 w-12 h-12 rounded-full glass-panel border border-white/20 items-center justify-center text-zinc-900 hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer"
-  aria-label="Previous slide"
->
-  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="m15 18-6-6 6-6"/>
-  </svg>
-</button>
+      <button 
+        onClick={prevSlide}
+        className="hidden md:flex absolute top-[calc(50%+24px)] md:top-[calc(50%+32px)] left-8 -translate-y-1/2 z-20 w-12 h-12 rounded-full glass-panel border border-white/20 items-center justify-center text-zinc-900 hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer"
+        aria-label="Previous slide"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m15 18-6-6 6-6"/>
+        </svg>
+      </button>
 
-<button 
-  onClick={nextSlide}
-  className="hidden md:flex absolute top-[calc(50%+24px)] md:top-[calc(50%+32px)] right-8 -translate-y-1/2 z-20 w-12 h-12 rounded-full glass-panel border border-white/20 items-center justify-center text-zinc-900 hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer"
-  aria-label="Next slide"
->
-  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="m9 18 6-6-6-6"/>
-  </svg>
-</button>
+      <button 
+        onClick={nextSlide}
+        className="hidden md:flex absolute top-[calc(50%+24px)] md:top-[calc(50%+32px)] right-8 -translate-y-1/2 z-20 w-12 h-12 rounded-full glass-panel border border-white/20 items-center justify-center text-zinc-900 hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg cursor-pointer"
+        aria-label="Next slide"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m9 18 6-6-6-6"/>
+        </svg>
+      </button>
 
       {/* Indicators */}
       <div className="absolute left-1/2 bottom-6 md:bottom-8 -translate-x-1/2 z-20 flex gap-3">
