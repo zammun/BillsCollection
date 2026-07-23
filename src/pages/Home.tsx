@@ -57,9 +57,19 @@ const HomePage = () => {
             </ScrollReveal>
           </div>
 
-          {/* Box 2 - Middle Video Box */}
+          {/* Box 2 - Middle Media Box (GIF on Mobile, Video on Desktop) */}
           <div className="col-span-2 relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs cursor-pointer active:scale-[0.97] transition-transform duration-300 ease-out">
             <ScrollReveal delay="delay-100" className="h-full w-full">
+              
+              {/* MOBILE GIF (Hidden on md and larger screens) */}
+              <img 
+                src="/vid.gif" 
+                alt="In Motion" 
+                loading="eager"
+                className="block md:hidden w-full h-full object-cover object-center transition-transform duration-500 ease-out opacity-85"
+              />
+
+              {/* DESKTOP VIDEO (Hidden on mobile screens) */}
               <video 
                 ref={videoRef} 
                 src="/vid.mp4" 
@@ -67,8 +77,9 @@ const HomePage = () => {
                 loop 
                 muted 
                 playsInline
-                className="w-full h-full object-cover object-center transition-transform duration-500 ease-out md:group-hover:scale-[1.02] opacity-85 md:group-hover:opacity-75"
+                className="hidden md:block w-full h-full object-cover object-center transition-transform duration-500 ease-out md:group-hover:scale-[1.02] opacity-85 md:group-hover:opacity-75"
               />
+              
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10 pointer-events-none" />
               <div className="absolute bottom-4 left-6 text-white z-10">
                 <p className="text-[10px] uppercase tracking-widest font-bold text-slate-300 mb-0.5">In Motion</p>
