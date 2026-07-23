@@ -63,7 +63,7 @@ const HomePage = () => {
               
               {/* MOBILE GIF (Hidden on md and larger screens) */}
               <img 
-                src="/vid.gif" 
+                src="/gif.gif" 
                 alt="In Motion" 
                 loading="eager"
                 className="block md:hidden w-full h-full object-cover object-center transition-transform duration-500 ease-out opacity-85"
