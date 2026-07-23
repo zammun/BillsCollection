@@ -1,9 +1,24 @@
+import { useEffect, useRef } from "react"; // 1. Import useRef and useEffect
 import Slider from "../components/Slider";
 import ProductList from "../components/ProductList";
 import Filter from "../components/Filter";
 import ScrollReveal from "../components/ScrollReveal";
 
 const HomePage = () => {
+  // 2. Create a reference for the video
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // 3. Force mobile browsers to respect the muted/autoplay rules via direct DOM manipulation
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      videoRef.current.play().catch((err) => {
+        console.log("Autoplay prevented by browser:", err);
+      });
+    }
+  }, []);
+
   return (
     <div className="pb-8 -mt-20 md:-mt-24">
       <Slider />
@@ -44,10 +59,11 @@ const HomePage = () => {
             </ScrollReveal>
           </div>
 
-          {/* Box 2 - Middle Video Box (NEW) */}
+          {/* Box 2 - Middle Video Box (WITH REF APPLIED) */}
           <div className="col-span-2 relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
             <ScrollReveal delay="delay-100" className="h-full w-full">
               <video 
+                ref={videoRef} // 4. Attach the ref here
                 src="/vid.mp4" 
                 autoPlay 
                 loop 
@@ -63,7 +79,7 @@ const HomePage = () => {
             </ScrollReveal>
           </div>
           
-          {/* Box 3 - Top Right Stack Card (Shifted downwards) */}
+          {/* Box 3 - Top Right Stack Card */}
           <div className="relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
             <ScrollReveal delay="delay-200" className="h-full w-full">
               <img 
@@ -80,7 +96,7 @@ const HomePage = () => {
             </ScrollReveal>
           </div>
 
-          {/* Box 4 - Bottom Right Stack Card (Shifted downwards) */}
+          {/* Box 4 - Bottom Right Stack Card */}
           <div className="relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
             <ScrollReveal delay="delay-300" className="h-full w-full">
               <img 
@@ -97,7 +113,7 @@ const HomePage = () => {
             </ScrollReveal>
           </div>
           
-          {/* Box 5 - Wide Horizontal Banner (Expanded to fill bottom row) */}
+          {/* Box 5 - Wide Horizontal Banner */}
           <div className="col-span-2 md:col-span-4 relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
             <ScrollReveal delay="delay-500" className="h-full w-full">
               <img 
