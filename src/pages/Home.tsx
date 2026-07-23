@@ -1,14 +1,12 @@
-import { useEffect, useRef } from "react"; // 1. Import useRef and useEffect
+import { useEffect, useRef } from "react"; 
 import Slider from "../components/Slider";
 import ProductList from "../components/ProductList";
 import Filter from "../components/Filter";
 import ScrollReveal from "../components/ScrollReveal";
 
 const HomePage = () => {
-  // 2. Create a reference for the video
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // 3. Force mobile browsers to respect the muted/autoplay rules via direct DOM manipulation
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.defaultMuted = true;
@@ -42,7 +40,7 @@ const HomePage = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px] sm:auto-rows-[260px] md:auto-rows-[320px]">
           
           {/* Box 1 - Large Feature Hero */}
-          <div className="col-span-2 row-span-2 relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
+          <div className="col-span-2 row-span-2 relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs cursor-pointer active:scale-[0.97] transition-transform duration-300 ease-out">
             <ScrollReveal className="h-full w-full">
               <img 
                 src="/15.jpg" 
@@ -59,11 +57,11 @@ const HomePage = () => {
             </ScrollReveal>
           </div>
 
-          {/* Box 2 - Middle Video Box (WITH REF APPLIED) */}
-          <div className="col-span-2 relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
+          {/* Box 2 - Middle Video Box */}
+          <div className="col-span-2 relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs cursor-pointer active:scale-[0.97] transition-transform duration-300 ease-out">
             <ScrollReveal delay="delay-100" className="h-full w-full">
               <video 
-                ref={videoRef} // 4. Attach the ref here
+                ref={videoRef} 
                 src="/vid.mp4" 
                 autoPlay 
                 loop 
@@ -80,7 +78,7 @@ const HomePage = () => {
           </div>
           
           {/* Box 3 - Top Right Stack Card */}
-          <div className="relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
+          <div className="relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs cursor-pointer active:scale-[0.96] transition-transform duration-300 ease-out">
             <ScrollReveal delay="delay-200" className="h-full w-full">
               <img 
                 src="/14.jpg" 
@@ -97,7 +95,7 @@ const HomePage = () => {
           </div>
 
           {/* Box 4 - Bottom Right Stack Card */}
-          <div className="relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
+          <div className="relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs cursor-pointer active:scale-[0.96] transition-transform duration-300 ease-out">
             <ScrollReveal delay="delay-300" className="h-full w-full">
               <img 
                 src="/11.jpg" 
@@ -114,7 +112,7 @@ const HomePage = () => {
           </div>
           
           {/* Box 5 - Wide Horizontal Banner */}
-          <div className="col-span-2 md:col-span-4 relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
+          <div className="col-span-2 md:col-span-4 relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs cursor-pointer active:scale-[0.98] transition-transform duration-300 ease-out">
             <ScrollReveal delay="delay-500" className="h-full w-full">
               <img 
                 src="/6.jpg" 

@@ -145,9 +145,9 @@ const OrdersDashboard = () => {
 
     return (
         <div className="text-left font-sans antialiased text-zinc-800 w-full">
-            {/* --- TOAST NOTIFICATIONS UI NODE --- */}
+            {/* --- RESPONSIVE TOAST NOTIFICATIONS UI NODE --- */}
             {toast && (
-                <div className={`fixed top-6 right-6 z-[999] flex items-center gap-3 px-5 py-3.5 rounded-2xl border bg-white shadow-xl animate-fadeIn transition-all duration-300 max-w-sm
+                <div className={`fixed bottom-6 left-4 right-4 md:bottom-auto md:top-28 md:left-auto md:right-8 z-[9999] flex items-center gap-3 px-5 py-3.5 rounded-2xl border bg-white shadow-2xl animate-fadeIn transition-all duration-300 md:max-w-sm mx-auto
                     ${toast.type === 'success' ? 'border-emerald-200' : ''}
                     ${toast.type === 'error' ? 'border-rose-200' : ''}
                     ${toast.type === 'info' ? 'border-indigo-200' : ''}
@@ -183,7 +183,9 @@ const OrdersDashboard = () => {
                             {orderToDelete === order.id && (
                                 <div className="absolute inset-0 bg-white/95 backdrop-blur-sm z-50 flex flex-col items-center justify-center p-6 text-center animate-fadeIn">
                                     <div className="w-12 h-12 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center text-lg mb-3 shadow-xs border border-rose-100 font-bold">
-                                        ✕
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M18 6L6 18M6 6l12 12" />
+                                        </svg>
                                     </div>
                                     <span className="text-xs font-bold uppercase tracking-widest text-rose-600 mb-1">
                                         Permanent Removal
@@ -250,7 +252,9 @@ const OrdersDashboard = () => {
                                         className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer"
                                         title="Remove Order"
                                     >
-                                        ✕
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M18 6L6 18M6 6l12 12" />
+                                        </svg>
                                     </button>
                                 </div>
                             </div>

@@ -376,9 +376,9 @@ const ProductsDashboard = () => {
 
     return (
         <div className="w-full font-sans antialiased text-zinc-800">
-            {/* --- TOAST NOTIFICATIONS UI NODE --- */}
+            {/* --- RESPONSIVE TOAST NOTIFICATIONS UI NODE --- */}
             {toast && (
-                <div className={`fixed top-6 right-6 z-[999] flex items-center gap-3 px-5 py-3.5 rounded-2xl border bg-white shadow-xl animate-fadeIn transition-all duration-300 max-w-sm
+                <div className={`fixed bottom-6 left-4 right-4 md:bottom-auto md:top-28 md:left-auto md:right-8 z-[9999] flex items-center gap-3 px-5 py-3.5 rounded-2xl border bg-white shadow-2xl animate-fadeIn transition-all duration-300 md:max-w-sm mx-auto
                     ${toast.type === 'success' ? 'border-emerald-200' : ''}
                     ${toast.type === 'error' ? 'border-rose-200' : ''}
                     ${toast.type === 'info' ? 'border-indigo-200' : ''}
@@ -505,20 +505,32 @@ const ProductsDashboard = () => {
                                     {existingImageUrls.map((url, idx) => (
                                         <div key={`exist-${idx}`} className="relative aspect-square rounded-xl overflow-hidden border border-zinc-200 shadow-xs">
                                             <img src={url} alt="existing" className="w-full h-full object-cover" />
-                                            <button type="button" onClick={() => removeImage(idx, true)} className="absolute top-1.5 right-1.5 bg-zinc-900/80 hover:bg-rose-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full transition-colors cursor-pointer">✕</button>
+                                            <button type="button" onClick={() => removeImage(idx, true)} className="absolute top-1.5 right-1.5 bg-zinc-900/80 hover:bg-rose-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full transition-colors cursor-pointer">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                                            </button>
                                             <div className="absolute bottom-1.5 left-1.5 flex gap-1 bg-zinc-900/70 p-0.5 rounded-lg">
-                                                <button type="button" onClick={() => moveImage(idx, 'left', true)} className="text-white text-[10px] w-4 hover:text-[#d4af37] cursor-pointer">←</button>
-                                                <button type="button" onClick={() => moveImage(idx, 'right', true)} className="text-white text-[10px] w-4 hover:text-[#d4af37] cursor-pointer">→</button>
+                                                <button type="button" onClick={() => moveImage(idx, 'left', true)} className="text-white text-[10px] w-4 hover:text-[#d4af37] flex items-center justify-center cursor-pointer">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+                                                </button>
+                                                <button type="button" onClick={() => moveImage(idx, 'right', true)} className="text-white text-[10px] w-4 hover:text-[#d4af37] flex items-center justify-center cursor-pointer">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+                                                </button>
                                             </div>
                                         </div>
                                     ))}
                                     {imagePreviews.map((url, idx) => (
                                         <div key={`new-${idx}`} className="relative aspect-square rounded-xl overflow-hidden border border-emerald-500 shadow-xs">
                                             <img src={url} alt="preview" className="w-full h-full object-cover" />
-                                            <button type="button" onClick={() => removeImage(idx, false)} className="absolute top-1.5 right-1.5 bg-zinc-900/80 hover:bg-rose-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full transition-colors cursor-pointer">✕</button>
+                                            <button type="button" onClick={() => removeImage(idx, false)} className="absolute top-1.5 right-1.5 bg-zinc-900/80 hover:bg-rose-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full transition-colors cursor-pointer">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                                            </button>
                                             <div className="absolute bottom-1.5 left-1.5 flex gap-1 bg-zinc-900/70 p-0.5 rounded-lg">
-                                                <button type="button" onClick={() => moveImage(idx, 'left', false)} className="text-white text-[10px] w-4 hover:text-emerald-300 cursor-pointer">←</button>
-                                                <button type="button" onClick={() => moveImage(idx, 'right', false)} className="text-white text-[10px] w-4 hover:text-emerald-300 cursor-pointer">→</button>
+                                                <button type="button" onClick={() => moveImage(idx, 'left', false)} className="text-white text-[10px] w-4 hover:text-emerald-300 flex items-center justify-center cursor-pointer">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+                                                </button>
+                                                <button type="button" onClick={() => moveImage(idx, 'right', false)} className="text-white text-[10px] w-4 hover:text-emerald-300 flex items-center justify-center cursor-pointer">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+                                                </button>
                                             </div>
                                         </div>
                                     ))}
@@ -573,7 +585,9 @@ const ProductsDashboard = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <button onClick={(e) => handleDeleteProduct(e, item.id, item.name)} className="text-zinc-400 hover:text-rose-600 p-1.5 rounded-lg text-xs cursor-pointer flex-shrink-0 transition-colors">✕</button>
+                                    <button onClick={(e) => handleDeleteProduct(e, item.id, item.name)} className="text-zinc-400 hover:text-rose-600 p-1.5 rounded-lg text-xs cursor-pointer flex-shrink-0 transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                                    </button>
                                 </div>
                             ))}
                         </div>
@@ -613,7 +627,9 @@ const ProductsDashboard = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <button onClick={(e) => handleDeleteTemplate(e, template.id)} className="text-zinc-400 hover:text-rose-600 p-1.5 rounded-lg text-xs cursor-pointer flex-shrink-0 transition-colors">✕</button>
+                                        <button onClick={(e) => handleDeleteTemplate(e, template.id)} className="text-zinc-400 hover:text-rose-600 p-1.5 rounded-lg text-xs cursor-pointer flex-shrink-0 transition-colors">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                                        </button>
                                     </div>
                                 ))
                             )}

@@ -184,19 +184,21 @@ const Navbar = () => {
         {/* Brand Identity Bundle + Left Mobile Burger */}
         <div className="flex items-center gap-3 md:gap-12 shrink-0">
           
-          {/* Left Mobile Burger Button */}
+          {/* Left Mobile Burger Button with Spin Animation */}
           <button 
             onClick={() => { setMobileMenuOpen(!mobileMenuOpen); setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); }}
-            className="focus:outline-none md:hidden flex items-center justify-center shrink-0 cursor-pointer text-slate-900 h-6 w-6 mr-1"
+            className="focus:outline-none md:hidden flex items-center justify-center shrink-0 cursor-pointer text-slate-900 h-10 w-10 mr-1 rounded-full active:scale-90 transition-all hover:bg-slate-900/5"
             aria-label="Toggle navigation menu"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300">
-              {mobileMenuOpen ? (
-                <path d="M18 6 6 18M6 6l12 12" />
-              ) : (
-                <path d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
+            <div className={`transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] transform-gpu ${mobileMenuOpen ? "rotate-90 scale-110" : "rotate-0 scale-100"}`}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                {mobileMenuOpen ? (
+                  <path d="M18 6 6 18M6 6l12 12" />
+                ) : (
+                  <path d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </div>
           </button>
 
           <Link to="/" className="flex items-center gap-2 md:gap-4 shrink-0" onClick={() => { setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); setMobileMenuOpen(false); }}>
@@ -255,12 +257,12 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Drawer Panel with Smooth Transition */}
+        {/* Mobile Drawer Panel with Premium Slide/Fade Animation */}
         <div 
-          className={`absolute top-20 left-0 w-full bg-[#E6E4DC]/60 backdrop-blur-md p-6 border-b border-slate-300/60 shadow-2xl flex flex-col gap-6 md:hidden z-50 transition-all duration-300 ease-in-out transform-gpu origin-top ${
+          className={`absolute top-full left-0 w-full bg-[#E6E4DC]/40 backdrop-blur-md p-6 pb-8 border-t border-b border-slate-300/30 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] flex flex-col gap-6 md:hidden z-50 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu origin-top ${
             mobileMenuOpen 
-              ? "opacity-100 scale-y-100 translate-y-0 pointer-events-auto" 
-              : "opacity-0 scale-y-95 -translate-y-2 pointer-events-none"
+              ? "opacity-100 translate-y-0 pointer-events-auto visible" 
+              : "opacity-0 -translate-y-8 pointer-events-none invisible"
           }`}
         >
           
