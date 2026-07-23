@@ -43,10 +43,29 @@ const HomePage = () => {
               </div>
             </ScrollReveal>
           </div>
-          
-          {/* Box 2 - Top Right Stack Card */}
-          <div className="relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
+
+          {/* Box 2 - Middle Video Box (NEW) */}
+          <div className="col-span-2 relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
             <ScrollReveal delay="delay-100" className="h-full w-full">
+              <video 
+                src="/vid.mp4" 
+                autoPlay 
+                loop 
+                muted 
+                playsInline
+                className="w-full h-full object-cover object-center transition-transform duration-500 ease-out md:group-hover:scale-[1.02] opacity-85 md:group-hover:opacity-75"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10 pointer-events-none" />
+              <div className="absolute bottom-4 left-6 text-white z-10">
+                <p className="text-[10px] uppercase tracking-widest font-bold text-slate-300 mb-0.5">In Motion</p>
+                <span className="font-bold tracking-tight text-lg md:text-xl">The Daily Routine</span>
+              </div>
+            </ScrollReveal>
+          </div>
+          
+          {/* Box 3 - Top Right Stack Card (Shifted downwards) */}
+          <div className="relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
+            <ScrollReveal delay="delay-200" className="h-full w-full">
               <img 
                 src="/14.jpg" 
                 alt="Outerwear" 
@@ -61,9 +80,9 @@ const HomePage = () => {
             </ScrollReveal>
           </div>
 
-          {/* Box 3 - Bottom Right Stack Card */}
+          {/* Box 4 - Bottom Right Stack Card (Shifted downwards) */}
           <div className="relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
-            <ScrollReveal delay="delay-200" className="h-full w-full">
+            <ScrollReveal delay="delay-300" className="h-full w-full">
               <img 
                 src="/11.jpg" 
                 alt="Dapper" 
@@ -78,9 +97,9 @@ const HomePage = () => {
             </ScrollReveal>
           </div>
           
-          {/* Box 4 - Wide Horizontal Banner */}
-          <div className="col-span-2 relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
-            <ScrollReveal delay="delay-300" className="h-full w-full">
+          {/* Box 5 - Wide Horizontal Banner (Expanded to fill bottom row) */}
+          <div className="col-span-2 md:col-span-4 relative group overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
+            <ScrollReveal delay="delay-500" className="h-full w-full">
               <img 
                 src="/6.jpg" 
                 alt="Lookbook" 
