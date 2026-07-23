@@ -49,7 +49,7 @@ const NavIcons = ({
   }, [totalItemsInCart]);
 
   return (
-    <div ref={containerRef} className='flex items-center gap-4 xl:gap-6 relative shrink-0'>
+    <div ref={containerRef} className='flex items-center gap-6 md:gap-4 xl:gap-6 relative shrink-0'>
       <style>{`
         @keyframes cartPop {
           0% { transform: scale(1); }
@@ -65,9 +65,7 @@ const NavIcons = ({
       <img 
         src='/profile.png' 
         alt='Profile' 
-        width={22} 
-        height={22} 
-        className="cursor-pointer shrink-0 transition-opacity duration-200 hover:opacity-75" 
+        className="w-7 h-7 md:w-[22px] md:h-[22px] cursor-pointer shrink-0 transition-opacity duration-200 hover:opacity-75" 
         id="profile-icon" 
         onClick={onProfileClick} 
       />
@@ -80,9 +78,7 @@ const NavIcons = ({
         <img 
           src='/notification.png' 
           alt='Notifications' 
-          width={22} 
-          height={22} 
-          className="shrink-0 transition-opacity duration-200 hover:opacity-75" 
+          className="w-7 h-7 md:w-[22px] md:h-[22px] shrink-0 transition-opacity duration-200 hover:opacity-75" 
         />
       </div>
       
@@ -91,13 +87,11 @@ const NavIcons = ({
         <img 
           src='/cart.png' 
           alt='Cart' 
-          width={22} 
-          height={22} 
-          className="shrink-0 transition-opacity duration-200 hover:opacity-75"
+          className="w-7 h-7 md:w-[22px] md:h-[22px] shrink-0 transition-opacity duration-200 hover:opacity-75"
         />
         
         {totalItemsInCart > 0 && (
-          <div className={`absolute -top-2.5 -right-2.5 w-5 h-5 bg-rose-600 text-white rounded-full text-[10px] font-bold flex items-center justify-center select-none shadow-xs border border-white transition-all
+          <div className={`absolute -top-1.5 -right-2 md:-top-2.5 md:-right-2.5 w-5 h-5 bg-rose-600 text-white rounded-full text-[10px] font-bold flex items-center justify-center select-none shadow-xs border border-white transition-all
             ${shouldAnimate ? 'animate-bubble-pop' : ''}`}
           >
             {totalItemsInCart}
