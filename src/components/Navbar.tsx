@@ -6,7 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useAuthContext } from "../context/AuthContext";
 import { useCartStore } from "../store/useCartStore";
 
-const UserMenu = ({ closeMenu }: { closeMenu: () => void }) => {
+const UserMenu = ({ isOpen, closeMenu }: { isOpen: boolean; closeMenu: () => void }) => {
   const { loginWithGoogle, loginWithEmail } = useAuth();
   const { user, logout } = useAuthContext();
   const navigate = useNavigate();
@@ -18,6 +18,8 @@ const UserMenu = ({ closeMenu }: { closeMenu: () => void }) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!isOpen) return; // Only listen for clicks when the menu is actually open
+
     const handleClickOutside = (event: PointerEvent) => {
       const target = event.target as Element;
       if (target.closest('#profile-icon')) return;
@@ -29,7 +31,7 @@ const UserMenu = ({ closeMenu }: { closeMenu: () => void }) => {
 
     document.addEventListener("pointerdown", handleClickOutside);
     return () => document.removeEventListener("pointerdown", handleClickOutside);
-  }, [closeMenu]);
+  }, [isOpen, closeMenu]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,79 +44,92 @@ const UserMenu = ({ closeMenu }: { closeMenu: () => void }) => {
     }
   };
 
-  if (user) {
-    const fullName = user.user_metadata?.full_name || "User";
-    const authorizedEmails = ['moneyygdaman@gmail.com'];
-    const isAdmin = authorizedEmails.includes(user.email || '');
-
-    return (
-      <div ref={menuRef} className="absolute top-full right-0 mt-3 w-72 bg-[#D9D7D0] shadow-2xl border border-slate-200/90 rounded-xl p-2 z-[100] pointer-events-auto text-base animate-fadeIn">
-        <div className="px-4 py-4 border-b border-slate-400/30">
-          <p className="font-bold text-slate-800 truncate text-lg">{fullName}</p>
-          <p className="text-sm text-slate-600 truncate mt-0.5">{user.email}</p>
-        </div>
-
-        {isAdmin && (
-          <Link to="/admin" onClick={closeMenu} className="block px-4 py-2.5 mx-1 mt-2 text-center font-bold text-sm uppercase tracking-wide rounded-lg bg-slate-800 text-white hover:bg-slate-700 transition-colors">
-            Admin Dashboard
-          </Link>
-        )}
-
-        <div className="mt-2 space-y-1">
-          <Link to="/profile" onClick={closeMenu} className="block px-4 py-2.5 text-slate-800 hover:bg-[#E6E4DC] hover:text-slate-900 rounded-md transition-colors font-medium">
-            Account Settings
-          </Link>
-          <Link to="/orders" onClick={closeMenu} className="block px-4 py-2.5 text-slate-800 hover:bg-[#E6E4DC] hover:text-slate-900 rounded-md transition-colors font-medium">
-            Order History
-          </Link>
-        </div>
-
-        <div className="border-t border-slate-400/30 my-2"></div>
-
-        <button 
-          onClick={async () => { 
-            await logout(); 
-            closeMenu(); 
-            window.location.href = "/"; 
-          }} 
-          className="w-full text-left px-4 py-2.5 hover:bg-rose-100 text-rose-700 rounded-md font-semibold transition-colors cursor-pointer"
-        >
-          Sign out
-        </button>
-      </div>
-    );
-  }
+  const fullName = user?.user_metadata?.full_name || "User";
+  const authorizedEmails = ['moneyygdaman@gmail.com'];
+  const isAdmin = authorizedEmails.includes(user?.email || '');
 
   return (
-    <div ref={menuRef} className="absolute top-full right-0 mt-3 w-[calc(100vw-32px)] sm:w-80 bg-[#D9D7D0] shadow-xl rounded-2xl p-6 z-[100] pointer-events-auto text-base border border-slate-200/60 animate-fadeIn">
-      <button onClick={loginWithGoogle} className="flex items-center justify-center w-full py-3 border border-slate-300 rounded-xl hover:bg-[#E6E4DC] min-h-[48px] text-slate-800 font-semibold transition-colors cursor-pointer shadow-sm">
-        <img src="/google.svg" alt="Google" className="w-5 h-5 mr-3" /> Sign in with Google
-      </button>
-      
-      <div className="flex items-center my-5 text-slate-500">
-        <div className="flex-1 border-t border-slate-400/40"></div>
-        <span className="px-3 text-sm font-medium">or</span>
-        <div className="flex-1 border-t border-slate-400/40"></div>
-      </div>
+    <div 
+      ref={menuRef} 
+      // Premium Slide/Fade Animation applied to the master container
+      className={`absolute top-full right-0 mt-3 z-[100] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu origin-top-right ${
+        isOpen 
+          ? "opacity-100 translate-y-0 pointer-events-auto visible scale-100" 
+          : "opacity-0 -translate-y-4 pointer-events-none invisible scale-95"
+      } ${
+        // Dynamically shift styling based on authentication state
+        user 
+          ? "w-72 bg-[#D9D7D0] shadow-2xl border border-slate-200/90 rounded-xl p-2 text-base" 
+          : "w-[calc(100vw-32px)] sm:w-80 bg-[#D9D7D0] shadow-xl rounded-2xl p-6 text-base border border-slate-200/60"
+      }`}
+    >
+      {user ? (
+        <>
+          <div className="px-4 py-4 border-b border-slate-400/30">
+            <p className="font-bold text-slate-800 truncate text-lg">{fullName}</p>
+            <p className="text-sm text-slate-600 truncate mt-0.5">{user.email}</p>
+          </div>
 
-      <form className="space-y-4" onSubmit={handleLogin}>
-        <input type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-3.5 border border-slate-300 rounded-xl bg-[#E6E4DC] focus:outline-none focus:border-slate-500 focus:bg-[#f4f3ef] text-slate-900 text-sm transition-colors placeholder-slate-500" />
-        <input type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3.5 border border-slate-300 rounded-xl bg-[#E6E4DC] focus:outline-none focus:border-slate-500 focus:bg-[#f4f3ef] text-slate-900 text-sm transition-colors placeholder-slate-500" />
-        <button type="submit" className="w-full py-3.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 font-bold transition-colors cursor-pointer text-sm uppercase tracking-wider shadow-md mt-2">Login</button>
-      </form>
+          {isAdmin && (
+            <Link to="/admin" onClick={closeMenu} className="block px-4 py-2.5 mx-1 mt-2 text-center font-bold text-sm uppercase tracking-wide rounded-lg bg-slate-800 text-white hover:bg-slate-700 transition-colors">
+              Admin Dashboard
+            </Link>
+          )}
 
-      <div className="mt-4 text-center text-xs text-slate-700 pt-2 border-t border-slate-400/30">
-        Don't have an account?{" "}
-        <button 
-          onClick={() => {
-            closeMenu();
-            navigate("/register");
-          }} 
-          className="font-bold text-slate-900 hover:underline cursor-pointer ml-1"
-        >
-          Sign up
-        </button>
-      </div>
+          <div className="mt-2 space-y-1">
+            <Link to="/profile" onClick={closeMenu} className="block px-4 py-2.5 text-slate-800 hover:bg-[#E6E4DC] hover:text-slate-900 rounded-md transition-colors font-medium">
+              Account Settings
+            </Link>
+            <Link to="/orders" onClick={closeMenu} className="block px-4 py-2.5 text-slate-800 hover:bg-[#E6E4DC] hover:text-slate-900 rounded-md transition-colors font-medium">
+              Order History
+            </Link>
+          </div>
+
+          <div className="border-t border-slate-400/30 my-2"></div>
+
+          <button 
+            onClick={async () => { 
+              await logout(); 
+              closeMenu(); 
+              window.location.href = "/"; 
+            }} 
+            className="w-full text-left px-4 py-2.5 hover:bg-rose-100 text-rose-700 rounded-md font-semibold transition-colors cursor-pointer"
+          >
+            Sign out
+          </button>
+        </>
+      ) : (
+        <>
+          <button onClick={loginWithGoogle} className="flex items-center justify-center w-full py-3 border border-slate-300 rounded-xl hover:bg-[#E6E4DC] min-h-[48px] text-slate-800 font-semibold transition-colors cursor-pointer shadow-sm">
+            <img src="/google.svg" alt="Google" className="w-5 h-5 mr-3" /> Sign in with Google
+          </button>
+          
+          <div className="flex items-center my-5 text-slate-500">
+            <div className="flex-1 border-t border-slate-400/40"></div>
+            <span className="px-3 text-sm font-medium">or</span>
+            <div className="flex-1 border-t border-slate-400/40"></div>
+          </div>
+
+          <form className="space-y-4" onSubmit={handleLogin}>
+            <input type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-3.5 border border-slate-300 rounded-xl bg-[#E6E4DC] focus:outline-none focus:border-slate-500 focus:bg-[#f4f3ef] text-slate-900 text-sm transition-colors placeholder-slate-500" />
+            <input type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3.5 border border-slate-300 rounded-xl bg-[#E6E4DC] focus:outline-none focus:border-slate-500 focus:bg-[#f4f3ef] text-slate-900 text-sm transition-colors placeholder-slate-500" />
+            <button type="submit" className="w-full py-3.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 font-bold transition-colors cursor-pointer text-sm uppercase tracking-wider shadow-md mt-2">Login</button>
+          </form>
+
+          <div className="mt-4 text-center text-xs text-slate-700 pt-2 border-t border-slate-400/30">
+            Don't have an account?{" "}
+            <button 
+              onClick={() => {
+                closeMenu();
+                navigate("/register");
+              }} 
+              className="font-bold text-slate-900 hover:underline cursor-pointer ml-1"
+            >
+              Sign up
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
@@ -253,7 +268,8 @@ const Navbar = () => {
               setIsNotificationOpen={setNotificationOpen}
             />
 
-            {userMenuOpen && <UserMenu closeMenu={() => setUserMenuOpen(false)} />}
+            {/* Always mounted to allow the exit animation to fire */}
+            <UserMenu isOpen={userMenuOpen} closeMenu={() => setUserMenuOpen(false)} />
           </div>
         </div>
 

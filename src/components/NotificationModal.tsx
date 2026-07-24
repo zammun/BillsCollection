@@ -1,12 +1,16 @@
 import { useNotificationStore } from '../store/useNotificationStore';
 
-export default function NotificationModal({ isOpen }: { isOpen: boolean; onClose: () => void }) {
+export default function NotificationModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { notifications, markAsRead, clearAll } = useNotificationStore();
 
-  if (!isOpen) return null;
-
   return (
-    <div className="absolute top-full right-0 mt-3 w-80 md:w-96 bg-[#D9D7D0] shadow-2xl border border-slate-300/60 rounded-2xl p-4 z-[100] text-left">
+    <div 
+      className={`absolute top-full right-0 mt-3 w-80 md:w-96 bg-[#D9D7D0] shadow-2xl border border-slate-300/60 rounded-2xl p-4 z-[100] text-left transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu origin-top-right ${
+        isOpen 
+          ? "opacity-100 translate-y-0 pointer-events-auto visible scale-100" 
+          : "opacity-0 -translate-y-4 pointer-events-none invisible scale-95"
+      }`}
+    >
       <div className="flex justify-between items-center pb-3 border-b border-slate-400/30">
         <h2 className="text-xl font-bold text-slate-900 tracking-tight">Notifications</h2>
         {notifications.length > 0 && (

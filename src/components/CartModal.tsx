@@ -4,10 +4,11 @@ import { useCartStore } from '../store/useCartStore';
 import { supabase } from '../supabase';
 
 interface CartModalProps {
+    isOpen: boolean;
     onClose: () => void;
 }
 
-const CartModal = ({ onClose }: CartModalProps) => {
+const CartModal = ({ isOpen, onClose }: CartModalProps) => {
     const cartItems = useCartStore((state) => state.cartItems);
     const removeFromCart = useCartStore((state) => state.removeFromCart);
     const updateQuantity = useCartStore((state) => state.updateQuantity);
@@ -93,8 +94,13 @@ const CartModal = ({ onClose }: CartModalProps) => {
     };
 
     return (
-        <div className="absolute top-14 right-0 w-[calc(100vw-24px)] max-w-sm sm:w-96 p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-[#D9D7D0] border border-slate-300/60 flex flex-col gap-6 z-[100] pointer-events-auto">
-            
+        <div 
+            className={`absolute top-full right-0 mt-3 w-[calc(100vw-24px)] max-w-sm sm:w-96 p-6 rounded-2xl shadow-2xl bg-[#D9D7D0] border border-slate-300/60 flex flex-col gap-6 z-[100] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu origin-top-right ${
+                isOpen 
+                    ? "opacity-100 translate-y-0 pointer-events-auto visible scale-100" 
+                    : "opacity-0 -translate-y-4 pointer-events-none invisible scale-95"
+            }`}
+        >
             <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold text-slate-900 tracking-tight">Shopping Cart</h2>
                 {cartItems.length > 0 && (

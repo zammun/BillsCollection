@@ -99,7 +99,8 @@ const NavIcons = ({
         )}
       </div>
       
-      {isCartOpen && <CartModal onClose={() => setIsCartOpen(false)} />}
+      {/* Replaced conditional rendering to allow exit animations */}
+      <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
       <NotificationModal isOpen={isNotificationOpen} onClose={() => setIsNotificationOpen(false)} />
     </div>
   );
