@@ -18,7 +18,7 @@ const UserMenu = ({ isOpen, closeMenu }: { isOpen: boolean; closeMenu: () => voi
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!isOpen) return; // Only listen for clicks when the menu is actually open
+    if (!isOpen) return; 
 
     const handleClickOutside = (event: PointerEvent) => {
       const target = event.target as Element;
@@ -51,13 +51,11 @@ const UserMenu = ({ isOpen, closeMenu }: { isOpen: boolean; closeMenu: () => voi
   return (
     <div 
       ref={menuRef} 
-      // Premium Slide/Fade Animation applied to the master container
       className={`absolute top-full right-0 mt-3 z-[100] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu origin-top-right ${
         isOpen 
           ? "opacity-100 translate-y-0 pointer-events-auto visible scale-100" 
           : "opacity-0 -translate-y-4 pointer-events-none invisible scale-95"
       } ${
-        // Dynamically shift styling based on authentication state
         user 
           ? "w-72 bg-[#D9D7D0] shadow-2xl border border-slate-200/90 rounded-xl p-2 text-base" 
           : "w-[calc(100vw-32px)] sm:w-80 bg-[#D9D7D0] shadow-xl rounded-2xl p-6 text-base border border-slate-200/60"
@@ -192,6 +190,16 @@ const Navbar = () => {
 
   return (
     <>
+      {/* Custom class for a crisp, 1px white outline on text */}
+      <style>{`
+        .text-outline-white {
+          text-shadow: 1px 1px 0px #ffffff, 
+                      -1px -1px 0px #ffffff, 
+                       1px -1px 0px #ffffff, 
+                      -1px 1px 0px #ffffff;
+        }
+      `}</style>
+
       <div 
         className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 z-50 flex items-center justify-between gap-4 transition-all duration-300 bg-[#E6E4DC]/40 backdrop-blur-md shadow-sm transform-gpu"
       >
@@ -222,27 +230,29 @@ const Navbar = () => {
                 alt="Logo" 
                 className="w-14 h-14 md:w-[70px] md:h-[70px] shrink-0" 
             />
-            <div className="text-xl md:text-3xl font-black tracking-tight text-slate-900 font-heading">Bills Collection</div>
+            {/* Added text-outline-white here */}
+            <div className="text-xl md:text-3xl font-black tracking-tight text-slate-900 font-heading text-outline-white">Bills Collection</div>
           </Link>
 
           {/* Desktop Global Navigation links */}
           <nav className="hidden lg:flex items-center gap-8 text-lg font-semibold">
+            {/* Added text-outline-white to NavLinks */}
             <NavLink 
               to="/" 
               end 
-              className={({ isActive }) => `transition-colors duration-300 ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
+              className={({ isActive }) => `text-outline-white transition-colors duration-300 ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
             >
               Home
             </NavLink>
             <NavLink 
               to="/about" 
-              className={({ isActive }) => `transition-colors duration-300 ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
+              className={({ isActive }) => `text-outline-white transition-colors duration-300 ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
             >
               About
             </NavLink>
             <NavLink 
               to="/contact" 
-              className={({ isActive }) => `transition-colors duration-300 ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
+              className={({ isActive }) => `text-outline-white transition-colors duration-300 ${isActive ? 'text-slate-900 font-bold underline underline-offset-8 decoration-2' : 'text-slate-600 hover:text-slate-900'}`}
             >
               Contact
             </NavLink>
@@ -268,7 +278,6 @@ const Navbar = () => {
               setIsNotificationOpen={setNotificationOpen}
             />
 
-            {/* Always mounted to allow the exit animation to fire */}
             <UserMenu isOpen={userMenuOpen} closeMenu={() => setUserMenuOpen(false)} />
           </div>
         </div>
@@ -294,7 +303,7 @@ const Navbar = () => {
             <Link 
               to="/" 
               onClick={() => setMobileMenuOpen(false)} 
-              className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
+              className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base text-outline-white"
             >
               <span>Home</span>
               <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -305,7 +314,7 @@ const Navbar = () => {
             <Link 
               to="/about" 
               onClick={() => setMobileMenuOpen(false)} 
-              className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
+              className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base text-outline-white"
             >
               <span>About</span>
               <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -316,7 +325,7 @@ const Navbar = () => {
             <Link 
               to="/contact" 
               onClick={() => setMobileMenuOpen(false)} 
-              className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
+              className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base text-outline-white"
             >
               <span>Contact</span>
               <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
