@@ -128,7 +128,7 @@ const Footer = () => {
                                 {status === 'loading' ? '...' : 'JOIN'}
                             </button>
                         </form>
-                        {status === 'success' && <p className="text-sm text-green-600 font-medium">{message}</p>}
+                        {status === 'success' && <p className="text-sm text-[#d4af37] font-medium">{message}</p>}
                         {status === 'error' && <p className="text-sm text-red-600 font-medium">{message}</p>}
                     </div>
 
