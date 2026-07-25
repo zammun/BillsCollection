@@ -193,10 +193,10 @@ const Navbar = () => {
       {/* Custom class for a crisp, 1px white outline on text */}
       <style>{`
         .text-outline-white {
-          text-shadow: 0.5px 0.5px 0px #ffffff, 
-                      -0.5px -0.5px 0px #ffffff, 
-                       0.5px -0.5px 0px #ffffff, 
-                      -0.5px 0.5px 0px #ffffff;
+          text-shadow: 0.25px 0.25px 0px #E6E4DC, 
+                      -0.25px -0.25px 0px #E6E4DC, 
+                       0.25px -0.25px 0px #E6E4DC, 
+                      -0.25px 0.25px 0px #E6E4DC;
         }
       `}</style>
 
