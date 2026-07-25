@@ -40,7 +40,13 @@ const extendedSlides = [
 
 const Slider = () => {
   const [current, setCurrent] = useState(1); 
+  const [isLoaded, setIsLoaded] = useState(false); // 1. Added isLoaded state
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // 2. Trigger initial load animations immediately after mount
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
 
   // Use getBoundingClientRect for precise fractional width on mobile screens
   useLayoutEffect(() => {
@@ -124,12 +130,14 @@ const Slider = () => {
       >
         {extendedSlides.map((slide, index) => {
           
-          const isActive = 
+          // 3. Bound isActive to the isLoaded state
+          const isActive = isLoaded && (
             index === current || 
             (current === 0 && index === slides.length) || 
             (current === slides.length + 1 && index === 1) ||
             (current === 1 && index === slides.length + 1) ||
-            (current === slides.length && index === 0);
+            (current === slides.length && index === 0)
+          );
 
           return (
             // snap-always natively forces mobile browsers to stop at 1 slide per swipe
