@@ -56,13 +56,13 @@ const Footer = () => {
                         <a href="https://instagram.com/billscollection.co" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity">
                             <img src='/instagram.png' alt='Instagram' width={16} height={16} />
                         </a>
-                        <a href="https://x.com/yourhandle" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity">
+                        <a href="https://x.com/" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity">
                             <img src='/x.png' alt='X' width={16} height={16} />
                         </a>
-                        <a href="https://tiktok.com/@yourhandle" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity">
+                        <a href="https://tiktok.com/@" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity">
                             <img src='/tiktok.png' alt='TikTok' width={16} height={16} />
                         </a>
-                        <a href="https://facebook.com/yourhandle" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity">
+                        <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity">
                             <img src='/facebook.png' alt='Facebook' width={16} height={16} />
                         </a>
                     </div>
