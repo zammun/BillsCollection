@@ -49,7 +49,8 @@ const NavIcons = ({
   }, [totalItemsInCart]);
 
   return (
-    <div ref={containerRef} className='flex items-center gap-6 md:gap-4 xl:gap-6 relative shrink-0'>
+    <div ref={containerRef} className='flex items-center gap-3 sm:gap-6 md:gap-4 xl:gap-6 relative shrink-0'>
+      {/* Squeezed the gap for extra-narrow mobile screens here */}
       <style>{`
         @keyframes cartPop {
           0% { transform: scale(1); }

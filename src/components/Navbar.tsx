@@ -18,7 +18,7 @@ const UserMenu = ({ isOpen, closeMenu }: { isOpen: boolean; closeMenu: () => voi
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!isOpen) return; // Only listen for clicks when the menu is actually open
+    if (!isOpen) return; 
 
     const handleClickOutside = (event: PointerEvent) => {
       const target = event.target as Element;
@@ -51,13 +51,11 @@ const UserMenu = ({ isOpen, closeMenu }: { isOpen: boolean; closeMenu: () => voi
   return (
     <div 
       ref={menuRef} 
-      // Premium Slide/Fade Animation applied to the master container
       className={`absolute top-full right-0 mt-3 z-[100] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu origin-top-right ${
         isOpen 
           ? "opacity-100 translate-y-0 pointer-events-auto visible scale-100" 
           : "opacity-0 -translate-y-4 pointer-events-none invisible scale-95"
       } ${
-        // Dynamically shift styling based on authentication state
         user 
           ? "w-72 bg-[#D9D7D0] shadow-2xl border border-slate-200/90 rounded-xl p-2 text-base" 
           : "w-[calc(100vw-32px)] sm:w-80 bg-[#D9D7D0] shadow-xl rounded-2xl p-6 text-base border border-slate-200/60"
@@ -193,16 +191,14 @@ const Navbar = () => {
   return (
     <>
       <div 
-        className="fixed top-0 left-0 w-full h-20 md:h-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 z-50 flex items-center justify-between gap-4 transition-all duration-300 bg-[#E6E4DC]/40 backdrop-blur-md shadow-sm transform-gpu"
+        className="fixed top-0 left-0 w-full h-20 md:h-24 px-3 sm:px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 z-50 flex items-center justify-between gap-1 sm:gap-4 transition-all duration-300 bg-[#E6E4DC]/40 backdrop-blur-md shadow-sm transform-gpu"
       >
         
-        {/* Brand Identity Bundle + Left Mobile Burger */}
-        <div className="flex items-center gap-3 md:gap-12 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-3 md:gap-12 shrink-0 min-w-0">
           
-          {/* Left Mobile Burger Button with Spin Animation */}
           <button 
             onClick={() => { setMobileMenuOpen(!mobileMenuOpen); setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); }}
-            className="focus:outline-none md:hidden flex items-center justify-center shrink-0 cursor-pointer text-slate-900 h-10 w-10 mr-1 rounded-full active:scale-90 transition-all hover:bg-slate-900/5"
+            className="focus:outline-none md:hidden flex items-center justify-center shrink-0 cursor-pointer text-slate-900 h-8 w-8 sm:h-10 sm:w-10 rounded-full active:scale-90 transition-all hover:bg-slate-900/5"
             aria-label="Toggle navigation menu"
           >
             <div className={`transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] transform-gpu ${mobileMenuOpen ? "rotate-90 scale-110" : "rotate-0 scale-100"}`}>
@@ -216,16 +212,15 @@ const Navbar = () => {
             </div>
           </button>
 
-          <Link to="/" className="flex items-center gap-2 md:gap-4 shrink-0" onClick={() => { setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); setMobileMenuOpen(false); }}>
+          <Link to="/" className="flex items-center gap-1.5 sm:gap-2 md:gap-4 shrink-0 min-w-0" onClick={() => { setCartOpen(false); setUserMenuOpen(false); setNotificationOpen(false); setMobileMenuOpen(false); }}>
             <img 
                 src="/logo.png" 
                 alt="Logo" 
-                className="w-14 h-14 md:w-[70px] md:h-[70px] shrink-0" 
+                className="w-10 h-10 sm:w-14 sm:h-14 md:w-[70px] md:h-[70px] shrink-0" 
             />
-            <div className="text-xl md:text-3xl font-black tracking-tight text-slate-900 font-heading">Bills Collection</div>
+            <div className="text-lg sm:text-xl md:text-3xl font-black tracking-tighter sm:tracking-tight text-slate-900 font-heading whitespace-nowrap">Bills Collection</div>
           </Link>
 
-          {/* Desktop Global Navigation links */}
           <nav className="hidden lg:flex items-center gap-8 text-lg font-semibold">
             <NavLink 
               to="/" 
@@ -249,14 +244,12 @@ const Navbar = () => {
           </nav>
         </div>
 
-        {/* Primary Actions Deck */}
-        <div className="flex-grow flex items-center justify-end gap-4 md:gap-6">
-          
+        <div className="flex-grow flex items-center justify-end gap-2 sm:gap-4 md:gap-6">
           <div className="hidden md:flex flex-1 max-w-[280px] justify-end">
             <SearchBar />
           </div>
           
-          <div className="relative shrink-0 flex items-center gap-4 text-slate-800">
+          <div className="relative shrink-0 flex items-center gap-2 sm:gap-4 text-slate-800">
             <NavIcons 
               onProfileClick={handleProfileClick} 
               isProfileOpen={userMenuOpen}
@@ -267,13 +260,10 @@ const Navbar = () => {
               onNotificationClick={handleNotificationClick}
               setIsNotificationOpen={setNotificationOpen}
             />
-
-            {/* Always mounted to allow the exit animation to fire */}
             <UserMenu isOpen={userMenuOpen} closeMenu={() => setUserMenuOpen(false)} />
           </div>
         </div>
 
-        {/* Mobile Drawer Panel with Premium Slide/Fade Animation */}
         <div 
           className={`absolute top-full left-0 w-full bg-[#E6E4DC]/40 backdrop-blur-md p-6 pb-8 border-t border-b border-slate-300/30 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] flex flex-col gap-6 md:hidden z-50 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu origin-top ${
             mobileMenuOpen 
@@ -282,14 +272,12 @@ const Navbar = () => {
           }`}
         >
           
-          {/* Full-width Search Container */}
           <div className="w-full flex justify-start">
             <div className="w-full">
               <SearchBar onSearch={() => setMobileMenuOpen(false)} />
             </div>
           </div>
 
-          {/* Nav Links */}
           <nav className="flex flex-col gap-1.5 pt-2 border-t border-slate-400/30">
             <Link 
               to="/" 
@@ -297,9 +285,7 @@ const Navbar = () => {
               className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
             >
               <span>Home</span>
-              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
-              </svg>
+              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/></svg>
             </Link>
 
             <Link 
@@ -308,9 +294,7 @@ const Navbar = () => {
               className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
             >
               <span>About</span>
-              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
-              </svg>
+              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/></svg>
             </Link>
 
             <Link 
@@ -319,12 +303,9 @@ const Navbar = () => {
               className="flex items-center justify-between py-3 px-4 rounded-xl text-slate-800 hover:bg-[#e6e4dc]/60 transition-all font-bold text-base"
             >
               <span>Contact</span>
-              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
-              </svg>
+              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/></svg>
             </Link>
 
-            {/* Track Order Button */}
             <Link 
               to="/track-order" 
               onClick={() => setMobileMenuOpen(false)} 
@@ -332,8 +313,7 @@ const Navbar = () => {
             >
               <div className="flex items-center gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                  <circle cx="12" cy="10" r="3"/>
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
                 </svg>
                 <span>Track Order</span>
               </div>
@@ -346,7 +326,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Dark Backdrop Overlay with Smooth Fade */}
       <div 
         onClick={() => setMobileMenuOpen(false)}
         className={`fixed inset-0 bg-slate-900/30 backdrop-blur-xs z-40 md:hidden transition-opacity duration-300 ${
